@@ -2,10 +2,13 @@
 
 # System Architecture
 
-This system uses Java EE servlets with Tomcat server. The database used is a MySQL-server. Execute the different sql-files in the ```LES/sql``` -directory
+```git clone https://github.com/vegardalvsaker/BrukerfeilLES``` and ```git checkout develop``` in order to download the project.
 
-The files ```web.xml``` and ```context.xml``` are ignored. These files are individual project files with references to your database
-username and password, as well as jdbc-driver reference.
+This system uses Java EE servlets with Tomcat server. The database used is a MySQL-server. Execute the sql-file in the ```LES/sql``` -directory in order to set up your database to work with this project.
+
+The files ```web.xml``` and ```context.xml``` are ignored. These files need to be added individually because they are individual project files with references to your database username and password, as well as jdbc-driver reference.
+
+## WHEN MAKING CHANGES TO THE CODE, BRANCH OUT OF THE ```develop```-BRANCH, AND NAME THE BRANCH AS FOLLOWS: ```feature_nameOfTheFeatureYouAreGoingToWorkOn```. WHEN YOU ARE DONE, MAKE A PULL REQUEST TO THE ```develop```-BRANCH.
 
 # Package documentation
 
