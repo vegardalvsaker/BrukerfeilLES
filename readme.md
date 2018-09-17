@@ -19,7 +19,7 @@ UI-method and some other calculations, e.g., assign an object to a session.
 
 ### Database package
 
-Classes in this package handles database queries. The name of explains which part of the database the class is going to handle. 
+Classes in this package handles database queries. The name of each class explains which part of the database the class is going to handle. 
 All classes in this package extends (is a subclass of) ```Database.java```, except for ```Database.java``` itself.
 
 ### HtmlTemplates
