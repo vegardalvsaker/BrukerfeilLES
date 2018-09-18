@@ -37,7 +37,7 @@ public class FrontpagePrinter {
         List<Module> modulList = mdb.getModuler();
         
         bs.bootstrapHeader(out, title);
-        bs.bootstrapNavbar(out);
+        bs.bootstrapNavbar(out, "Home");
         bs.jumbotron(out);
         bs.containerOpen(out);
         out.println("<div class=\"row\">");
