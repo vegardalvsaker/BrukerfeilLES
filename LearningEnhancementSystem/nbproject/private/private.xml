@@ -3,11 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Vegard/Documents/dev/Java/Semesterprosjekt/BrukerfeilLES/LearningEnhancementSystem/src/java/Servlets/OneModule.java</file>
+            <file>file:/C:/Users/Vegard/Documents/dev/Java/Semesterprosjekt/BrukerfeilLES/LearningEnhancementSystem/src/java/HtmlTemplates/BootstrapTemplate.java</file>
+            <file>file:/C:/Users/Vegard/Documents/dev/Java/Semesterprosjekt/BrukerfeilLES/LearningEnhancementSystem/src/java/Database/ModuleDb.java</file>
             <file>file:/C:/Users/Vegard/Documents/dev/Java/Semesterprosjekt/BrukerfeilLES/LearningEnhancementSystem/src/java/Servlets/Modules.java</file>
-            <file>file:/C:/Users/Vegard/Documents/dev/Java/Semesterprosjekt/BrukerfeilLES/LearningEnhancementSystem/src/java/Database/UserDb.java</file>
             <file>file:/C:/Users/Vegard/Documents/dev/Java/Semesterprosjekt/BrukerfeilLES/LearningEnhancementSystem/src/java/Database/LearningGoalDb.java</file>
+            <file>file:/C:/Users/Vegard/Documents/dev/Java/Semesterprosjekt/BrukerfeilLES/LearningEnhancementSystem/src/java/Database/UserDb.java</file>
             <file>file:/C:/Users/Vegard/Documents/dev/Java/Semesterprosjekt/BrukerfeilLES/LearningEnhancementSystem/src/java/Servlets/Index.java</file>
+            <file>file:/C:/Users/Vegard/Documents/dev/Java/Semesterprosjekt/BrukerfeilLES/LearningEnhancementSystem/src/java/Printers/FrontpagePrinter.java</file>
         </group>
     </open-files>
 </project-private>

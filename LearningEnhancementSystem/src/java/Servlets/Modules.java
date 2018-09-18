@@ -42,14 +42,21 @@ public class Modules extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {                           
             ModuleDb db = new ModuleDb();
             db.init();
-            
             bst.bootstrapHeader(out, "Modules");
-            bst.bootstrapNavbar(out);
+            bst.bootstrapNavbar(out, "Modules");
+            
+            
+            /*out.format(bst.hei(), "en", "to", "", "");
+            out.println();
+            out.format(bst.hei(), "", to, "", "4");*/
+            
+            
             bst.containerOpen(out);
             
             db.skrivModuler(out);
             
             bst.containerClose(out);
+            bst.bootstrapFooter(out);
         }
     }
 

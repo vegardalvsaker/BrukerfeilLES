@@ -11,6 +11,12 @@ import java.io.PrintWriter;
  * @author Vegard
  */
 public class BootstrapTemplate {
+    
+    /**
+     * bootstrapHeader is a HTML-header with necessary Bootstrap imports.
+     * @param out
+     * @param title is a String which is the title of the current page.
+     */
     public void bootstrapHeader(PrintWriter out, String title) {
         out.println("<!DOCTYPE html>");
         out.println("<head>");
@@ -24,8 +30,37 @@ public class BootstrapTemplate {
         out.println("<body>");
     }
     
-    public void bootstrapNavbar(PrintWriter out) {
-        out.println("<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark \">\n" +
+    /**
+     * This method ensures that the right tab is highlighted in the navbar.
+     * @param out
+     * @param tab is a String with the name of the active tab.
+     */
+    public void bootstrapNavbar(PrintWriter out, String tab) {
+        String current_tab = "active";
+        
+        switch (tab) {
+            case "Home":    out.format(getBootstrapNavbar(), current_tab, "", "", "", "");
+                            break;
+            case "Modules": out.format(getBootstrapNavbar(), "", current_tab, "", "", "");
+                            break;
+            case "Results": out.format(getBootstrapNavbar(), "", "", current_tab, "", "");
+                            break;
+            case "Inbox":   out.format(getBootstrapNavbar(), "", "", "", current_tab, "");
+                            break;
+            case "People":  out.format(getBootstrapNavbar(), "", "", "", "", current_tab);
+                            break;
+            default:        out.format(getBootstrapNavbar(), "", "", "", "", "");
+                            break;  
+        }
+    }
+    
+    /**
+     * This method returns the html for the navigation bar
+     * %s is for which tab is active. This is used in bootstrapNavbar().
+     * @return 
+     */
+    public String getBootstrapNavbar() {
+        return "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark \">\n" +
 "    <div class=\"container\">\n" +
 "    <a class=\"navbar-brand\" href=\"Index\">IS-110</a>\n" +
 "    <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n" +
@@ -33,18 +68,21 @@ public class BootstrapTemplate {
 "    </button>\n" +
 "    <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">\n" +
 "      <ul class=\"navbar-nav mr-auto\">\n" +
-"        <li class=\"nav-item active\">\n" +
-"          <a class=\"nav-link\" href=\"Index\">Home <span class=\"sr-only\">(current)</span></a>\n" +
+"        <li class=\"nav-item %s\">\n" +
+"          <a class=\"nav-link\" href=\"Index\">Home </a>\n" +
 "        </li>\n" +
-"        <li class=\"nav-item\">\n" +
-"          <a class=\"nav-link\" href=\"Modules\">Modules</a>\n" +
+"        <li class=\"nav-item %s\">\n" +
+"          <a class=\"nav-link\" href=\"Modules\">Modules </a>\n" +
 "        </li>\n" +
-"        <li class=\"nav-item\" >\n" +
-"          <a class=\"nav-link\" href=\"#\">Inbox</a>\n" +
+"        <li class=\"nav-item %s\" >\n" +
+"          <a class=\"nav-link disabled\" href=\"#\">Results </a>\n" +
 "        </li>\n" +
-"        <li class=\"nav-item dropdown\">\n" +
+"        <li class=\"nav-item %s\" >\n" +
+"          <a class=\"nav-link disabled\" href=\"#\">Inbox </a>\n" +
+"        </li>\n" +
+"        <li class=\"nav-item %s dropdown\">\n" +
 "          <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
-"            People\n" +
+"            People \n" +
 "          </a>\n" +
 "          <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\n" +            
 "            <a class=\"dropdown-item\" href=\"#\">Students</a>\n" +
@@ -54,14 +92,18 @@ public class BootstrapTemplate {
 "            <a class=\"dropdown-item \" href=\"#\">Test</a>\n" +
 "          </div>\n" +
 "        </li>\n" +
-"        <li class=\"nav-item\">\n" +
-"          <a class=\"nav-link disabled\" href=\"#\">Press here for free A (coming soon!)</a>\n" +
-"        </li>\n" +
 "      </ul>\n" +
 "    </div>\n" +
-"  </nav>\n");
+"  </nav>";
+        
     }
-    
+    /**
+     * Method for formatting modules on the front page
+     * @param out
+     * @param modulNo
+     * @param modulName
+     * @param modulDesc 
+     */
     public void bootstrapCard(PrintWriter out,int modulNo, String modulName, String modulDesc) {
         out.println("<div class=\"col-4\">\n" +
 "      <div class=\"card\">\n" +
@@ -73,7 +115,10 @@ public class BootstrapTemplate {
 "      </div>\n" +
 "    </div>\n");
     }
-    
+    /**
+     * Necessary html footer for importin jQuery and other stuff
+     * @param out 
+     */
     public void bootstrapFooter(PrintWriter out) {
         out.println("<script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script>");
         out.println("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js\" integrity=\"sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49\" crossorigin=\"anonymous\"></script>");
@@ -81,6 +126,10 @@ public class BootstrapTemplate {
         out.println("</body>");
     }
     
+    /**
+     * A bootstrap Jumbotron which displays announcements. placeholder at this moment {18.09}
+     * @param out 
+     */
     public void jumbotron(PrintWriter out) {
         out.println("<div class=\"jumbotron\">");
         out.println("<div class=\"container\">");
@@ -97,10 +146,18 @@ public class BootstrapTemplate {
         out.println("</div>");
     }
     
+    /**
+     * Method for opening a bootstrap container
+     * @param out 
+     */
     public void containerOpen(PrintWriter out) {
         out.println("<div class=\"container\">");
     }
     
+    /**
+     * Method for closing a bootstrap container
+     * @param out 
+     */
     public void containerClose(PrintWriter out) {
         out.println("</div>");
     }
