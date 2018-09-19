@@ -13,8 +13,8 @@ hs_err_pid*
 # netbeans
 nbproject/private/private.properties
 nbproject/private/private.xml
-build/
-nbbuild/
+build/*
+nbbuild/*
 
 # hardware and project specific xml-files
 context.xml
