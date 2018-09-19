@@ -7,6 +7,17 @@
 This system uses Java EE servlets with Tomcat server. The database used is a MySQL-server. Execute the sql-file in the ```LES/sql``` -directory in order to set up your database to work with this project.
 
 The files ```web.xml``` and ```context.xml``` are ignored. These files need to be added individually because they are individual project files with references to your database username and password, as well as jdbc-driver reference.
+## context.xml will look like this
+### Enter your own stuff where obv.
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/NavnPåNetbeansProsjekt">
+    <Resource name="jdbc/localhostDS" type="javax.sql.DataSource" auth="Container" 
+        username="brukernavnTilMYSQLServer" password="PassordTilMYSQLServer" driverClassName="enten com.mysql.jdbc.Driver eller com.mysql.cj.jdbc.Driver"
+        url="jdbc:mysql://localhost:3306/NavnPåSchema">
+    </Resource>
+</Context>
+```
 
 ## WHEN MAKING CHANGES TO THE CODE, BRANCH OUT OF THE ```develop```-BRANCH, AND NAME THE BRANCH AS FOLLOWS: ```feature_nameOfTheFeatureYouAreGoingToWorkOn```. WHEN YOU ARE DONE, MAKE A PULL REQUEST TO THE ```develop```-BRANCH.
 
