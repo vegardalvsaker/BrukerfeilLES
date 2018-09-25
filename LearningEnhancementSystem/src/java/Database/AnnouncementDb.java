@@ -37,7 +37,7 @@ public class AnnouncementDb extends Database {
                 announcemen.setDescription(announcementSet.getString("announcement_description"));
                 announcemen.setAuthor(announcementSet.getString("announcement_author"));
                 announcemen.setDate(announcementSet.getString("announcement_date"));
-                announcemen.add(announcements);
+                announcements.add(announcemen);
             }
             return announcements;
         }

@@ -133,16 +133,10 @@ public class BootstrapTemplate {
     public void jumbotron(PrintWriter out,String annoTitle,String annoDescription,String annoAuthor) {
         out.println("<div class=\"jumbotron\">");
         out.println("<div class=\"container\">");
-        out.println("<h1 class=\"display-4\">Announcements:</h1>");  
-        out.println("<hr class=\"my-4\">");
         out.println("<h2>" + annoTitle + "</h2>");
         out.println("<p>" + annoDescription + "</p>");
         out.println("<p>" + annoAuthor + "</p>");
-        out.println("<hr class=\"my-4\">");
-        out.println("<p>This is another dummy announcement. Do not take this text seriously, either</p>");
-
         out.println("<p class=\"lead\">");
-        out.println("<a class=\"btn btn-primary btn-lg\" href=\"Announcement\" role=\"button\">View all announcements</a>");
         out.println("</p>");
         out.println("</div>");
         out.println("</div>");
