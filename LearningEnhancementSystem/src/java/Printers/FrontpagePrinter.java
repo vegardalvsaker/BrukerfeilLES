@@ -45,12 +45,17 @@ public class FrontpagePrinter {
         bs.bootstrapNavbar(out, "Home");
         bs.containerOpen(out);
         
+        out.println("<h1 class=\"display-4\">Announcements:</h1>");
+        out.println("<hr class=\"my-4\">");
+        
             for (Announcement announcement : announcementList){
                 String atitle = announcement.getTitle();
                 String adesc = announcement.getDescription();
                 String author = announcement.getAuthor();       
                 bs.jumbotron(out,atitle,adesc,author);
             }
+        out.println("<a class=\"btn btn-primary btn-lg\" href=\"Announcement\" role=\"button\">View all announcements</a>");
+        out.println("<hr class=\"my-4\">");
         bs.containerClose(out);
         bs.containerOpen(out);
         out.println("<div class=\"row\">");
