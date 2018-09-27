@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import Classes.Module;
+import Classes.LearningGoal;
+import java.sql.PreparedStatement;
 
 /**
  *This class handles every database-query that has something to do with modules
@@ -21,7 +23,9 @@ import Classes.Module;
  */
 public class ModuleDb extends Database {
     
-    static final String SLCT_MODULE = "select * from Module";
+    private static final String SLCT_ALL_MODULES = "select * from Module";
+    private static final String SLCT_MODULES_WITH_GOALS = "select m.module_no, l.learn_goal_text, l.points from Module m inner join LearningGoal l on m.module_no = l.module_no where m.module_no = ?;";
+    private static final String SLCT_LEARNGOAL = "select * from LearningGoal where module_no = ?";
     /**
      * This method retrieves all of the modules in the database, create an object of each record and is then
      * added to a list of modules
@@ -33,13 +37,14 @@ public class ModuleDb extends Database {
         try (
             Connection conn = getConnection();
             Statement stmt = getStatement(conn);
-            ResultSet modulSet = stmt.executeQuery(SLCT_MODULE);
+            ResultSet modulSet = stmt.executeQuery(SLCT_ALL_MODULES);
           ){
             while(modulSet.next()) {
                 Module modul = new Module();
-                modul.setNumber(modulSet.getInt("module_id"));
-                modul.setName(modulSet.getString("module_name"));
-                modul.setDescription(modulSet.getString("module_description"));
+                modul.setModule_no(modulSet.getInt("module_no"));
+                modul.setLong_desc(modulSet.getString("long_desc"));
+                modul.setShort_desc(modulSet.getString("short_desc"));
+                modul.setPublished(modulSet.getBoolean("published"));
                 moduler.add(modul);
             }
             return moduler;
@@ -49,6 +54,36 @@ public class ModuleDb extends Database {
         }
         return null;
     }
+    
+    public Module getModuleWithLearningGoals(String module_no) {
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(SLCT_MODULES_WITH_GOALS);
+            ){
+                ps.setString(1, module_no);
+                try (ResultSet rs = ps.executeQuery();) {
+    
+                    Module module = new Module();
+                    module.setModule_no(Integer.parseInt(module_no));
+                    while (rs.next()) {
+                        LearningGoal lg = new LearningGoal();
+                        lg.setText(rs.getString("learn_goal_text"));
+                        int points = rs.getInt("points");
+                        System.out.println(points);
+                        lg.setPoints(points);
+                        
+                        module.addLearningGoal(lg);
+                    }
+                    return module;
+                }
+        }
+        catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
+    
     /**
      * Redundant*
      * @param out 
@@ -59,12 +94,12 @@ public class ModuleDb extends Database {
 
      
 
-     System.out.println("The SQL query is: " + SLCT_MODULE); // Echo For debugging
+     System.out.println("The SQL query is: " + SLCT_ALL_MODULES); // Echo For debugging
 
      System.out.println();
 
      try {
-            ResultSet rset = stmt.executeQuery(SLCT_MODULE);
+            ResultSet rset = stmt.executeQuery(SLCT_ALL_MODULES);
 
             // Step 4: Process the ResultSet by scrolling the cursor forward via next().
             //  For each row, retrieve the contents of the cells with getXxx(columnName).
