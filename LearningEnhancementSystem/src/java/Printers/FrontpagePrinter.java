@@ -44,18 +44,25 @@ public class FrontpagePrinter {
         bs.bootstrapHeader(out, title);
         bs.bootstrapNavbar(out, "Home");
         bs.containerOpen(out);
-        
+        out.println("<div class=\"jumbotron\">");
+        out.println("<div class=\"container\">");
         out.println("<h1 class=\"display-4\">Announcements:</h1>");
         out.println("<hr class=\"my-4\">");
-        
+        int i= 0;
             for (Announcement announcement : announcementList){
-                String atitle = announcement.getTitle();
+                if (i < 2){
+                  String atitle = announcement.getTitle();
                 String adesc = announcement.getDescription();
                 String author = announcement.getAuthor();       
                 bs.jumbotron(out,atitle,adesc,author);
+                i++;
+                }
             }
         out.println("<a class=\"btn btn-primary btn-lg\" href=\"Announcement\" role=\"button\">View all announcements</a>");
-        out.println("<hr class=\"my-4\">");
+        out.println("<p class=\"lead\">");
+        out.println("</p>");
+        out.println("</div>");
+        out.println("</div>");
         bs.containerClose(out);
         bs.containerOpen(out);
         out.println("<div class=\"row\">");

@@ -18,8 +18,8 @@ import Database.AnnouncementDb;
  *
  * @author Marius
  */
-@WebServlet(name = "Announcement", urlPatterns = {"/Announcement"})
-public class Announcement extends HttpServlet {
+@WebServlet(name = "AddAnnouncement", urlPatterns = {"/AddAnnouncement"})
+public class AddAnnouncement extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,6 +33,8 @@ public class Announcement extends HttpServlet {
     
     BootstrapTemplate bst = new BootstrapTemplate();
     
+    
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -41,15 +43,36 @@ public class Announcement extends HttpServlet {
              db.init();
              bst.bootstrapHeader(out,"Announcement");
              bst.bootstrapNavbar(out,"Announcement");
-             
              bst.containerOpen(out);
-             out.println("<a href=\"AddAnnouncement\"a class=\"btn btn-primary\">Add more</button></a>");
-             db.skrivAnnouncement(out);
              
+            out.println("<form method=\"post\" action=\"register>");
+            out.println("<div class=\"form-group\">");
+            out.println("<label for=\"titleheader\">Title</label>");
+            out.println("<input type=\"text\" class=\"form-control\" id=\"title\">");
+            out.println("</div>");
+            out.println("<div class=\"form-group\">");
+            out.println("<label for=\"descheader\">Description</label>");
+            out.println("<textarea type=\"text\" class=\"form-control\" id=\"description\" rows=\"3\"></textarea>");
+            out.println("</div>");
+            out.println("<div class=\"form-group\">");
+            out.println("<label for=\"authorheader\">Author</label>");
+            out.println("<input type=\"text\" class=\"form-control\" id=\"author\">");
+            out.println("</div>");
+            out.println("<button type=\"submit\"button href=\"Announcement\" class=\"btn btn-primary\">Submit</button>");
+            out.println("</form>");
+            
+            
+            String text = request.getParameter("title");
+            String description = request.getParameter("description");
+            String author = request.getParameter("author");
+            db.addAnnouncement(request);
+            out.println();
              bst.containerClose(out);
              bst.bootstrapFooter(out);
         }
     }
+    
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

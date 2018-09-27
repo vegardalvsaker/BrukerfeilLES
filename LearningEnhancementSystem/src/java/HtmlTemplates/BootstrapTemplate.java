@@ -131,16 +131,14 @@ public class BootstrapTemplate {
      * @param out 
      */
     public void jumbotron(PrintWriter out,String annoTitle,String annoDescription,String annoAuthor) {
-        out.println("<div class=\"jumbotron\">");
-        out.println("<div class=\"container\">");
+        
         out.println("<h2>" + annoTitle + "</h2>");
         out.println("<p>" + annoDescription + "</p>");
         out.println("<p>" + annoAuthor + "</p>");
-        out.println("<p class=\"lead\">");
-        out.println("</p>");
-        out.println("</div>");
-        out.println("</div>");
+        out.println("<hr class=\"my-4\">");
     }
+    
+    
     
     /**
      * Method for opening a bootstrap container

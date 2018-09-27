@@ -21,14 +21,16 @@ import Classes.Announcement;
 public class AnnouncementDb extends Database {
     
     static final String SLCT_ANNOUNCEMENT = "select * from Announcement";
+    static final String ORDER_ANNOUNCEMENT = "select * from Announcement order by announcement_date desc";
     
     public List<Announcement> getAnnouncement(){
         List<Announcement> announcements = new ArrayList<>();
         
         try (
             Connection conn = getConnection();
-            Statement stmt = getStatement(conn);
-            ResultSet announcementSet = stmt.executeQuery(SLCT_ANNOUNCEMENT);
+            Statement gstmt = getStatement(conn);
+           // Statement cstmt = createStatement(conn);
+            ResultSet announcementSet = gstmt.executeQuery(ORDER_ANNOUNCEMENT);
           ){
             while(announcementSet.next()) {
                 Announcement announcemen = new Announcement();
@@ -53,12 +55,12 @@ public class AnnouncementDb extends Database {
 
      
 
-     System.out.println("The SQL query is: " + SLCT_ANNOUNCEMENT); // Echo For debugging
+     System.out.println("The SQL query is: " + ORDER_ANNOUNCEMENT); // Echo For debugging
 
      System.out.println();
 
      try {
-            ResultSet rset = stmt.executeQuery(SLCT_ANNOUNCEMENT);
+            ResultSet rset = stmt.executeQuery(ORDER_ANNOUNCEMENT);
 
             // Step 4: Process the ResultSet by scrolling the cursor forward via next().
             //  For each row, retrieve the contents of the cells with getXxx(columnName).
@@ -73,7 +75,7 @@ public class AnnouncementDb extends Database {
                 String annoTitle = rset.getString("announcement_title");
                 String  annoDescription = rset.getString("announcement_description");
                 String annoAuthor = rset.getString("announcement_author");
-            //    String annoDate = rset.getString("announcement_date");
+                String annoDate = rset.getString("announcement_date");
 
                // out.println( annoID + annoTitle+"\">" +annoDescription +": " + annoAuthor +"</a>");
               //  out.println(annoDate);
@@ -81,6 +83,7 @@ public class AnnouncementDb extends Database {
                 out.println("<h2>" + annoTitle + "</h2>");
                 out.println("<p>" + annoDescription + "</p>");
                 out.println("<p>" + annoAuthor + "</p>");
+                out.println("<small>" + annoDate + "</small>");
                 out.println("<hr class=\"my-4\">");
                 //if (userIsAdmin) {
                 //deleteUI(out, annoID);
@@ -97,4 +100,27 @@ public class AnnouncementDb extends Database {
      }
       //stmt.close(); 
     }
+    
+    
+    public void addAnnouncement(HttpServletRequest req) {
+        Connection conn = getConnection();
+        Statement stmt = getStatement(conn);
+        
+        String[] values = {req.getParameter("title"),
+        req.getParameter("description"),
+        req.getParameter("author")};
+        
+        
+        String sql = "insert into Announcement values ("+ values[0] +", '"+values[1]+"', '"+ values[2] + "')";
+        System.out.println(sql);
+        try {
+            stmt.execute(sql);
+            System.out.println("Succsessfully added a module");
+            conn.close();
+        }
+        catch (SQLException ex) {
+            System.out.println("Could not insert into table, because: " + ex);
+        }
+    }
+    
 }
