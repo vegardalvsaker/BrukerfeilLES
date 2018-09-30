@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Servlets;
 
+import Database.addRemoveModules;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,10 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import Database.ModuleDb;
 import HtmlTemplates.BootstrapTemplate;
-import Classes.User;
-
+import Database.ModuleDb;
 /**
  *
  * @author Vegard
@@ -39,10 +33,13 @@ public class Modules extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {                           
+        try (PrintWriter out = response.getWriter()) {  
+            
             ModuleDb db = new ModuleDb();
             db.init();
+            
             bst.bootstrapHeader(out, "Modules");
+            
             bst.bootstrapNavbar(out, "Modules");
             
             
@@ -56,14 +53,53 @@ public class Modules extends HttpServlet {
             db.skrivModuler(out);
             
             bst.containerClose(out);
+            
+            addModuleForm(out, response);
+            
             bst.bootstrapFooter(out);
+            
+
+            addRemoveModules modules = new addRemoveModules();
+           
+
+            if (request.getMethod().equals("POST"))  {
+                
+                
+                String modulnr = request.getParameter("Modulnummer");
+                
+                String modulnavn = request.getParameter("Modulnavn");
+         
+                String beskrivelse = request.getParameter("Beskrivelse");
+             
+                modules.addModule(out, modulnr, modulnavn, beskrivelse);
+            }  
+         
         }
+        
     }
-
-    
+        private void addModuleForm(PrintWriter out, HttpServletResponse response)  {
+            
+            out.println("<div>");
+            out.println("<a href=\"Modules\">");
+            out.println("</a>");
+            out.println("<h1>Legg til modul</h1>");
+            out.println("<form action=\"Modules\" method=\"POST\">");
+            out.println("<h3>Modulnummer</h3><br>");
+            out.println("<input type =\"text\" name=\"Modulnummer\"><br>");
+            out.println("<h3>Modulnavn</h3><br>");
+            out.println("<input type=\"text\" name=\"Modulnavn\"><br>");
+            out.println("<h3>Beskrivelse av læringsmål</h3><br>");
+            out.println("<input type=\"text\" name=\"Beskrivelse\"><br>");
+            out.println("<br>");
+            out.println("<input type=\"submit\" value=\"Legg til modul\"><br>");        
+            out.println("<br>");
+            out.println("</form>");
+            out.println("</div>");
+           
  
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+        }
+        
+            // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -101,5 +137,4 @@ public class Modules extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
