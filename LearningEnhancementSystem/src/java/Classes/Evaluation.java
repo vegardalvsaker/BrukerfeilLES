@@ -5,10 +5,68 @@
  */
 package Classes;
 
+import java.util.ArrayList;
+import Classes.Score;
 /**
  *
  * @author Vegard
  */
 public class Evaluation {
+    private String evaluationid;
+    private String teacherid;
+    private String deliveryid;
+    private String comment;
+    private boolean isPublished;
+
+    public boolean isIsPublished() {
+        return isPublished;
+    }
+
+    public void setIsPublished(boolean isPublished) {
+        this.isPublished = isPublished;
+    }
+    
+    private ArrayList<Score> scorelist = new ArrayList<>();
+
+    public String getEvaluationid() {
+        return evaluationid;
+    }
+
+    public void setEvaluationid(String evaluationid) {
+        this.evaluationid = evaluationid;
+    }
+
+    public String getTeacherid() {
+        return teacherid;
+    }
+
+    public void setTeacherid(String teacherid) {
+        this.teacherid = teacherid;
+    }
+
+    public String getDeliveryid() {
+        return deliveryid;
+    }
+
+    public void setDeliveryid(String deliveryid) {
+        this.deliveryid = deliveryid;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public ArrayList<Score> getScorelist() {
+        return scorelist;
+    }
+
+    public void addScoreToList(Score score) {
+        scorelist.add(score);
+    }
+    
     
 }

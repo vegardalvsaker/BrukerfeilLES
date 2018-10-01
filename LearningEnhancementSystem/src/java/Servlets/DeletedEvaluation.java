@@ -12,21 +12,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import Database.UserDb;
-import Database.ModuleDb;
-import Database.EvaluationDb;
-import Classes.*;
 import java.util.ArrayList;
+import Classes.Score;
+import Database.ScoreDb;
+import Database.EvaluationDb;
 
 /**
  *
  * @author Vegard
  */
-@WebServlet(name = "EvaluateServlet", urlPatterns = {"/EvaluateServlet"})
-public class EvaluateServlet extends HttpServlet {
-    private User user;
-    private Delivery delivery;
-    private Module module;
+@WebServlet(name = "DeletedEvaluation", urlPatterns = {"/DeletedEvaluation"})
+public class DeletedEvaluation extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,46 +37,21 @@ public class EvaluateServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            //setup(request.getParameter("student_id"), request.getParameter("module_id"));
-            //hardkodet, metoden over vil bli brukt når worklist er ferdig
-            setup("1000", "1");
-            request.getSession().setAttribute("module", module);
-            out.println("<a href=\"EvaluateServlet?start=TRUE\">Start</a>");
-            if (request.getParameter("start").equals("TRUE")) {
-                EvaluationDb eDb = new EvaluationDb();
-                if (eDb.addEvaluation("100", "2")) {
-                    out.println("<h1> Evaluation for student " + user.getUserName() + " for " + module.getName());
-                out.println("<ul>");
-                ArrayList<LearningGoal> lgoals = module.getLearningGoals();
-                out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation?deliveryid=2&studentid=1000&module_id=1&numberOfLearnGoals="+ lgoals.size() +"\" method=\"POST\">");
-                int i = 1;
-                for (LearningGoal lg : lgoals) {
-                    out.println("<li> Learning goal: " + lg.getText() + " | <input type=\"text\" name=\"learngoal" + i + "\"/>/"+ lg.getPoints() +"</li>");
-                    i++;
-                }
-            out.println("<textarea form=\"evaluationForm\" name=\"comment\"></textarea>");
-            out.println("<input type=\"submit\" value=\"Evaluate!\"/>");
-            out.println("</form>");
-            out.println("</ul>");
-                } else {
-                    out.println("Det er allerede en evaluering opprettet for denne studenten på denne modulen");
-                }
-            }  
+            ArrayList<Score> scores = new ArrayList<>();
+            scores = (ArrayList<Score>) request.getSession().getAttribute("Scores");
+            
+            ScoreDb sDb = new ScoreDb();
+            for (Score score : scores) {
+                sDb.deleteScore(score.getId());
+            }
+            
+            EvaluationDb eDb = new EvaluationDb();
+            eDb.deleteEvaluation(request.getParameter("evaluationid"));
+            out.println("<h1>Deleted this evaluation!</h1>");
+            out.println("<a href=\"Index\"> Go home </a>");
         }
     }
 
-    
-    public void setup (String student_id, String module_id) {
-        UserDb uDb = new UserDb();
-        uDb.init();
-        user = uDb.getUser(student_id);
-                       
-        ModuleDb mdb = new ModuleDb();
-        mdb.init();
-        module = mdb.getModuleWithLearningGoals(module_id);
-        
-       
-    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

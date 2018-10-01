@@ -24,8 +24,8 @@ import java.sql.PreparedStatement;
 public class ModuleDb extends Database {
     
     private static final String SLCT_ALL_MODULES = "select * from Module";
-    private static final String SLCT_MODULES_WITH_GOALS = "select m.module_no, l.learn_goal_text, l.points from Module m inner join LearningGoal l on m.module_no = l.module_no where m.module_no = ?;";
-    private static final String SLCT_LEARNGOAL = "select * from LearningGoal where module_no = ?";
+    private static final String SLCT_MODULES_WITH_GOALS = "select m.module_id, m.module_name, l.learn_goal_id, l.learn_goal_text, l.learn_goal_points from Module m inner join LearningGoal l on m.module_id = l.module_id where m.module_id = ?";
+    private static final String SLCT_LEARNGOAL = "select * from LearningGoal where module_id = ?";
     /**
      * This method retrieves all of the modules in the database, create an object of each record and is then
      * added to a list of modules
@@ -41,10 +41,11 @@ public class ModuleDb extends Database {
           ){
             while(modulSet.next()) {
                 Module modul = new Module();
-                modul.setModule_no(modulSet.getInt("module_no"));
-                modul.setLong_desc(modulSet.getString("long_desc"));
-                modul.setShort_desc(modulSet.getString("short_desc"));
-                modul.setPublished(modulSet.getBoolean("published"));
+                modul.setId(modulSet.getInt("module_id"));
+                modul.setName(modulSet.getString("module_name"));
+                modul.setContent(modulSet.getString("module_content"));
+                modul.setDesc(modulSet.getString("module_desc"));
+                modul.setPublished(modulSet.getBoolean("module_isPublished"));
                 moduler.add(modul);
             }
             return moduler;
@@ -55,24 +56,31 @@ public class ModuleDb extends Database {
         return null;
     }
     
-    public Module getModuleWithLearningGoals(String module_no) {
+    public Module getModuleWithLearningGoals(String module_id) {
         try (
                 Connection conn = getConnection();
                 PreparedStatement ps = conn.prepareStatement(SLCT_MODULES_WITH_GOALS);
             ){
-                ps.setString(1, module_no);
+                ps.setString(1, module_id);
                 try (ResultSet rs = ps.executeQuery();) {
     
                     Module module = new Module();
-                    module.setModule_no(Integer.parseInt(module_no));
+                    rs.first();
+                    module.setId(Integer.parseInt(module_id));
+                    module.setName(rs.getString("module_name"));
+                    LearningGoal lg = new LearningGoal();
+                    lg.setLearn_goal_id(rs.getString("learn_goal_id"));
+                    lg.setText(rs.getString("learn_goal_text"));
+                    lg.setPoints(rs.getInt("learn_goal_points"));
+
+                    module.addLearningGoal(lg);
                     while (rs.next()) {
-                        LearningGoal lg = new LearningGoal();
-                        lg.setText(rs.getString("learn_goal_text"));
-                        int points = rs.getInt("points");
-                        System.out.println(points);
-                        lg.setPoints(points);
+                        LearningGoal lg2 = new LearningGoal();
+                        lg2.setLearn_goal_id(rs.getString("learn_goal_id"));
+                        lg2.setText(rs.getString("learn_goal_text"));
+                        lg2.setPoints(rs.getInt("learn_goal_points"));
                         
-                        module.addLearningGoal(lg);
+                        module.addLearningGoal(lg2);
                     }
                     return module;
                 }
@@ -108,7 +116,7 @@ public class ModuleDb extends Database {
             while(rset.next()) {   // Move the cursor to the next row, return false if no more row
                 String moduleID = rset.getString("module_id");
                 String  moduleName = rset.getString("module_name");
-                String moduleDescription = rset.getString("module_description");
+                String moduleDescription = rset.getString("module_desc");
 
                 out.println("<a href=\"OneModule?id="+ moduleID+"\">" +moduleID +": " + moduleName + ", " + moduleDescription +"</a>");
                 //if (userIsAdmin) {
@@ -173,5 +181,9 @@ public class ModuleDb extends Database {
             System.out.println("Could not execute statement: " + ex);
         }
         return false;
+    }
+    
+    private void moduleBuilder(Module module) {
+        
     }
 }

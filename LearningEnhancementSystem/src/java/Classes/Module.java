@@ -12,36 +12,45 @@ import java.util.ArrayList;
  */
 public class Module {
         
-    private int module_no;
-    private String short_desc;
-    private String long_desc;
+    private int id;
+    private String name;
+    private String desc;
+    private String content;
     private boolean published;
     private ArrayList<LearningGoal> lgoals = new ArrayList<>();
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
     
-    public int getModule_no() {
-        return module_no;
-    }
-
-    public void setModule_no(int module_no) {
-        this.module_no = module_no;
-    }
-
-    public String getShort_desc() {
-        return short_desc;
-    }
-
-    public void setShort_desc(String short_desc) {
-        this.short_desc = short_desc;
-    }
-
-    public String getLong_desc() {
-        return long_desc;
-    }
-
-    public void setLong_desc(String long_desc) {
-        this.long_desc = long_desc;
-    }
-
     public boolean isPublished() {
         return published;
     }
