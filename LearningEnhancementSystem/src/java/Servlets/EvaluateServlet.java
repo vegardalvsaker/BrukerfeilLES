@@ -57,10 +57,10 @@ public class EvaluateServlet extends HttpServlet {
                     out.println("<li> Learning goal: " + lg.getText() + " | <input type=\"text\" name=\"learngoal" + i + "\"/>/"+ lg.getPoints() +"</li>");
                     i++;
                 }
-            out.println("<textarea form=\"evaluationForm\" name=\"comment\"></textarea>");
-            out.println("<input type=\"submit\" value=\"Evaluate!\"/>");
-            out.println("</form>");
-            out.println("</ul>");
+                out.println("<textarea form=\"evaluationForm\" name=\"comment\"></textarea>");
+                out.println("<input type=\"submit\" value=\"Evaluate!\"/>");
+                out.println("</form>");
+                out.println("</ul>");
                 } else {
                     out.println("Det er allerede en evaluering opprettet for denne studenten på denne modulen");
                 }
@@ -68,7 +68,11 @@ public class EvaluateServlet extends HttpServlet {
         }
     }
 
-    
+    /**
+     * Henter den studenten som skal evalueres og hvilken modul. Disse blir lagt i globale variabler.
+     * @param student_id
+     * @param module_id 
+     */
     public void setup (String student_id, String module_id) {
         UserDb uDb = new UserDb();
         uDb.init();
