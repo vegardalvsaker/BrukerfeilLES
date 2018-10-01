@@ -6,18 +6,25 @@ import java.sql.*;
 
 public class addRemoveStudent extends Database {
   
-   
-   
-    public boolean addStudent(PrintWriter out, String navn)   {
+    
+    public boolean addStudent(PrintWriter out, String navn, String email, boolean teacher)   {
         
 
-        String add = "insert into Student values (default, '" + navn + "')";
-         
+      //  String add = "insert into Student values (default, '" + navn + "')";
+        String add = "insert into Users" 
+                + " values (?, ?, ?, ?)";
+        
         try(
              Connection connection = getConnection();
-             Statement statement = connection.createStatement();)  {
+             PreparedStatement prepStatement = connection.prepareStatement(add);)  {
              
-        return statement.execute(add);
+           prepStatement.setString(1, "default");
+           prepStatement.setString(2, navn);
+           prepStatement.setString(3, email);
+           prepStatement.setBoolean(4, teacher);
+            
+            
+        return prepStatement.execute(add);
    
         }
         
@@ -35,13 +42,17 @@ public class addRemoveStudent extends Database {
         
         
         
-        String remove = ("delete from Student where student_name = '" + studnavn + "'");
+        String remove = "delete from Users"
+                + " where user_name = ?";
   
         try(
              Connection connection = getConnection();
-             Statement statement = connection.createStatement();)  {
+             PreparedStatement prepStatement = connection.prepareStatement(remove);)  {
              
-        return statement.execute(remove);
+            prepStatement.setString(1, studnavn);
+            
+        
+            return prepStatement.execute(remove);
    
         }
 
@@ -57,21 +68,31 @@ public class addRemoveStudent extends Database {
 
     public void getStudentList(PrintWriter out)    {
         
-        String list = ("select * from Student");
+        String list = ("select * from Users");
         
         try(
                 Connection connection = getConnection();
-                Statement statement = connection.createStatement();
-                ResultSet rset = statement.executeQuery(list);) {
+                PreparedStatement prepStatement = connection.prepareStatement(list);
+                ResultSet rset = prepStatement.executeQuery(list);) {
             
 
+            prepStatement.setString(1, "user_ID");
+            prepStatement.setString(2, "user_name");
+            prepStatement.setString(3, "user_email");
+            prepStatement.setString(4, "user_isTeacher");
+            
+            
             out.println("<h1>Studentliste:</h1>");
             
             while(rset.next())  {
-                String student_ID = rset.getString("student_ID");
-                String student_name = rset.getString("student_name");
-                
-                out.println("Student ID: " + "'" + student_ID +  "', " + "<br>" + "Navn: " + "'" + student_name + "')" + "<br>");
+                String user_ID = rset.getString("user_ID");
+                String user_name = rset.getString("user_name");
+                String user_email = rset.getString("user_email");
+                String user_isTeacher = rset.getString("user_isTeacher");
+                out.println("Student ID: ?");
+                out.println("Navn: ?");
+                out.println("Email: ?");
+                out.println("Lærer: ?");
             }
             
         }

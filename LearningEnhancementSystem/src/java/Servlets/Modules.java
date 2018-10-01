@@ -70,7 +70,8 @@ public class Modules extends HttpServlet {
                 String modulnavn = request.getParameter("Modulnavn");
          
                 String beskrivelse = request.getParameter("Beskrivelse");
-             
+                
+                            
                 modules.addModule(out, modulnr, modulnavn, beskrivelse);
             }  
          

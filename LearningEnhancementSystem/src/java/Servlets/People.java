@@ -45,19 +45,30 @@ public class People extends HttpServlet {
             
          //   addModules.connection(out);
             
-            if (request.getMethod().equals("POST"))    {
-                 
+           
+            
+            if (request.getMethod().equals("POST"))  {
+                
+            boolean teacher = false;
             String navn = request.getParameter("Navn");
+            String email = request.getParameter("email");
+            String isTeacher = request.getParameter("isTeacher");
             String studnavn = request.getParameter("Studentnavn");
             
-            students.addStudent(out, navn);
+            if (isTeacher == "Lærer")   {
+                teacher = true;
+            }   else if (isTeacher == "Student")    {
+                teacher = false;
+            }
+            
+            students.addStudent(out, navn, email, teacher);
+            
             students.removeStudent(out, studnavn);
             
             } else if (request.getMethod().equals("GET")) {
                  students.getStudentList(out);
                      
                }
-    
         }
     }
         
@@ -72,9 +83,13 @@ public class People extends HttpServlet {
             out.println("<div>");
             out.println("<a href=\"People\"></a>");
             out.println("<form action=\"People\" method=\"POST\">");
-            out.println("<h1>Legg til student</h1><br>");
+            out.println("<h1>Legg til navn</h1><br>");
             out.println("<input type=\"text\" name=\"Navn\"><br>");
-            out.println("<input type=\"submit\" value=\"Legg til student\"><br>");
+            out.println("<h1>Legg til email</h1><br>");
+            out.println("<input type=\"text\" name=\"email\"><br>");
+            out.println("<h1>Er dette en lærer eller student?</h1><br>");
+            out.println("<input type=\"radio\" name=\"isTeacher\" value=\"Lærer\"><br>");
+            out.println("<input type=\"radio\" name=\"isTeacher\" value=\"Student\"><br>");
             out.println("</form>");
             out.println("</div>");  
    
