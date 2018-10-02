@@ -43,9 +43,9 @@ public class FrontpagePrinter {
         out.println("<div class=\"row\">");
         
             for (Module modul : modulList) {
-                int number = modul.getNumber();
+                int number = modul.getId();
                 String name = modul.getName();
-                String desc = modul.getDescription();
+                String desc = modul.getDesc();
                 bs.bootstrapCard(out,number, name, desc);
             }
             

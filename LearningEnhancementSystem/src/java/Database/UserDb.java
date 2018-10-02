@@ -16,7 +16,7 @@ import Classes.User;
  * @author Vegard
  */
 public class UserDb extends Database {
-    static final String SLCT_USER= "select * from Users where user_email = ?";
+    static final String SLCT_USER= "select * from Users where user_id = ?";
     
     public boolean checkUser(String email) {
         PreparedStatement chckUsr = null;
@@ -45,16 +45,16 @@ public class UserDb extends Database {
         return true;
     }
     
-    public User getUser(String email) {
+    public User getUser(String id) {
         try (
             Connection conn = getConnection();
             PreparedStatement chckUsr = conn.prepareStatement(SLCT_USER)
         ) {
-            chckUsr.setString(1, email);
+            chckUsr.setString(1, id);
             ResultSet user = chckUsr.executeQuery();
             
             user.last();
-            String id = user.getString("user_id");
+            String email = user.getString("user_email");
             String name = user.getString("user_name");
             
             User userObj = new User(id, name, email);
