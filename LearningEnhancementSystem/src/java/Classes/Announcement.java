@@ -5,7 +5,6 @@
  */
 package Classes;
 
-import java.util.List;
 
 /**
  *
@@ -13,54 +12,30 @@ import java.util.List;
  */
 public class Announcement {
     
-    private int anNumber;
-    private String title;
-    private String description;
-    private String author;
-    private String date;
-
-    public int getAnNumber() {
-        return anNumber;
-    }
+    private int id;
+    private String subject;
+    private String body;
     
-    public String getTitle() {
-        return title;
-       }
-    
-    public String getDescription() {
-        return description;
+    public int getId() {
+        return id;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getDate() {
-        return date;
+    public String getSubject() {
+        return subject;
     }
     
-    public void setAnNumber (int anNumber) {
-        this.anNumber = anNumber;
+    public String getBody() {
+        return body;
+    }
+    public void setId(int id){
+        this.id = id;
+    }
+   
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
     
-    public void setTitle(String title) {
-        this.title = title;
+    public void setBody(String body) {
+        this.body = body;
     }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-    
-    public void setDate (String date){
-        this.date = date;
-    }
-
-    public void add(List<Announcement> announcements) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

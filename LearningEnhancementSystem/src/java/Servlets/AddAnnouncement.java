@@ -43,38 +43,50 @@ public class AddAnnouncement extends HttpServlet {
              db.init();
              bst.bootstrapHeader(out,"Announcement");
              bst.bootstrapNavbar(out,"Announcement");
-             bst.containerOpen(out);
-             
-            out.println("<form method=\"post\" action=\"register>");
-            out.println("<div class=\"form-group\">");
-            out.println("<label for=\"titleheader\">Title</label>");
-            out.println("<input type=\"text\" class=\"form-control\" id=\"title\">");
-            out.println("</div>");
-            out.println("<div class=\"form-group\">");
-            out.println("<label for=\"descheader\">Description</label>");
-            out.println("<textarea type=\"text\" class=\"form-control\" id=\"description\" rows=\"3\"></textarea>");
-            out.println("</div>");
-            out.println("<div class=\"form-group\">");
-            out.println("<label for=\"authorheader\">Author</label>");
-            out.println("<input type=\"text\" class=\"form-control\" id=\"author\">");
-            out.println("</div>");
-            out.println("<button type=\"submit\"button href=\"Announcement\" class=\"btn btn-primary\">Submit</button>");
-            out.println("</form>");
-            
-            
-            String text = request.getParameter("title");
-            String description = request.getParameter("description");
-            String author = request.getParameter("author");
-            db.addAnnouncement(request);
-            out.println();
-             bst.containerClose(out);
-             bst.bootstrapFooter(out);
-        }
-    }
-    
-    
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+            addAnnouncement(out,response);
+            db.skrivAnnouncement(out);
+            
+            
+           
+             bst.bootstrapFooter(out);
+             
+              if (request.getMethod().equals("POST"))  {
+                String teacherId = request.getParameter("TeacherId");
+                int teacherID = Integer.parseInt(teacherId);
+                
+                String annoSubject = request.getParameter("Subject");
+                
+                String annoBody = request.getParameter("Body");
+         
+              // String annoAuthor = request.getParameter("author");
+             
+                db.addAnnouncement(teacherID, annoSubject, annoBody);
+            }
+        }
+    
+    }  
+
+        private void addAnnouncement(PrintWriter out, HttpServletResponse response)  {
+            
+            out.println("<div>");
+            out.println("<a href=\"Announcement\">");
+            out.println("</a>");
+            out.println("<h1>Legg til kunngjøring</h1>");
+            out.println("<form action=\"Modules\" method=\"POST\">");
+            out.println("<h3>Subject</h3><br>");
+            out.println("<input type =\"text\" name=\"Subject\"><br>");
+            out.println("<h3>Body</h3><br>");
+            out.println("<input type=\"text\" name=\"Body\"><br>");
+            out.println("<h3>Lærer-nummer</h3><br>");
+            out.println("<input type=\"number\" name=\"TeacherId\"><br>");
+            out.println("<br>");
+            out.println("<input type=\"submit\" value=\"Legg til\"><br>");        
+            out.println("<br>");
+            out.println("</form>");
+            out.println("</div>");
+        }
+        // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -102,15 +114,5 @@ public class AddAnnouncement extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+      
 }

@@ -14,31 +14,30 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import Classes.Announcement;
+import java.sql.PreparedStatement;
 /**
  *
  * @author Marius
  */
 public class AnnouncementDb extends Database {
     
-    static final String SLCT_ANNOUNCEMENT = "select * from Announcement";
-    static final String ORDER_ANNOUNCEMENT = "select * from Announcement order by announcement_date desc";
+    private static final String ORDER_ANNOUNCEMENT = "select * from Announcement order by ann_timestamp";
+    private static final String ADD_ANNOUNCEMENT = "insert into Announcement values (default, ?, default, ?, ?)";
     
     public List<Announcement> getAnnouncement(){
         List<Announcement> announcements = new ArrayList<>();
         
         try (
             Connection conn = getConnection();
-            Statement gstmt = getStatement(conn);
-           // Statement cstmt = createStatement(conn);
-            ResultSet announcementSet = gstmt.executeQuery(ORDER_ANNOUNCEMENT);
+            Statement stmt = getStatement(conn);
+            ResultSet announcementSet = stmt.executeQuery(ORDER_ANNOUNCEMENT);
+
           ){
             while(announcementSet.next()) {
                 Announcement announcemen = new Announcement();
-                announcemen.setAnNumber(announcementSet.getInt("announcement_id"));
-                announcemen.setTitle(announcementSet.getString("announcement_title"));
-                announcemen.setDescription(announcementSet.getString("announcement_description"));
-                announcemen.setAuthor(announcementSet.getString("announcement_author"));
-                announcemen.setDate(announcementSet.getString("announcement_date"));
+                announcemen.setId(announcementSet.getInt("ann_id"));
+                announcemen.setBody(announcementSet.getString("ann_subject"));
+                announcemen.setSubject(announcementSet.getString("ann_body"));
                 announcements.add(announcemen);
             }
             return announcements;
@@ -50,77 +49,51 @@ public class AnnouncementDb extends Database {
     }
     
     public void skrivAnnouncement(PrintWriter out) {
-    Connection conn = getConnection();
-    Statement stmt = getStatement(conn);
-
-     
-
-     System.out.println("The SQL query is: " + ORDER_ANNOUNCEMENT); // Echo For debugging
-
-     System.out.println();
-
-     try {
-            ResultSet rset = stmt.executeQuery(ORDER_ANNOUNCEMENT);
-
-            // Step 4: Process the ResultSet by scrolling the cursor forward via next().
-            //  For each row, retrieve the contents of the cells with getXxx(columnName).
-            //out.println("The records selected are:" +"<br>");
-             out.println("<div class=\"jumbotron\">");
+       
+                Connection conn = getConnection();
+                Statement stmt = getStatement(conn);
+                try {
+                ResultSet rset = stmt.executeQuery(ORDER_ANNOUNCEMENT);
+                
+                while(rset.next()) {  
+                out.println("<div class=\"jumbotron\">");
                 out.println("<div class=\"container\">");
                 out.println("<h1 class=\"display-4\">Announcements:</h1>");  
                 out.println("<hr class=\"my-4\">");
-            int rowCount = 0;
-            while(rset.next()) {   // Move the cursor to the next row, return false if no more row
-              //  int annoID = rset.getInt("announcement_ID");
-                String annoTitle = rset.getString("announcement_title");
-                String  annoDescription = rset.getString("announcement_description");
-                String annoAuthor = rset.getString("announcement_author");
-                String annoDate = rset.getString("announcement_date");
+                int annoID = rset.getInt("anno_ID");
+                String annoSubject = rset.getString("anno_subject");
+                String  annoBody = rset.getString("anno_body");
 
-               // out.println( annoID + annoTitle+"\">" +annoDescription +": " + annoAuthor +"</a>");
-              //  out.println(annoDate);
-               
-                out.println("<h2>" + annoTitle + "</h2>");
-                out.println("<p>" + annoDescription + "</p>");
-                out.println("<p>" + annoAuthor + "</p>");
-                out.println("<small>" + annoDate + "</small>");
-                out.println("<hr class=\"my-4\">");
-                //if (userIsAdmin) {
-                //deleteUI(out, annoID);
-            //}
-
-                ++rowCount;
-             }  
-             //out.println("Total number of records = " + rowCount);
-
-             conn.close(); 
-     }     
-     catch (SQLException ex) {
-            out.println("Database error: " +ex);
+                out.println("<h2>" + annoSubject + "</h2>");
+                out.println("<p>" + annoBody + "</p>");
+                out.println("<p>" + annoID + "</p>");
+                out.println("<hr class=\"my-4\">");    
+            } conn.close();
+        } catch (SQLException ex){
+                System.out.println("Some error with the database" + ex);
+        }
+        
+    }
+    
+    
+    public boolean addAnnouncement(int teacher_id,String ann_subject, String ann_body)  {
+    
+        try( Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(ADD_ANNOUNCEMENT);
+                ) {
+            
+            ps.setInt(1,teacher_id);
+            ps.setString(2,ann_subject);
+            ps.setString(3,ann_body);
+            ps.executeUpdate();
+            return true;
+        }
+        catch(SQLException ex)   {
+            System.out.println(ex);
+        }
+       
+        return false;
      }
-      //stmt.close(); 
-    }
-    
-    
-    public void addAnnouncement(HttpServletRequest req) {
-        Connection conn = getConnection();
-        Statement stmt = getStatement(conn);
-        
-        String[] values = {req.getParameter("title"),
-        req.getParameter("description"),
-        req.getParameter("author")};
-        
-        
-        String sql = "insert into Announcement values ("+ values[0] +", '"+values[1]+"', '"+ values[2] + "')";
-        System.out.println(sql);
-        try {
-            stmt.execute(sql);
-            System.out.println("Succsessfully added a module");
-            conn.close();
-        }
-        catch (SQLException ex) {
-            System.out.println("Could not insert into table, because: " + ex);
-        }
-    }
+
     
 }
