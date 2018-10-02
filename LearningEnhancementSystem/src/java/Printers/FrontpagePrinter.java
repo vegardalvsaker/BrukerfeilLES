@@ -56,7 +56,7 @@ public class FrontpagePrinter {
                 int id = announcement.getId();
                 String ID = String.valueOf(id);
                        
-                bs.jumbotron(out,atitle,adesc,ID);
+                bs.jumbotron(out,adesc,atitle,ID);
                 i++;
                 }
             }

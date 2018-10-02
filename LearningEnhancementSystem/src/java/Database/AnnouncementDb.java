@@ -55,19 +55,23 @@ public class AnnouncementDb extends Database {
                 try {
                 ResultSet rset = stmt.executeQuery(ORDER_ANNOUNCEMENT);
                 
-                while(rset.next()) {  
                 out.println("<div class=\"jumbotron\">");
                 out.println("<div class=\"container\">");
                 out.println("<h1 class=\"display-4\">Announcements:</h1>");  
                 out.println("<hr class=\"my-4\">");
-                int annoID = rset.getInt("anno_ID");
-                String annoSubject = rset.getString("anno_subject");
-                String  annoBody = rset.getString("anno_body");
-
+                int rowCount = 0;
+                while(rset.next()) {  
+                
+                int annoID = rset.getInt("ann_ID");
+                String annoSubject = rset.getString("ann_subject");
+                String  annoBody = rset.getString("ann_body");
+                     
                 out.println("<h2>" + annoSubject + "</h2>");
                 out.println("<p>" + annoBody + "</p>");
                 out.println("<p>" + annoID + "</p>");
                 out.println("<hr class=\"my-4\">");    
+                ++rowCount;
+                
             } conn.close();
         } catch (SQLException ex){
                 System.out.println("Some error with the database" + ex);
@@ -76,7 +80,7 @@ public class AnnouncementDb extends Database {
     }
     
     
-    public boolean addAnnouncement(int teacher_id,String ann_subject, String ann_body)  {
+    public void addAnnouncement(int teacher_id,String ann_subject, String ann_body)  {
     
         try( Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(ADD_ANNOUNCEMENT);
@@ -86,13 +90,12 @@ public class AnnouncementDb extends Database {
             ps.setString(2,ann_subject);
             ps.setString(3,ann_body);
             ps.executeUpdate();
-            return true;
+            
         }
         catch(SQLException ex)   {
             System.out.println(ex);
         }
-       
-        return false;
+
      }
 
     
