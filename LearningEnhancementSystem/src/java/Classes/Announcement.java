@@ -5,7 +5,7 @@
  */
 package Classes;
 
-
+import java.sql.Timestamp;
 /**
  *
  * @author Marius
@@ -15,6 +15,7 @@ public class Announcement {
     private int id;
     private String subject;
     private String body;
+    private Timestamp timestamp;
     
     public int getId() {
         return id;
@@ -27,6 +28,9 @@ public class Announcement {
     public String getBody() {
         return body;
     }
+    public Timestamp getTime() {
+        return timestamp;
+    }
     public void setId(int id){
         this.id = id;
     }
@@ -38,4 +42,7 @@ public class Announcement {
     public void setBody(String body) {
         this.body = body;
     }
+    public void setTime(Timestamp timestamp){
+       this.timestamp= timestamp;
+   }
 }

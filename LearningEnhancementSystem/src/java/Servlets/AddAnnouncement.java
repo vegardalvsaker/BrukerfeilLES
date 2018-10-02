@@ -45,13 +45,14 @@ public class AddAnnouncement extends HttpServlet {
              bst.bootstrapNavbar(out,"Announcement");
 
             addAnnouncement(out,response);
-            db.skrivAnnouncement(out);
+            //db.skrivAnnouncement(out);
             
             
            
              bst.bootstrapFooter(out);
              
               if (request.getMethod().equals("POST"))  {
+               
                 String teacherId = request.getParameter("TeacherId");
                 int teacherID = Integer.parseInt(teacherId);
                 
@@ -73,7 +74,7 @@ public class AddAnnouncement extends HttpServlet {
             out.println("<a href=\"Announcement\">");
             out.println("</a>");
             out.println("<h1>Legg til kunngjøring</h1>");
-            out.println("<form action=\"Announcement\" method=\"POST\">");
+            out.println("<form action=\"AddAnnouncement\" method=\"POST\">");
             out.println("<h3>Subject</h3><br>");
             out.println("<input type =\"text\" name=\"Subject\"><br>");
             out.println("<h3>Body</h3><br>");
@@ -85,6 +86,22 @@ public class AddAnnouncement extends HttpServlet {
             out.println("<br>");
             out.println("</form>");
             out.println("</div>");
+            /*
+            out.println("<form>");
+            out.println("<div class=\"form-group\">");
+            out.println("<label for=\"AddAnnouncement\">Overskrift</label>");
+            out.println("<input type=\"text\" class=\"form-control\" name=\"Subject\">");
+            out.println("</div>");
+            out.println(" <div class=\"form-group\">");
+            out.println("<label for=\"AddAnnouncement\">Hoveddel</label>");
+            out.println("<input type=\"text\" class=\"form-control\" name=\"Body\">");
+            out.println("</div>");
+            out.println("<div class=\"form-group\">");
+            out.println("<label for=\"AddAnnouncement\">Lærer-id</label>");
+            out.println("<input type=\"number\" class=\"form-control\" name=\"TeacherId\">");
+            out.println("</div>");
+            out.println("<button type=\"submit\" class=\"btn btn-primary\">Submit</button>");
+            out.println("</form>");*/
         }
         // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -15,13 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 import Classes.Announcement;
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 /**
  *
  * @author Marius
  */
 public class AnnouncementDb extends Database {
     
-    private static final String ORDER_ANNOUNCEMENT = "select * from Announcement order by ann_timestamp";
+    private static final String ORDER_ANNOUNCEMENT = "select * from Announcement order by ann_timestamp desc";
     private static final String ADD_ANNOUNCEMENT = "insert into Announcement values (default, ?, default, ?, ?)";
     
     public List<Announcement> getAnnouncement(){
@@ -38,6 +39,7 @@ public class AnnouncementDb extends Database {
                 announcemen.setId(announcementSet.getInt("ann_id"));
                 announcemen.setBody(announcementSet.getString("ann_subject"));
                 announcemen.setSubject(announcementSet.getString("ann_body"));
+                announcemen.setTime(announcementSet.getTimestamp("ann_timestamp"));
                 announcements.add(announcemen);
             }
             return announcements;
@@ -65,10 +67,11 @@ public class AnnouncementDb extends Database {
                 int annoID = rset.getInt("ann_ID");
                 String annoSubject = rset.getString("ann_subject");
                 String  annoBody = rset.getString("ann_body");
+                Timestamp annotime = rset.getTimestamp("ann_timestamp");
                      
-                out.println("<h2>" + annoSubject + "</h2>");
+                out.println("<h2>"+ annoID + ". " + annoSubject + "</h2>");
                 out.println("<p>" + annoBody + "</p>");
-                out.println("<p>" + annoID + "</p>");
+                out.println("<small>" + annotime + "</small>");
                 out.println("<hr class=\"my-4\">");    
                 ++rowCount;
                 
