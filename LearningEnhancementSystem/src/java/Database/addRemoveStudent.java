@@ -9,7 +9,8 @@ public class addRemoveStudent extends Database {
     
     public boolean addStudent(PrintWriter out, String navn, String email, boolean teacher)   {
         
-
+            init();
+        
       //  String add = "insert into Student values (default, '" + navn + "')";
         String add = "insert into Users" 
                 + " values (?, ?, ?, ?)";

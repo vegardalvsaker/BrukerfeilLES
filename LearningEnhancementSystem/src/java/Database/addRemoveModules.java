@@ -14,8 +14,7 @@ public class addRemoveModules extends Database {
         
         
         //String addmodule = "insert into Module values ('" + modulnr + "', '" + modulnavn + "', '" + beskrivelse + "')";
-        String sql = "insert into Module"
-                + " values (?, ?, ?, ?, ?)";
+        String sql = "insert into Module values (default, ?, ?, ?, true)";
       
         try( Connection connection = getConnection();
              PreparedStatement prepStatement = connection.prepareStatement(sql);
@@ -26,14 +25,16 @@ public class addRemoveModules extends Database {
             
             //Må legge til published variabel
             
-             prepStatement.setString(1, "default");
-             prepStatement.setString(2, modulnr);
-             prepStatement.setString(3, modulnavn);
-             prepStatement.setString(4, beskrivelse);
+            // prepStatement.setString(1, "default");
+             prepStatement.setString(1, modulnr);
+             prepStatement.setString(2, modulnavn);
+             prepStatement.setString(3, beskrivelse);
              //prepStatement.setBoolean(5, published);
             
-            return prepStatement.execute(sql);
+           // return prepStatement.execute(sql);
             
+            prepStatement.executeUpdate();
+            return true;
         }
         catch(SQLException e)   {
             out.println("Ugyldig SQL query");

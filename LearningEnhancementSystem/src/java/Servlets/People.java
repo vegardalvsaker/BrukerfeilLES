@@ -65,10 +65,10 @@ public class People extends HttpServlet {
             
             students.removeStudent(out, studnavn);
             
-            } else if (request.getMethod().equals("GET")) {
+            } /*else if (request.getMethod().equals("GET")) {
                  students.getStudentList(out);
                      
-               }
+               }*/
         }
     }
         
