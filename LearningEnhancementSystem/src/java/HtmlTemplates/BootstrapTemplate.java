@@ -130,10 +130,10 @@ public class BootstrapTemplate {
      * A bootstrap Jumbotron which displays announcements. placeholder at this moment {18.09}
      * @param out 
      */
-    public void jumbotron(PrintWriter out,String annoTitle,String annoDescription,String annoAuthor) {
+    public void jumbotron(PrintWriter out,String annoSubject,String annoBody,String annoAuthor) {
         
-        out.println("<h2>" + annoTitle + "</h2>");
-        out.println("<p>" + annoDescription + "</p>");
+        out.println("<h2>" + annoSubject + "</h2>");
+        out.println("<p>" + annoBody + "</p>");
         out.println("<p>" + annoAuthor + "</p>");
         out.println("<hr class=\"my-4\">");
     }

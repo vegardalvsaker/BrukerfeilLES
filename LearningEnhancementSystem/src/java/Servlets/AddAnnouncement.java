@@ -73,7 +73,7 @@ public class AddAnnouncement extends HttpServlet {
             out.println("<a href=\"Announcement\">");
             out.println("</a>");
             out.println("<h1>Legg til kunngjøring</h1>");
-            out.println("<form action=\"Modules\" method=\"POST\">");
+            out.println("<form action=\"Announcement\" method=\"POST\">");
             out.println("<h3>Subject</h3><br>");
             out.println("<input type =\"text\" name=\"Subject\"><br>");
             out.println("<h3>Body</h3><br>");
