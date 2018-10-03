@@ -31,28 +31,29 @@ public class WorklistDb extends Database {
      * This method retrieves all of the deliveries in the database, create an object of each record and is then
      * added to a list of deliveries
      * @return a list of delivery-objects.
+     */ 
+    
+    /**
+     *
+     * @param conn
+     * @param tableDelivery
      */
-    public List<Worklist> getDelivery(){
-        List<Worklist> worklist = new ArrayList<>();
-        
-        try (
-            Connection conn = getConnection();
-            Statement stmt = getStatement(conn);
-            DeliverySet deliverySet = stmt.executeQuery(SLCT_ALL_DELIVERY);
-          ){
-            while(DeliverySet.next()) {
-                Delivery delivery = new Evaluation();
-                delivery.setId(deliverySet.getInt("delivery_id"));
-                delivery.setStudentName(deliverySet.getString("student_id"));
-                delivery.setDelivaryContent(deliverySet.getString("delivery_content"));
-                delivery.setDesc(deliverySet.getString("delivery_timestamp"));
-                
-            }
-            return Delivery;
-        }
-        catch (SQLException ex) {
-            System.out.println("Query error:" + ex);
-        }
-        return null;
+    public static void SortDatabaseViaMysql(Connection conn, String tableDelivery) {
+
+    try {
+        Statement stmt = conn.createStatement();
+        String cmd = "SELECT * FROM " + tableDelivery + " order by delivery_timestamp";
+
+
+        ResultSet rs = stmt.executeQuery(cmd);
+    } catch (Exception e) {
+         System.out.println(e);
     }
     
+
+}
+
+    public void SortDatabaseViaMysql(PrintWriter out) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+}

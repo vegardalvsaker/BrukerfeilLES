@@ -48,7 +48,7 @@ public class Worklist extends HttpServlet {
             
             bst.containerOpen(out);
             
-            db.writeWorklist(out);
+            db.SortDatabaseViaMysql(out);
             
             bst.containerClose(out);
             bst.bootstrapFooter(out);
