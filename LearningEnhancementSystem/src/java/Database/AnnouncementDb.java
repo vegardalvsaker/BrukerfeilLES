@@ -24,6 +24,7 @@ public class AnnouncementDb extends Database {
     
     private static final String ORDER_ANNOUNCEMENT = "select * from Announcement order by ann_timestamp desc";
     private static final String ADD_ANNOUNCEMENT = "insert into Announcement values (default, ?, default, ?, ?)";
+    private static final String DEL_ANNOUNCEMENT = "delete from Announcement where ann_id = ?";
     
     public List<Announcement> getAnnouncement(){
         List<Announcement> announcements = new ArrayList<>();
@@ -72,9 +73,15 @@ public class AnnouncementDb extends Database {
                 out.println("<h2>"+ annoID + ". " + annoSubject + "</h2>");
                 out.println("<p>" + annoBody + "</p>");
                 out.println("<small>" + annotime + "</small>");
+                out.println("<button class=\"btn btn-outline-danger my-2 my-sm-0\" type=\"submit\">Delete</button>");
                 out.println("<hr class=\"my-4\">");    
                 ++rowCount;
                 
+                /*if (ps.getMethod().equals("delete")){
+                    String annoId = ps.getParameter("annoID");
+                    int annoId = 
+                    deleteAnnouncement(annoID);
+                }*/
             } conn.close();
         } catch (SQLException ex){
                 System.out.println("Some error with the database" + ex);
@@ -100,6 +107,21 @@ public class AnnouncementDb extends Database {
         }
 
      }
+   /* public boolean deleteAnnouncement(int annoID,HttpServletRequest req) {
+        try(
+        Connection conn = getConnection();
+        Statement stmt = getStatement(conn);
+        ResultSet rset = stmt.executeQuery(DEL_ANNOUNCEMENT);
+                ){
+            stmt.setString(1,req);
+            stmt.executeQuery();
+            conn.close();
+            return true;
+        }
+        catch (SQLException ex) {
+            System.out.println("Could not execute statement: " + ex);
+        }
+        return false;
+    }*/
 
-    
 }

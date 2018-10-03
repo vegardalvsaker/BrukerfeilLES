@@ -44,11 +44,8 @@ public class AddAnnouncement extends HttpServlet {
              bst.bootstrapHeader(out,"Announcement");
              bst.bootstrapNavbar(out,"Announcement");
 
-            addAnnouncement(out,response);
-            //db.skrivAnnouncement(out);
+             addAnnouncement(out,response);
             
-            
-           
              bst.bootstrapFooter(out);
              
               if (request.getMethod().equals("POST"))  {
@@ -76,7 +73,7 @@ public class AddAnnouncement extends HttpServlet {
             out.println("<h1>Legg til kunngjøring</h1>");
             out.println("<form action=\"AddAnnouncement\" method=\"POST\">");
             out.println("<h3>Subject</h3><br>");
-            out.println("<input type =\"text\" name=\"Subject\"><br>");
+            out.println("<input type =\"text\" name=\"Subject\"><br>");           
             out.println("<h3>Body</h3><br>");
             out.println("<input type=\"text\" name=\"Body\"><br>");
             out.println("<h3>Lærer-nummer</h3><br>");
