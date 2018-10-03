@@ -6,6 +6,7 @@
 package Servlets;
 
 import Database.LearningGoalDb;
+import Database.CommentDb;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -34,12 +35,16 @@ public class OneModule extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("id");
+        String user_id = "Hallgeir";
+        String comment_text = "hei alle sammen";
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             LearningGoalDb db = new LearningGoalDb();
+            CommentDb cdb = new CommentDb();
             db.init();
             System.out.println(id);
             db.printLearningGoals(id, out);
+            cdb.addCOMMENT(id,user_id,comment_text);
         }
     }
 
