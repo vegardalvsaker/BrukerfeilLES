@@ -17,6 +17,7 @@ import Database.ModuleDb;
 import Database.EvaluationDb;
 import Classes.*;
 import java.util.ArrayList;
+import HtmlTemplates.BootstrapTemplate;
 
 /**
  *
@@ -27,6 +28,7 @@ public class EvaluateServlet extends HttpServlet {
     private User user;
     private Delivery delivery;
     private Module module;
+    private BootstrapTemplate bst = new BootstrapTemplate();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,25 +44,38 @@ public class EvaluateServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             //setup(request.getParameter("student_id"), request.getParameter("module_id"));
             //hardkodet, metoden over vil bli brukt når worklist er ferdig
+            
+            
+            
             setup("1000", "1");
+            bst.bootstrapHeader(out, "Evaluation for" + module.getName());
+            bst.bootstrapNavbar(out, "Home");
+            bst.containerOpen(out);
             request.getSession().setAttribute("module", module);
-            out.println("<a href=\"EvaluateServlet?start=TRUE\">Start</a>");
+            out.println("<button href=\"EvaluateServlet?start=TRUE\" class=\"btn btn-primary\">Start</button>");
             if (request.getParameter("start").equals("TRUE")) {
                 EvaluationDb eDb = new EvaluationDb();
                 if (eDb.addEvaluation("100", "2")) {
-                    out.println("<h1> Evaluation for student " + user.getUserName() + " for " + module.getName());
-                out.println("<ul>");
+                    out.println("<h1> Evaluation for student " + user.getUserName() + " for " + module.getName() + "</h1>");
+              
                 ArrayList<LearningGoal> lgoals = module.getLearningGoals();
+                bst.tableOpen(out);
                 out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation?deliveryid=2&studentid=1000&module_id=1&numberOfLearnGoals="+ lgoals.size() +"\" method=\"POST\">");
                 int i = 1;
+                
                 for (LearningGoal lg : lgoals) {
-                    out.println("<li> Learning goal: " + lg.getText() + " | <input type=\"text\" name=\"learngoal" + i + "\"/>/"+ lg.getPoints() +"</li>");
+                    bst.tableRow(out, i, lg.getText(), "<input type=\"text\" name=\"learngoal" + i + "\"/>", lg.getPoints());
+                    //out.println("<li> Learning goal: " + lg.getText() + " | <input type=\"text\" name=\"learngoal" + i + "\"/>/"+ lg.getPoints() +"</li>");
                     i++;
                 }
-                out.println("<textarea form=\"evaluationForm\" name=\"comment\"></textarea>");
-                out.println("<input type=\"submit\" value=\"Evaluate!\"/>");
+                bst.tableClose(out);
+                
+                out.println("<textarea class=\"form-control\" form=\"evaluationForm\" name=\"comment\"></textarea>");
+                out.println("<button type=\"submit\" class=\"btn btn-primary\">Evaluate!</button>");
                 out.println("</form>");
-                out.println("</ul>");
+                
+                bst.containerClose(out);
+                bst.bootstrapFooter(out);
                 } else {
                     out.println("Det er allerede en evaluering opprettet for denne studenten på denne modulen");
                 }
