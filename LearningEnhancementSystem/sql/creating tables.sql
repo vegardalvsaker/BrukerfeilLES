@@ -132,3 +132,6 @@ constraint message_pk primary key (msg_id),
 constraint message_fk_1 foreign key (msg_sender) references Users (user_id),
 constraint message_fk_2 foreign key (msg_receiver) references Inbox (inbox_id)
 );
+
+
+

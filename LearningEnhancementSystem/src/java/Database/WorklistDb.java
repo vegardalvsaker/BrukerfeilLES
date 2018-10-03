@@ -24,9 +24,8 @@ import java.sql.*;
  */
 public class WorklistDb extends Database {
     
-    private static final String SLCT_ALL_EVALUATIONS = "select * from Evaluation";
-    private static final String SLCT_EVALUATION_WITH_DELIVERY = "select e.evaluation_id, u.teacher_id, d.delivary_id, e.evaluation_comment, e.evaluation_isPublished = ?";
-    private static final String SLCT_EVALUATION = "select * from Evaluation where evalution_isPublished = false";
+    private static final String SLCT_ALL_DELIVERABELS = "select * from Delivery";
+    private static final String SLCT_EVALUATION_WITH_DELIVERY = "select d.delivery_id, u.student_id, m.module_id, d.delivery_content, w.worklist_id, d.delivery_timestamp";
     /**
      * This method retrieves all of the deliveries in the database, create an object of each record and is then
      * added to a list of deliveries
@@ -50,10 +49,57 @@ public class WorklistDb extends Database {
          System.out.println(e);
     }
     
-
 }
 
     public void SortDatabaseViaMysql(PrintWriter out) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+     /**
+     * Redundant*
+     * @param out 
+     */
+    public void skrivDeliveries(PrintWriter out) {
+    Connection conn = getConnection();
+    Statement stmt = getStatement(conn);
+
+     
+
+     System.out.println("The SQL query is: " + SLCT_ALL_DELIVERABELS); // Echo For debugging
+
+     System.out.println();
+
+     try {
+            ResultSet rset = stmt.executeQuery(SLCT_ALL_DELIVERABELS);
+
+            // Step 4: Process the ResultSet by scrolling the cursor forward via next().
+            //  For each row, retrieve the contents of the cells with getXxx(columnName).
+            out.println("The records selected are:" +"<br>");
+            int rowCount = 0;
+            while(rset.next()) {   // Move the cursor to the next row, return false if no more row
+                String delID = rset.getString("delivery_id");
+                String  sID = rset.getString("student_id");
+                String delContent = rset.getString("delivery_content");
+
+                out.println("<a href=\"OneModule?id="+ delID+"\">" +delID +": " + sID + ", " + delContent +"</a>");
+                //if (userIsAdmin) {
+                deleteUI(out, delID);
+            //}
+
+                ++rowCount;
+             }  
+             out.println("Total number of records = " + rowCount);
+
+             conn.close();
+     }     
+     catch (SQLException ex) {
+            out.println("Database error: " +ex);
+     }
+      //stmt.close(); 
+    }
+
+    private void deleteUI(PrintWriter out, String moduleID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
+
