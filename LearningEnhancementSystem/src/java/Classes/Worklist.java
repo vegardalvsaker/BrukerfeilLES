@@ -15,8 +15,9 @@ public class Worklist {
     
     private int worklistid;
     private int teacherid;
-    private boolean isPublished;
-    private ArrayList<Evaluation> Todo = new ArrayList<>();
-   
     
+    private ArrayList<Evaluation> Todo = new ArrayList<>();
+    private ArrayList<Evaluation> Evaluated = new ArrayList<>();
+   
 }
+
