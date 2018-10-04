@@ -35,8 +35,8 @@ public class OneModule extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("id");
-        String user_id = "Hallgeir";
-        String comment_text = "hei alle sammen";
+       // String user_id = "Hallgeir";
+       // String comment_text = "hei alle sammen";
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             LearningGoalDb db = new LearningGoalDb();
@@ -44,7 +44,7 @@ public class OneModule extends HttpServlet {
             db.init();
             System.out.println(id);
             db.printLearningGoals(id, out);
-            cdb.addCOMMENT(id,user_id,comment_text);
+            cdb.getComments(2,out);
         }
     }
 

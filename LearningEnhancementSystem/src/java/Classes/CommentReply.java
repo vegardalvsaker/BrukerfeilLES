@@ -39,7 +39,7 @@ public class CommentReply {
         new Module().setId(moduleid);
     }
     public void setUserid (User setUserid, int userid){
-       new User().setId(userid);
+       new User().setUserid(userid);
     }
    public void setTime(Timestamp commenttimestamp){
        this.commenttimestamp= commenttimestamp;

@@ -51,14 +51,15 @@ public class UserDb extends Database {
             PreparedStatement chckUsr = conn.prepareStatement(SLCT_USER)
         ) {
             chckUsr.setString(1, id);
-            ResultSet user = chckUsr.executeQuery();
+            chckUsr.executeUpdate();
+           // ResultSet user = chckUsr.executeQuery();
             
-            user.last();
+          /*  user.last();
             String email = user.getString("user_email");
             String name = user.getString("user_name");
             
             User userObj = new User(id, name, email);
-            return userObj;
+            return userObj;*/
           }
         catch (SQLException ex) {
         System.out.println(ex);

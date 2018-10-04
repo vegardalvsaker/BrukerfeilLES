@@ -31,11 +31,11 @@ public class Comment {
     public void setCommentid (int commentid) {
         this.commentid = commentid;
     }
-    public void setModuleid (int moduleid){
-        this.moduleId = moduleid;
+    public void setModuleid (Module setModuleid, int moduleid){
+        new Module().setId(moduleid);
     }
-    public void setUserid (int userid){
-        this.userId = userid;
+    public void setUserid (User setUserid, int userid){
+       new User().setUserid(userid);
     }
    public void setTime(Timestamp commenttimestamp){
        this.commenttimestamp= commenttimestamp;
