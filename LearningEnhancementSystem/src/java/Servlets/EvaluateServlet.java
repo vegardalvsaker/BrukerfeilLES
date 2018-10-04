@@ -48,11 +48,12 @@ public class EvaluateServlet extends HttpServlet {
             
             
             setup("1000", "1");
+            request.getSession().setAttribute("student", user.getUserName());
             bst.bootstrapHeader(out, "Evaluation for" + module.getName());
             bst.bootstrapNavbar(out, "Home");
             bst.containerOpen(out);
             request.getSession().setAttribute("module", module);
-            out.println("<button href=\"EvaluateServlet?start=TRUE\" class=\"btn btn-primary\">Start</button>");
+            out.println("<a href=\"EvaluateServlet?start=TRUE\"><button  class=\"btn btn-primary\">Start</button></a>");
             if (request.getParameter("start").equals("TRUE")) {
                 EvaluationDb eDb = new EvaluationDb();
                 if (eDb.addEvaluation("100", "2")) {
@@ -64,14 +65,18 @@ public class EvaluateServlet extends HttpServlet {
                 int i = 1;
                 
                 for (LearningGoal lg : lgoals) {
-                    bst.tableRow(out, i, lg.getText(), "<input type=\"text\" name=\"learngoal" + i + "\"/>", lg.getPoints());
+                    bst.tableRow(out, i, lg.getText(), "<input type=\"number\" name=\"learngoal" + i + "\"/>", lg.getPoints());
                     //out.println("<li> Learning goal: " + lg.getText() + " | <input type=\"text\" name=\"learngoal" + i + "\"/>/"+ lg.getPoints() +"</li>");
                     i++;
                 }
                 bst.tableClose(out);
-                
+                out.println("  <div class=\"form-group row\">\n" +
+"        <div class=\"col-md-4 offset-md-4 mb-3\">\n" +
+"          <label for=\"tekst\">Comment for the student</label>");
                 out.println("<textarea class=\"form-control\" form=\"evaluationForm\" name=\"comment\"></textarea>");
                 out.println("<button type=\"submit\" class=\"btn btn-primary\">Evaluate!</button>");
+                out.println("</div>\n" +
+"      </div>");
                 out.println("</form>");
                 
                 bst.containerClose(out);

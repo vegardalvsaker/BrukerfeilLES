@@ -14,6 +14,7 @@ import Classes.LearningGoal;
 import java.util.ArrayList;
 import Classes.Evaluation;
 import Classes.Score;
+import HtmlTemplates.BootstrapTemplate;
 /**
  *
  * @author Vegard
@@ -31,6 +32,8 @@ public class AddedEvaluation extends HttpServlet {
     private ScoreDb sDb;
     private Module module;
     private ArrayList<String> givenPoints = new ArrayList<>();
+    private BootstrapTemplate bst = new BootstrapTemplate();
+    private Evaluation evaluation;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -53,9 +56,10 @@ public class AddedEvaluation extends HttpServlet {
                 sDb.giveScore(evaluationId, lgId, givenPoints.get(i) );
                 i++;
             }
-            out.println("<h1>Du kom deg hit<h1>");
+            bst.bootstrapHeader(out, moduleid);
+            bst.bootstrapNavbar(out, "Home");
             printOptions(request, out);
-            out.println("<a href=\"EvaluateServlet\">Go back</a>");
+            out.println("<br><a href=\"EvaluateServlet\">Go back</a>");
         }
     }
     
@@ -85,16 +89,29 @@ public class AddedEvaluation extends HttpServlet {
         scores = eval.getScorelist();
         ArrayList<LearningGoal> lgoals = new ArrayList<>();
         lgoals = module.getLearningGoals();
-                
+        String student = (String)request.getSession().getAttribute("student");
+        bst.containerOpen(out);
+                out.println("<h1>Evaluation for " + student +", " + module.getName() +"</h1>");
+                bst.tableOpen(out);
+                int i = 1;
+                for (LearningGoal lg : lgoals) {
+                    bst.tableRow(out, i, lg.getText(), Integer.toString(scores.get(i-1).getPoints()), lg.getPoints());
+                    //out.println("<li> Learning goal: " + lg.getText() + " | <input type=\"text\" name=\"learngoal" + i + "\"/>/"+ lg.getPoints() +"</li>");
+                    i++;
+                }
+                bst.tableClose(out);
+                out.println("<h3>" + eval.getComment() + "</h3>");
+                /**
                 int i = 0;
                 for (LearningGoal lg : lgoals) {
                     out.println("<li> Learning goal: " + lg.getText() + " | <p> "+ scores.get(i).getPoints() +"/"+ lg.getPoints() +"</li>");
                     i++;
                 }
-                
+                **/
                 request.getSession().setAttribute("Scores", scores);
-        out.println("<a href=\"PublishedEvaluation?evaluationid="+ evaluationId +"\"> Publish evaluation!</a>");
-        out.println("<a href=\"DeletedEvaluation?evaluationid="+ evaluationId +"\"> Delete evaluation!</a>");
+        out.println("<a style=\"float: left;\" href=\"PublishedEvaluation?evaluationid="+ evaluationId +"\"><button class=\"btn btn-success\"> Publish evaluation!</button></a>");
+        out.println("<a style=\"float: right;\" href=\"DeletedEvaluation?evaluationid="+ evaluationId +"\"><button class=\"btn btn-danger\"> Delete evaluation!</button></a>");
+        bst.containerClose(out);
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

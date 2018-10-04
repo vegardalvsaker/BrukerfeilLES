@@ -105,7 +105,7 @@ public class EvaluationDb extends Database{
                 
             ps.setString(1, evaluationid);
             try (ResultSet rset = ps.executeQuery()) {
-                rset.first();
+                rset.next();
                 
                 Evaluation eval = new Evaluation();
                 eval.setEvaluationid(evaluationid);
@@ -131,7 +131,7 @@ public class EvaluationDb extends Database{
             }
         }
         catch (SQLException ex) {
-            System.out.println(ex);
+            System.out.println("method: getEvaluationWithScore" + ex);
         }
         
         return null;
