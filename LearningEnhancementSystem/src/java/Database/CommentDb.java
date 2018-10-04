@@ -17,6 +17,7 @@ import java.util.List;
 public class CommentDb extends Database{
     private static final String ADD_COMMENT = "insert into Comments values (default, ?, ?, default,?)";
     private static final String PRINT_COMMENT = "select c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id where c.module_id = ? order by c.comment_timestamp;";
+    private static final String DEL_COMMENT = "delete from Comment where comment_id = ?";
     
     public List<Comment> getComments(){
         List<Comment> comments = new ArrayList<>();
@@ -49,13 +50,12 @@ public class CommentDb extends Database{
                     PreparedStatement ps = conn.prepareStatement(ADD_COMMENT);
                     ) {
 
-                ps.setInt(1, module_id);
-                ps.setString(2, user_id);
-                ps.setString(3,comment_text);
-                ps.executeUpdate();
-               
+                         ps.setInt(1, module_id);
+                         ps.setString(2, user_id);
+                         ps.setString(3,comment_text);
+                         ps.executeUpdate();
 
-            } catch (SQLException ex) {
+                       } catch (SQLException ex) {
                 System.out.println(ex);
             }
         }
@@ -67,21 +67,33 @@ public class CommentDb extends Database{
            ){
            ps.setInt(1, moduleId);
            ResultSet rs = ps.executeQuery();
-           out.println("<h2>Kommentarer</h2>");
-           while (rs.next()){
-           String commenttext = rs.getString("comment_text");
-           String author = rs.getString("user_name");
-
-           out.println("<h3>" + commenttext + "</h3>");
-           out.println("<h5>" + author + "</h5>");
+           out.println("<div class=\"jumbotron\">");
+           out.println("<div class=\"container\">");
+           out.println("<h1 class=\"display-4\">Kommentarer</h1>");  
            out.println("<hr class=\"my-4\">");
-           }
-   
-    } catch (SQLException ex) {
+            while (rs.next()){
+                 String commenttext = rs.getString("comment_text");
+                 String author = rs.getString("user_name");
+
+                 out.println("<h3>" + commenttext + "</h3>");
+                 out.println("<h5>" + author + "</h5>");
+                 out.println("<button type=\"button\" class=\"btn btn-outline-danger\" method=\"DELETE\">X</button>");
+                 out.println("<hr class=\"my-4\">");
+                }
+            } catch (SQLException ex) {
         System.out.println("Some error with the database" + ex);
+        }     
     }
-       
- }
-   
+   public void deleteComment(int Commentid){
+       try (
+               Connection conn = getConnection();
+               PreparedStatement ps = conn.prepareStatement(DEL_COMMENT)) {
+           
+               ps.setInt(1, Commentid);
+               ps.executeUpdate();
+       } catch (SQLException ex){
+           System.out.println(ex);
+       }          
+   }
 }
 

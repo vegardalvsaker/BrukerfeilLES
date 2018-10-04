@@ -50,12 +50,13 @@ public class OneModule extends HttpServlet {
             addComment(out,request);
             
             if (request.getMethod().equals("POST"))  {
-               
-                
                 String comText = request.getParameter("comment");
-                
-             
                 cdb.addComment(mId, "1", comText);
+            }
+            if (request.getMethod().equals("DELETE"))  {
+                String comid = request.getParameter("comment_id");
+                int commId = Integer.parseInt(comid);
+                cdb.deleteComment(commId);
             }
         }
     }
