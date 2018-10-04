@@ -15,7 +15,7 @@ import java.util.List;
  * @author Filip
  */
 public class CommentDb extends Database{
-    private static final String ADD_COMMENT = "insert into Comments values (default, ?, ?, ?, default)";
+    private static final String ADD_COMMENT = "insert into Comments values (default, ?, ?, default,?)";
     private static final String PRINT_COMMENT = "select c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id where c.module_id = ? order by c.comment_timestamp;";
     
     public List<Comment> getComments(){
@@ -42,14 +42,14 @@ public class CommentDb extends Database{
     }
     
 
- public void addCOMMENT(String module_id,String user_id, String comment_text){
+ public void addComment(int module_id,String user_id, String comment_text){
         
             try (
                     Connection conn = getConnection();
                     PreparedStatement ps = conn.prepareStatement(ADD_COMMENT);
                     ) {
 
-                ps.setString(1, module_id);
+                ps.setInt(1, module_id);
                 ps.setString(2, user_id);
                 ps.setString(3,comment_text);
                 ps.executeUpdate();
@@ -67,13 +67,15 @@ public class CommentDb extends Database{
            ){
            ps.setInt(1, moduleId);
            ResultSet rs = ps.executeQuery();
+           out.println("<h2>Kommentarer</h2>");
            while (rs.next()){
            String commenttext = rs.getString("comment_text");
            String author = rs.getString("user_name");
-           
+
            out.println("<h3>" + commenttext + "</h3>");
            out.println("<h5>" + author + "</h5>");
-            }
+           out.println("<hr class=\"my-4\">");
+           }
    
     } catch (SQLException ex) {
         System.out.println("Some error with the database" + ex);
