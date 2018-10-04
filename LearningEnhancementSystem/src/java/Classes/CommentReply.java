@@ -6,7 +6,6 @@
 package Classes;
 
 import java.sql.Timestamp;
-import Classes.Comment;
 
 /**
  *
@@ -14,35 +13,19 @@ import Classes.Comment;
  */
 public class CommentReply {
     private int replyid;
-    private Timestamp commenttimestamp;
+    private Timestamp replytimestamp;
 
     public int getReplyid(){
         return replyid;
     }
-    public void getCommentid(){
-        new Comment().getCommentid();
+    public void setReplyid(int replyid){
+        this.replyid = replyid;
     }
-    public void getModuleid() {
-        new Module().getModuleid();
+    public Timestamp getReplyTimestamp(){
+       return replytimestamp;
     }
-    public void getUserid() {
-        new User().getUserId();
-    }
-    public Timestamp getTime(){
-       return commenttimestamp;
-    }
-    
-    public void setCommentid (Comment setCommentid, int commentid) {
-        new Comment().setCommentid(commentid);
-    }
-    public void setModuleid (Module setModuleid, int moduleid){
-        new Module().setId(moduleid);
-    }
-    public void setUserid (User setUserid, int userid){
-       new User().setUserid(userid);
-    }
-   public void setTime(Timestamp commenttimestamp){
-       this.commenttimestamp= commenttimestamp;
+    public void setReplyTimestamp(Timestamp replytimestamp){
+       this.replytimestamp= replytimestamp;
    }
 }
 

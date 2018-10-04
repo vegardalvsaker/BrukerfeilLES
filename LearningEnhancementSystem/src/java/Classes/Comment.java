@@ -14,32 +14,25 @@ import java.sql.Timestamp;
 public class Comment {
     private int commentid;
     private Timestamp commenttimestamp;
+    private String commenttext;
 
-    public int getCommentid() {
+    public int getCommentId() {
         return commentid;
     }
-    public void getModuleid(){
-        new Module().getModuleid();
-    }
-    public void getUserid(){
-        new User().getUserId();
-    }
-    public Timestamp getTime(){
-       return commenttimestamp;
-    }
-    
-    public void setCommentid (int commentid) {
+    public void setCommentId (int commentid) {
         this.commentid = commentid;
     }
-    public void setModuleid (Module setModuleid, int moduleid){
-        new Module().setId(moduleid);
+    public Timestamp getCommentTime(){
+       return commenttimestamp;
     }
-    public void setUserid (User setUserid, int userid){
-       new User().setUserid(userid);
-    }
-   public void setTime(Timestamp commenttimestamp){
+    public void setCommentTime(Timestamp commenttimestamp){
        this.commenttimestamp= commenttimestamp;
-   }
+    }
+    public String getCommentText(){
+        return commenttext;
+    }
+    public void setCommentText(String commenttext){
+        this.commenttext = commenttext;
+    }
+    
 }
-
-

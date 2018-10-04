@@ -7,6 +7,8 @@ package Database;
 import java.sql.*;
 import Classes.Comment;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -14,10 +16,31 @@ import java.io.PrintWriter;
  */
 public class CommentDb extends Database{
     private static final String ADD_COMMENT = "insert into Comments values (default, ?, ?, ?, default)";
-    private static final String PRINT_COMMENT = "select user_id, comment_id, comments_text from Comments where module_id = ?";
-     public CommentDb(){
-        init();
+    private static final String PRINT_COMMENT = "select c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id where c.module_id = ? order by c.comment_timestamp;";
+    
+    public List<Comment> getComments(){
+        List<Comment> comments = new ArrayList<>();
+    
+        try (
+             Connection conn = getConnection();
+             Statement stmt = getStatement(conn);
+             ResultSet commentSet = stmt.executeQuery(PRINT_COMMENT);
+            ){ 
+              while(commentSet.next()){
+                  Comment com = new Comment();
+                  com.setCommentId(commentSet.getInt("comment_id"));
+                  com.setCommentTime(commentSet.getTimestamp("comment_timestamp"));
+                  com.setCommentText(commentSet.getString("comment_text"));
+                  comments.add(com);
+              }
+              return comments;
+        }
+        catch (SQLException ex) {
+            System.out.println("Query error:" + ex);
+        }
+        return null;
     }
+    
 
  public void addCOMMENT(String module_id,String user_id, String comment_text){
         
@@ -36,34 +59,27 @@ public class CommentDb extends Database{
                 System.out.println(ex);
             }
         }
- public Comment getComments(int moduleId) {
-         try (
-                Connection conn = getConnection();
-                 PreparedStatement ps = conn.prepareStatement(PRINT_COMMENT);       
-                ) {
-                
-            ps.setInt(1, moduleId);
-            try(ResultSet rs = ps.executeQuery()){
-                rs.first();
-                Comment com = new Comment();
-                com.setModuleid(Module, moduleId);
+ public void printComments(int moduleId, PrintWriter out) {
+         
+     try (
+          Connection conn = getConnection();
+          PreparedStatement ps = conn.prepareStatement(PRINT_COMMENT);
+           ){
+           ps.setInt(1, moduleId);
+           ResultSet rs = ps.executeQuery();
+           while (rs.next()){
+           String commenttext = rs.getString("comment_text");
+           String author = rs.getString("user_name");
+           
+           out.println("<h3>" + commenttext + "</h3>");
+           out.println("<h5>" + author + "</h5>");
             }
-            ps.executeUpdate();
-            out.println("<h5>Learning goals:</h5>");
-            while(rs.next()){
-                //rs.getString("comment_text");
-            out.println("<h3>" + rs.getString("comment_text")+ "</h3>");
-          //  System.out.println("user_id");
-            }
-          //  rs.Close();
-            
-           // return rs.getString("evaluation_id");
-            
+   
     } catch (SQLException ex) {
         System.out.println("Some error with the database" + ex);
     }
        
-    }
+ }
    
-    }
+}
 

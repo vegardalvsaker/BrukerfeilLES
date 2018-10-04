@@ -44,7 +44,7 @@ public class OneModule extends HttpServlet {
             db.init();
             System.out.println(id);
             db.printLearningGoals(id, out);
-            cdb.getComments(2,out);
+            cdb.printComments(2,out);
         }
     }
 
