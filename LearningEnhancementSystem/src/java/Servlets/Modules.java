@@ -1,6 +1,6 @@
 package Servlets;
 
-import Database.addRemoveModules;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -59,7 +59,7 @@ public class Modules extends HttpServlet {
             bst.bootstrapFooter(out);
             
 
-            addRemoveModules modules = new addRemoveModules();
+            ModuleDb modules = new ModuleDb();
            
 
             if (request.getMethod().equals("POST"))  {

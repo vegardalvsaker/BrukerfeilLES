@@ -7,8 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import Database.addRemoveStudent;
 import HtmlTemplates.BootstrapTemplate;
+import Database.UserDb;
 /**
  *
  * @author gorm-erikaarsheim
@@ -38,7 +38,7 @@ public class People extends HttpServlet {
             
             bst.bootstrapFooter(out);
               
-            addRemoveStudent students = new addRemoveStudent();
+            UserDb students = new UserDb();
             students.init();
             
             if (request.getMethod().equals("POST"))  {
