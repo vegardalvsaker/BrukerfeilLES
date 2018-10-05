@@ -87,7 +87,7 @@ public class BootstrapTemplate {
 "          <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\n" +            
 "            <a class=\"dropdown-item\" href=\"#\">Students</a>\n" +
 "            <a class=\"dropdown-item\" href=\"#\">Teachers</a>\n" +
-"            <a class=\"dropdown-item\" href=\"#\">Everyone</a>\n" +
+"            <a class=\"dropdown-item\" href=\"People\">Everyone</a>\n" +
 "            <div class=\"dropdown-divider\"></div>\n" +
 "            <a class=\"dropdown-item \" href=\"#\">Test</a>\n" +
 "          </div>\n" +

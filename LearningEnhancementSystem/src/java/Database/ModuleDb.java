@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import Classes.Module;
+import java.sql.PreparedStatement;
 
 /**
  *This class handles every database-query that has something to do with modules
@@ -139,4 +140,35 @@ public class ModuleDb extends Database {
         }
         return false;
     }
+    
+    public boolean addModule(PrintWriter out, String modulnr, String modulnavn, String beskrivelse)  {
+        
+        init();
+        
+        String sql = "insert into Module values (default, ?, ?, ?, true)";
+        
+        try( Connection connection = getConnection();
+             PreparedStatement prepStatement = connection.prepareStatement(sql);
+             
+                ) {
+
+            //Må legge til published variabel
+            
+             prepStatement.setString(1, modulnr);
+             prepStatement.setString(2, modulnavn);
+             prepStatement.setString(3, beskrivelse);
+             //prepStatement.setBoolean(5, published);
+            
+
+            prepStatement.executeUpdate();
+            return true;
+        }
+        catch(SQLException e)   {
+            out.println("Ugyldig SQL query");
+            out.println("Feilmelding: " + e);
+            
+        }
+       
+        return false;
+     }
 }

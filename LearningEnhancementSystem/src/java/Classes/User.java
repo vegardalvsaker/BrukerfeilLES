@@ -13,11 +13,14 @@ public class User {
     private String userID;
     private String userName;
     private String userEmail;
+    private boolean isTeacher;
     
-    public User(String userID, String userName, String userEmail) {
+    public User(String userID, String userName, String userEmail, boolean isTeacher) {
+        
         this.userID = userID;
         this.userName = userName;
         this.userEmail = userEmail;
+        this.isTeacher = isTeacher;
     }
 
     public String getUserID() {
@@ -31,5 +34,10 @@ public class User {
     public String getUserEmail() {
         return userEmail;
     }
-    
+    public boolean getIsTeacher()   {
+        return isTeacher;
+    }
+    public String toString()    {
+        return userID + " " + userName + " " + userEmail + " " + isTeacher + " ";
+    }
 }
