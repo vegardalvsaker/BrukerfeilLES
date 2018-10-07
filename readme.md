@@ -43,4 +43,4 @@ Classes here are also dedicated to the printing of specific elements in a page. 
 
 ### Classes package
 
-Classes here are a representation of the tables in the database. Here you will classes such as ```Module.java```, which has all the attributes that the module-table in the database has, as ```private``` fields.
+Classes here are a representation of the tables in the database. Here you will find classes such as ```Module.java```, which has all the attributes that the module-table in the database has, as ```private``` fields.
