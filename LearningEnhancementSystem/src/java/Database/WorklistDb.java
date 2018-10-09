@@ -81,15 +81,8 @@ public class WorklistDb extends Database {
                 String  sID = rset.getString("student_id");
                 String delContent = rset.getString("delivery_content");
 
-<<<<<<< HEAD
-                out.println("<br href=\"OneDelid?id="+ delID+"\">" +delID +": " + sID + ", " + delContent + "</br>");
-=======
-<<<<<<< HEAD
-                out.println("<br href=\"OneDel?id="+ delID+"\">" +delID +": " + sID + ", " + delContent +"</br>");
-=======
-                out.println("<br href=\"OneDelid?id="+ delID+"\">" +delID +": " + sID + ", " + delContent + "</br>");
->>>>>>> feature_worklist
->>>>>>> feature_worklist
+      
+             out.println("<br href=\"OneDel?id="+ delID+"\">" +delID +": " + sID + ", " + delContent +"</br>");
                 //if (userIsAdmin) {
                 
             //}
