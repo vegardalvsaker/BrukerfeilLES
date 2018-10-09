@@ -50,6 +50,7 @@ public class FrontpagePrinter {
             }
             
         out.println("</div>");
+        out.println("<a href=\"LogOut\">Log out</a>");
         bs.containerClose(out);
         bs.bootstrapFooter(out);
     }

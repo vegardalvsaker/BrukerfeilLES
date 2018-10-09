@@ -12,17 +12,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import Printers.FrontpagePrinter;
-import Database.UserDb;
 import Classes.User;
 
 /**
  *
  * @author Vegard
  */
-@WebServlet(name = "Index", urlPatterns = {"/Index"})
-public class Index extends HttpServlet {
+@WebServlet(name = "SuperServlet", urlPatterns = {"/SuperServlet"})
+public class SuperServlet extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,33 +33,22 @@ public class Index extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-           
-            //Må fikse denne
-            //Sjekker om emailen er i databasen
-            UserDb userdb = new UserDb();
-            userdb.init();
-            String username = request.getParameter("username");
-            if (request.getSession().getAttribute("userLoggedIn") == null) {
-                if (userdb.checkUserExist(username)) {
-                    HttpSession ses = request.getSession();
-                    User user = userdb.getUser(username);
-                    ses.setAttribute("userLoggedIn", user);
-                    FrontpagePrinter fp = new FrontpagePrinter();
-                    fp.printFrontpage(out, "LES IS-110");   
-                
-            }   else {
-                    out.println("Sorry, this user does not exist in our database");
-                    request.getRequestDispatcher("index.html").include(request, response);
-                }
-            } else {
-                FrontpagePrinter fp = new FrontpagePrinter();
-                fp.printFrontpage(out, "LES IS-110"); 
-            }
-            
-            
-            
+    }
+    
+    protected boolean checkIfTeacherLoggedIn(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("userLoggedIn");
+        if (user.getUserIsTeacher()){
+            return true;
         }
+        return false;
+    }
+    
+    protected boolean checkIfLoggedIn(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("userLoggedIn");
+        if(user == null) {
+            return false;
+        }
+        return true;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
