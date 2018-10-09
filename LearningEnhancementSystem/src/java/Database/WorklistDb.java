@@ -74,16 +74,16 @@ public class WorklistDb extends Database {
 
             // Step 4: Process the ResultSet by scrolling the cursor forward via next().
             //  For each row, retrieve the contents of the cells with getXxx(columnName).
-            out.println("To be evaluated:" +"<br>");
+            out.println("The records selected are:" +"<br>");
             int rowCount = 0;
             while(rset.next()) {   // Move the cursor to the next row, return false if no more row
                 String delID = rset.getString("delivery_id");
                 String  sID = rset.getString("student_id");
                 String delContent = rset.getString("delivery_content");
 
-                out.println("<a href=\"OneModule?id="+ delID+"\">" +delID +": " + sID + ", " + delContent +"</a>");
+                out.println("<br href=\"OneDel?id="+ delID+"\">" +delID +": " + sID + ", " + delContent +"</br>");
                 //if (userIsAdmin) {
-                deleteUI(out, delID);
+                
             //}
 
                 ++rowCount;

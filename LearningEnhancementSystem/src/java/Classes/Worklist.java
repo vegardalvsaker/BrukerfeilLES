@@ -55,7 +55,7 @@ public class Worklist {
         return delivery_timestamp;
     }
     
-    public boolean delivery_isEvaluated() {
+    public boolean delivery_isEvaluated() { 
         return delivery_isEvaluated;
     }
     
