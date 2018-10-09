@@ -27,7 +27,9 @@ public class Worklist {
     private String delivery_content;
     private int worklist_id;
     private int delivery_timestamp; 
-    private ArrayList<Worklist> worklist = new ArrayList<>();
+    private boolean delivery_isEvaluated;
+    private ArrayList<Worklist> worklist_1 = new ArrayList<>();
+    private ArrayList<Worklist> worklist_2 = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -53,7 +55,14 @@ public class Worklist {
         return delivery_timestamp;
     }
     
-    public ArrayList<Worklist> getWorklist(){
-        return worklist;
+    public boolean delivery_isEvaluated() { 
+        return delivery_isEvaluated;
+    }
+    
+    public ArrayList<Worklist> getWorklistNo1(){
+        return worklist_1;
+    }
+    public ArrayList<Worklist> getWorklistNo2(){
+        return worklist_2;
     }
     }
