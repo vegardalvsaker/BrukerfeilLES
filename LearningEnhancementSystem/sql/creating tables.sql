@@ -42,6 +42,7 @@ values (1, 'Module 1', 'Introduction to BlueJ', 'Save Project', true),
 (2, 'Modul 2', 'Continued on blueJ', 'Open project', true),
 (3, 'Modul 3', 'Last module', 'Make your own program' , false);
 
+
 create table LearningGoal(
 learn_goal_id integer auto_increment,
 learn_goal_text text,
@@ -83,7 +84,7 @@ constraint worklist_fk foreign key (teacher_id) references Users (user_id)
 );
 
 insert into Worklist
-values (1, 1);
+values (1, 1), (2,1), (3,1);
 
 create table Delivery(
 delivery_id integer not null auto_increment,
@@ -103,7 +104,9 @@ constraint delivery_pk primary key (delivery_id)
 );
 
 insert into Delivery (delivery_id, student_id, module_id, delivery_content, worklist_id)
-values (1, 2, 1, 'Solved task', 1);
+values (1, 2, 1, 'Solved task', 1), (2, 3, 2, 'Video hand in', 1), (3, 4, 3, 'the final one', 1);
+
+select * from Delivery;
 
 create table Evaluation(
 evaluation_id integer not null auto_increment,
