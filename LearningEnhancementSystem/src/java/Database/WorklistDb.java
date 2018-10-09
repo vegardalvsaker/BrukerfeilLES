@@ -76,16 +76,16 @@ public class WorklistDb extends Database {
             //  For each row, retrieve the contents of the cells with getXxx(columnName).
             out.println("The records selected are:" +"<br>");
             int rowCount = 0;
-            while(rset.next()) {   // Move the cursor to the next row, return false if no more row
+            while(rset.next()) {  
                 String delID = rset.getString("delivery_id");
                 String  sID = rset.getString("student_id");
                 String delContent = rset.getString("delivery_content");
 
-      
-             out.println("<br href=\"OneDel?id="+ delID+"\">" +delID +": " + sID + ", " + delContent +"</br>");
-                //if (userIsAdmin) {
-                
-            //}
+
+                out.println("<br href=\"OneDel?id="+ delID+"\">" +delID +": " + sID + ", " + delContent +"</br>");
+
+                out.println("<br href=\"OneDelid?id="+ delID+"\">" +delID +": " + sID + ", " + delContent + "</br>");
+
 
                 ++rowCount;
              }  
@@ -99,7 +99,7 @@ public class WorklistDb extends Database {
       //stmt.close(); 
     }
 
-    private void deleteUI(PrintWriter out, String moduleID) {
+    private void deleteUI(PrintWriter out, String deliveryID) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -54,6 +54,18 @@ public class Worklist extends HttpServlet {
             bst.bootstrapFooter(out);
         }
     }
+    
+    public void skrivDeliveries(PrintWriter out)   {
+            
+            
+            out.println("<div>");
+            out.println("<h1>List Worklist</h1>");
+            out.println("<form action=\"Worklist\" method=\"GET\">");
+            out.println("<input type=\"submit\" value=\"List Worklist\">");
+            out.println("</form>");
+            out.println("</div>");
+ 
+        }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
