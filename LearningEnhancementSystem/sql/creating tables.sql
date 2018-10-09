@@ -14,7 +14,8 @@ constraint user_pk primary key (user_id)
 insert into Users
 values (1, 'Hallgeir', 'hallgeiren@uia.no', true),
 (2, 'Kevin', 'kevins16@uia.no', false),
-(3, 'Espen', 'Espens17@uia.no', false);
+(3, 'Espen', 'Espens17@uia.no', false),
+(4, 'Holen', 'Mariushoe16@uia.no', false);
 
 create table Announcement(
 ann_id integer not null auto_increment,
@@ -41,7 +42,6 @@ insert into Module
 values (1, 'Module 1', 'Introduction to BlueJ', 'Save Project', true),
 (2, 'Modul 2', 'Continued on blueJ', 'Open project', true),
 (3, 'Modul 3', 'Last module', 'Make your own program' , false);
-
 
 create table LearningGoal(
 learn_goal_id integer auto_increment,
@@ -93,21 +93,21 @@ module_id integer,
 delivery_content text,
 worklist_id integer not null,
 delivery_timestamp timestamp default current_timestamp,
-delivery_isEvaluated boolean default 0,
+delivery_isEvaluated boolean default false,
 
 
 constraint delivery_fk_1 foreign key (student_id) references Users (user_id),
 constraint delivery_fk_2 foreign key (module_id) references Module (module_id),
 constraint delivery_fk_3 foreign key (worklist_id) references Worklist (worklist_id),
 constraint unique_student_and_module unique (student_id, module_id),
+
 constraint delivery_pk primary key (delivery_id)
 /*constraint delivery_pk primary key (student_id, module_no)*/
 );
 
-insert into Delivery (delivery_id, student_id, module_id, delivery_content, worklist_id)
-values (1, 2, 1, 'Solved task', 1), (2, 3, 2, 'Video hand in', 1), (3, 4, 3, 'the final one', 1);
+insert into Delivery (delivery_id, student_id, module_id, delivery_content, worklist_id, delivery_isEvaluated)
+values (1, 2, 1, 'Solved task', 1, false), (2, 3, 2, 'Video hand in', 1, false), (3, 4, 3, 'the final one', 1, false);
 
-select * from Delivery;
 
 create table Evaluation(
 evaluation_id integer not null auto_increment,
@@ -153,6 +153,9 @@ constraint message_pk primary key (msg_id),
 constraint message_fk_1 foreign key (msg_sender) references Users (user_id),
 constraint message_fk_2 foreign key (msg_receiver) references Inbox (inbox_id)
 );
+
+
+
 
 
 
