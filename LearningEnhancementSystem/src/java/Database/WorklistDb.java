@@ -81,9 +81,9 @@ public class WorklistDb extends Database {
                 String  sID = rset.getString("student_id");
                 String delContent = rset.getString("delivery_content");
 
-                out.println("<a href=\"OneModule?id="+ delID+"\">" +delID +": " + sID + ", " + delContent +"</a>");
+                out.println("<br href=\"OneDelid?id="+ delID+"\">" +delID +": " + sID + ", " + delContent + "</br>");
                 //if (userIsAdmin) {
-                deleteUI(out, delID);
+                
             //}
 
                 ++rowCount;

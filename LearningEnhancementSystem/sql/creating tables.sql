@@ -93,6 +93,7 @@ module_id integer,
 delivery_content text,
 worklist_id integer not null,
 delivery_timestamp timestamp default current_timestamp,
+delivery_isEvaluated boolean default 0,
 
 
 constraint delivery_fk_1 foreign key (student_id) references Users (user_id),
