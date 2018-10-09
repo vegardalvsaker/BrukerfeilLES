@@ -31,6 +31,33 @@ public class WorklistDb extends Database {
      * added to a list of deliveries
      * @return a list of delivery-objects.
      */ 
+     /**
+     * This method retrieves all of the delivereies in the database, create an object of each record and is then
+     * added to a list Worklist
+     * @return a list of module-objects.
+     */
+    public List<Worklist> getDeliveries() throws SQLException{
+        List<Worklist> worklist = new ArrayList<>();
+        
+        try (
+            Connection conn = getConnection();
+            Statement stmt = getStatement(conn);
+            ResultSet deliverySet = stmt.executeQuery(SLCT_ALL_DELIVERABELS);
+          ){
+            while(deliverySet.next()) {
+                Worklist delivery = new Worklist();
+                worklist.setId(deliverySet.getInt("delivery_id"));
+                worklist.setStudentId(deliverySet.getInt("student_id"));
+                worklist.setModuleId(deliverySet.getInt("module_id"));
+                worklist.setDesc(deliverySet.getString("delivery_content"));
+                worklist.setTimestamp(deliverySet.getInt("current_timestamp"));
+                worklist.setIsEvaluated(deliverySet.getBoolean("delivery_isEvaluated"));
+
+                worklist.add(delivery);
+            }
+            return worklist;
+        }
+    }
     
     /**
      *
@@ -83,9 +110,6 @@ public class WorklistDb extends Database {
 
 
                 out.println("<br href=\"OneDel?id="+ delID+"\">" +delID +": " + sID + ", " + delContent +"</br>");
-
-                out.println("<br href=\"OneDelid?id="+ delID+"\">" +delID +": " + sID + ", " + delContent + "</br>");
-
 
                 ++rowCount;
              }  

@@ -21,37 +21,37 @@ import java.util.ArrayList;
    
 public class Worklist {
         
-    private int id;
+    private int delivery_id;
     private int student_id;
     private int module_id;
     private String delivery_content;
     private int worklist_id;
     private int delivery_timestamp; 
     private boolean delivery_isEvaluated;
-    private ArrayList<Worklist> worklist_1 = new ArrayList<>();
+    private ArrayList<Worklist> delivery = new ArrayList<>();
     private ArrayList<Worklist> worklist_2 = new ArrayList<>();
 
-    public int getId() {
-        return id;
+    public int setId() {
+        return delivery_id;
     }
 
-    public int getStudent_id() {
+    public int setStudentId() {
         return student_id;
     }
     
-    public int module_id() {
+    public int setModuleId() {
         return module_id;
     }
     
-    public String delivery_content() {
+    public String setDesc() {
         return delivery_content;
     }
     
-    public int worklist_id() {
+    public int setTimestamp() {
            return worklist_id;
     }
     
-    public int delivery_timestamp() {
+    public int setIsEvaluated() {
         return delivery_timestamp;
     }
     
@@ -60,7 +60,7 @@ public class Worklist {
     }
     
     public ArrayList<Worklist> getWorklistNo1(){
-        return worklist_1;
+        return delivery;
     }
     public ArrayList<Worklist> getWorklistNo2(){
         return worklist_2;
