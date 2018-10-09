@@ -74,7 +74,7 @@ public class WorklistDb extends Database {
 
             // Step 4: Process the ResultSet by scrolling the cursor forward via next().
             //  For each row, retrieve the contents of the cells with getXxx(columnName).
-            out.println("The records selected are:" +"<br>");
+            out.println("To be evaluated:" +"<br>");
             int rowCount = 0;
             while(rset.next()) {  
                 String delID = rset.getString("delivery_id");
