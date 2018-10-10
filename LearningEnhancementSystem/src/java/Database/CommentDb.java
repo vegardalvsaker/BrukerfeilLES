@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class CommentDb extends Database{
     private static final String ADD_COMMENT = "insert into Comments values (default, ?, ?, default,?)";
-    private static final String PRINT_COMMENT = "select c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id where c.module_id = ? order by c.comment_timestamp;";
-    private static final String DEL_COMMENT = "delete from Comment where comment_id = ?";
+    private static final String PRINT_COMMENT = "select c.comment_id, c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id where c.module_id = ? order by c.comment_timestamp;";
+    private static final String DEL_COMMENT = "delete from Comments where comment_id = ?";
     
     public List<Comment> getComments(){
         List<Comment> comments = new ArrayList<>();
@@ -75,9 +75,13 @@ public class CommentDb extends Database{
                  String commenttext = rs.getString("comment_text");
                  String author = rs.getString("user_name");
 
-                 out.println("<h3>" + commenttext + "</h3>");
                  out.println("<h5>" + author + "</h5>");
-                 out.println("<button type=\"button\" class=\"btn btn-outline-danger\" method=\"DELETE\">X</button>");
+                 out.println("<h3>" +  commenttext + "</h3>");
+                 out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
+                 out.println("<input type=\"text\" name=\"delete\" value=\"TRUE\">");
+                 out.println("<input type=\"text\" name=\"comment_id\" value=\""+ rs.getString("comment_id") +"\"/>");
+                 out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete comment\">");
+                 out.println("</form>");
                  out.println("<hr class=\"my-4\">");
                 }
             } catch (SQLException ex) {
