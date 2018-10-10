@@ -5,37 +5,65 @@
  */
 package Classes;
 
+import java.util.ArrayList;
 /**
  *
  * @author Vegard
  */
 public class Module {
         
-    private int number;
+    private int id;
     private String name;
-    private String description;
+    private String desc;
+    private String content;
+    private boolean published;
+    private ArrayList<LearningGoal> lgoals = new ArrayList<>();
 
-    public int getNumber(){
-        return number;
-       }
-    
-    public String getName(){
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
         return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+    
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
+    }
+
+    public void addLearningGoal(LearningGoal lg) {
+        lgoals.add(lg);
+    }
+    
+    public ArrayList<LearningGoal> getLearningGoals(){
+        return lgoals;
     }
 }

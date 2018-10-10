@@ -25,15 +25,17 @@ public class LearningGoalDb extends Database {
     public void printLearningGoals(String id, PrintWriter out) {
         Connection conn = getConnection();
         Statement stmt = getStatement(conn);
-        String goalQuery = "select goaltext, points from LearningGoal where module_id = " + id;
-        String moduleInfoQuery = "select module_name, module_description from Module where module_id = " + id;
+        String goalQuery = "select learn_goal_text, learn_goal_points from LearningGoal where module_id = " + id;
+        String moduleInfoQuery = "select module_name, module_desc from Module where module_id = " + id;
         try {
             
             ResultSet modulSet = stmt.executeQuery(moduleInfoQuery);
             while(modulSet.next()) {
                 out.println("<h3>" +modulSet.getString("module_name")+ "</h3>");
                 
-                out.println("<p>" +modulSet.getString("module_description") + "</p>");
+                out.println("<p>" +modulSet.getString("module_desc") + "</p>");
+                out.println("<br>");
+                //out.println("<p>" + modulSet.getString("module_content"));
                 
             }
             modulSet.close();
@@ -42,8 +44,8 @@ public class LearningGoalDb extends Database {
             out.println("<h5>Learning goals:</h5>");
             while (goalSet.next()) {
                 out.println("<li>");
-                out.println(goalSet.getString("goaltext"));
-                out.println("Points:" + goalSet.getString("points"));
+                out.println(goalSet.getString("learn_goal_text"));
+                out.println("Points:" + goalSet.getString("learn_goal_points"));
                 out.println("</li>");
             }
             out.println("</ul>");
