@@ -45,19 +45,17 @@ public class OneModule extends HttpServlet {
             cdb.init();
             System.out.println(id);
             db.printLearningGoals(id, out);
-            int mId = Integer.parseInt(id);
-            cdb.printComments(mId,out);
-            addComment(out,request);
             
+            int mId = Integer.parseInt(id);
             if (request.getMethod().equals("POST"))  {
                 String comText = request.getParameter("comment");
                 cdb.addComment(mId, "1", comText);
             }
-            if (request.getMethod().equals("DELETE"))  {
-                String comid = request.getParameter("comment_id");
-                int commId = Integer.parseInt(comid);
-                cdb.deleteComment(commId);
-            }
+            
+            cdb.printComments(mId,out,request);
+            addComment(out,request);
+            
+            
         }
     }
 private void addComment(PrintWriter out, HttpServletRequest request){
@@ -72,7 +70,7 @@ private void addComment(PrintWriter out, HttpServletRequest request){
             out.println("</form>");
             out.println("</div>");
 }
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
