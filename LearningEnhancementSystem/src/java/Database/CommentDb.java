@@ -54,11 +54,12 @@ public class CommentDb extends Database{
                          ps.setString(2, user_id);
                          ps.setString(3,comment_text);
                          ps.executeUpdate();
-                       } catch (SQLException ex) {
+                       } 
+            catch (SQLException ex) {
                 System.out.println(ex);
             }
         }
- public void printComments(int moduleId, PrintWriter out, HttpServletRequest request) {
+ public void printComments(int moduleId, PrintWriter out) {
          
      try (
           Connection conn = getConnection();
@@ -76,39 +77,32 @@ public class CommentDb extends Database{
 
                  out.println("<h3>" + commenttext + "</h3>");
                  out.println("<h5>" + author + "</h5>");
-                 out.println("<button type=\"button\" class=\"btn btn-outline-danger\" method=\"DELETE\">X</button>");
+                 out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
+                 out.println("<input type=\"text\" name=\"delete\" value=\"TRUE\">");
+                 out.println("<input type=\"text\" name=\"comment_id\" value=\""+ rs.getString("comment_id") +"\"/>");
+                 out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete comment\">");
+                 out.println("</form>");
                  out.println("<hr class=\"my-4\">");
                 }
             } catch (SQLException ex) {
         System.out.println("Some error with the database" + ex);
         }     
     }
-  /* public void deleteComment(HttpServletRequest request, PrintWriter out, int Commentid){
+ 
+   public void deleteComment(int Commentid){
             try (
                Connection conn = getConnection();
                PreparedStatement ps = conn.prepareStatement(DEL_COMMENT)) {
-                if (request.getMethod().equals("post")){
-                    ps.setInt(1, Commentid);
-                    ps.executeUpdate();
-                }
-                out.println("<div>");
-                out.println("<button id=\"button\" type=\"submit\" class=\"btn btn-outline-danger\">X</button>");
-                out.println("</div>");
+               
+               ps.setInt(1, Commentid);
+               ps.executeUpdate();
+ 
        } catch (SQLException ex){
            System.out.println(ex);
        }
-   }*/
-            public  void deleteTest(int Commentid){
-                try(
-                        Connection conn = getConnection();
-                        PreparedStatement ps = conn.prepareStatement(DEL_COMMENT)){
-                    ps.setInt(1, Commentid);
-                    ps.executeUpdate();
-                }catch (SQLException ex){
-                    System.out.println(ex);
-                }
-            }
    }
+}
+ 
      /*          
    private void deleteUI(HttpServletRequest request, int Commentid){           
            try (

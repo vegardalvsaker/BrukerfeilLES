@@ -59,11 +59,11 @@ public class OneModule extends HttpServlet {
             
             bst.bootstrapHeader(out, "Module " + id);
             bst.bootstrapNavbar(out, "Modules");
-            
 
             db.printLearningGoals(id, out);
             cdb.printComments(mId,out);
             addComment(out,request);
+            
             bst.bootstrapFooter(out);
     
             
