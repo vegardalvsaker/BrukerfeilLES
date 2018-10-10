@@ -16,22 +16,22 @@ import Classes.User;
  * @author Vegard
  */
 public class UserDb extends Database {
-    static final String USER_EXIST = "select  count(*) from Users where user_name = ?";
-    static final String SLCT_USER = "select * from Users where user_name = ?";
+    static final String USER_EXIST = "select  count(*) from Users where user_email = ?";
+    static final String SLCT_USER = "select * from Users where user_email = ?";
     
     /**
      * Checks if there is a user in the database with the same name
      * @param email
      * @return 
      */
-    public boolean checkUserExist(String username) {
+    public boolean checkUserExist(String email) {
         try 
             (
                 Connection conn = getConnection();
                 PreparedStatement chckUsr = conn.prepareStatement(USER_EXIST);
             )
             {
-                chckUsr.setString(1, username);
+                chckUsr.setString(1, email);
             try (
             ResultSet rset = chckUsr.executeQuery();
                     ) {
@@ -49,12 +49,12 @@ public class UserDb extends Database {
         return false;
     }
     
-    public User getUser(String id) {
+    public User getUser(String email) {
         try (
             Connection conn = getConnection();
             PreparedStatement chckUsr = conn.prepareStatement(SLCT_USER)
         ) {
-            chckUsr.setString(1, id);
+            chckUsr.setString(1, email);
             try (ResultSet rset = chckUsr.executeQuery();) {
                 User user = new User();
                 rset.next();

@@ -37,30 +37,31 @@ public class Index extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
            
-            //Må fikse denne
+            
             //Sjekker om emailen er i databasen
             UserDb userdb = new UserDb();
             userdb.init();
-            String username = request.getParameter("username");
+            String email = request.getParameter("email");
             if (request.getSession().getAttribute("userLoggedIn") == null) {
-                if (userdb.checkUserExist(username)) {
+                if (userdb.checkUserExist(email)) {
                     HttpSession ses = request.getSession();
-                    User user = userdb.getUser(username);
+                    User user = userdb.getUser(email);
                     ses.setAttribute("userLoggedIn", user);
+                    //Printing the frontpage after the user details are connected to the session
                     FrontpagePrinter fp = new FrontpagePrinter();
                     fp.printFrontpage(out, "LES IS-110");   
                 
             }   else {
+                    //Sending the client back to the login page if he/she is not logged in
                     out.println("Sorry, this user does not exist in our database");
                     request.getRequestDispatcher("index.html").include(request, response);
                 }
+                
             } else {
+                //Printing the frontpage if the client is already logged in
                 FrontpagePrinter fp = new FrontpagePrinter();
                 fp.printFrontpage(out, "LES IS-110"); 
-            }
-            
-            
-            
+            }  
         }
     }
 
