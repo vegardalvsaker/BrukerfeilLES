@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class CommentDb extends Database{
     private static final String ADD_COMMENT = "insert into Comments values (default, ?, ?, default,?)";
-    private static final String PRINT_COMMENT = "select c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id where c.module_id = ? order by c.comment_timestamp;";
+    private static final String PRINT_COMMENT = "select c.comment_id, c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id where c.module_id = ? order by c.comment_timestamp;";
     private static final String DEL_COMMENT = "delete from Comment where comment_id = ?";
     
     public List<Comment> getComments(){
@@ -73,13 +73,17 @@ public class CommentDb extends Database{
             while (rs.next()){
                  String commenttext = rs.getString("comment_text");
                  String author = rs.getString("user_name");
-                 if (request.getMethod().equals("post"))  {
-                String comId = request.getParameter("comment_id");
-                int cId = Integer.parseInt(comId);
-                deleteTest(cId);}
+                 int commentid = rs.getInt("comment_id");
+                 if (request.getMethod().equals("delete")){
+                 deleteTest(commentid);
+                 }
                  out.println("<h3>" + commenttext + "</h3>");
                  out.println("<h5>" + author + "</h5>");
-                 out.println("<button type=\"button\" class=\"btn btn-outline-danger\" formmethod=\"post\">X</button>");
+                 //out.println("<small>" + commentid + "</small>");
+                 out.println("<form method=\"delete\">");
+                 out.println("<input type=\"submit\" value=\"X\"></submit>");
+                 out.println("</form><br>");
+               //  out.println("<input type=\"submit\" name=\"act\" value=\"delete\"></>");
                  out.println("<hr class=\"my-4\">");
                 }
             } catch (SQLException ex) {
