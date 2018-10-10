@@ -60,13 +60,14 @@ public class OneModule extends HttpServlet {
             bst.bootstrapHeader(out, "Module " + id);
             bst.bootstrapNavbar(out, "Modules");
             
-            System.out.println(id);
+
             db.printLearningGoals(id, out);
-            
             cdb.printComments(mId,out);
             addComment(out,request);
-    
             bst.bootstrapFooter(out);
+    
+            
+            
         }
     }
 private void addComment(PrintWriter out, HttpServletRequest request){
@@ -82,7 +83,7 @@ private void addComment(PrintWriter out, HttpServletRequest request){
             out.println("</form>");
             out.println("</div>");
 }
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
