@@ -21,37 +21,47 @@ import java.util.ArrayList;
    
 public class Worklist {
         
-    private int delivery_id;
-    private int student_id;
-    private int module_id;
+    private String delivery_id;
+    private String student_id;
+    private String module_id;
     private String delivery_content;
-    private int worklist_id;
-    private int delivery_timestamp; 
+    private String worklist_id;
+    private String delivery_timestamp; 
     private boolean delivery_isEvaluated;
-    private ArrayList<Worklist> delivery = new ArrayList<>();
-    private ArrayList<Worklist> worklist_2 = new ArrayList<>();
-
-    public int setId() {
+    
+    public Worklist(String delivery_id, String student_id, String module_id, String delivery_content, String worklist_id, String delivery_timestamp, boolean delivery_isEvaluated) {
+    
+    this.delivery_id = delivery_id;
+    this.student_id = student_id;
+    this.module_id = module_id;
+    this.delivery_content = delivery_content;
+    this.worklist_id = worklist_id;
+    this.delivery_timestamp = delivery_timestamp;
+    this.delivery_isEvaluated = delivery_isEvaluated;
+    }
+   
+  
+    public String getDelId() {
         return delivery_id;
     }
 
-    public int setStudentId() {
+    public String getStudentId() {
         return student_id;
     }
     
-    public int setModuleId() {
+    public String getModuleId() {
         return module_id;
     }
     
-    public String setDesc() {
+    public String getDesc() {
         return delivery_content;
     }
     
-    public int setTimestamp() {
+    public String getTimestamp() {
            return worklist_id;
     }
     
-    public int setIsEvaluated() {
+    public String getIsEvaluated() {
         return delivery_timestamp;
     }
     
@@ -59,10 +69,9 @@ public class Worklist {
         return delivery_isEvaluated;
     }
     
-    public ArrayList<Worklist> getWorklistNo1(){
-        return delivery;
-    }
-    public ArrayList<Worklist> getWorklistNo2(){
-        return worklist_2;
-    }
-    }
+    
+}
+    
+    
+    
+    

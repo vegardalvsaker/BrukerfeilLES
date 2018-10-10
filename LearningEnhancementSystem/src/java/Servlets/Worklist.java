@@ -48,7 +48,7 @@ public class Worklist extends HttpServlet {
             
             bst.containerOpen(out);
             
-            db.skrivDeliveries(out);
+            db.getWorklist(out);
             
             bst.containerClose(out);
             bst.bootstrapFooter(out);

@@ -24,107 +24,49 @@ import java.sql.*;
  */
 public class WorklistDb extends Database {
     
+    
+    
     private static final String SLCT_ALL_DELIVERABELS = "select * from Delivery";
     private static final String SLCT_EVALUATION_WITH_DELIVERY = "select d.delivery_id, u.student_id, m.module_id, d.delivery_content, w.worklist_id, d.delivery_timestamp";
-    /**
-     * This method retrieves all of the deliveries in the database, create an object of each record and is then
-     * added to a list of deliveries
-     * @return a list of delivery-objects.
-     */ 
-     /**
-     * This method retrieves all of the delivereies in the database, create an object of each record and is then
-     * added to a list Worklist
-     * @return a list of module-objects.
-     */
-    public List<Worklist> getDeliveries() throws SQLException{
-        List<Worklist> worklist = new ArrayList<>();
+    
+    public void getWorklist(PrintWriter out)    {
         
-        try (
-            Connection conn = getConnection();
-            Statement stmt = getStatement(conn);
-            ResultSet deliverySet = stmt.executeQuery(SLCT_ALL_DELIVERABELS);
-          ){
-            while(deliverySet.next()) {
-                Worklist delivery = new Worklist();
-                worklist.setId(deliverySet.getInt("delivery_id"));
-                worklist.setStudentId(deliverySet.getInt("student_id"));
-                worklist.setModuleId(deliverySet.getInt("module_id"));
-                worklist.setDesc(deliverySet.getString("delivery_content"));
-                worklist.setTimestamp(deliverySet.getInt("current_timestamp"));
-                worklist.setIsEvaluated(deliverySet.getBoolean("delivery_isEvaluated"));
-
-                worklist.add(delivery);
-            }
-            return worklist;
+        String list = ("select * from Delivery");
+        
+        try(
+                Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(list);
+                ResultSet rset = prepStatement.executeQuery();) {
+                ArrayList<Worklist> notEvaluted = new ArrayList();
+                
+               out.println("<h1>Worklist:</h1>");
+               
+               while(rset.next())   {
+                   
+                   String DelId = rset.getString("delivery_id");
+                   String StudentId = rset.getString("student_id");
+                   String ModuleId = rset.getString("module_id");
+                   String Desc = rset.getString("delivery_content");
+                   String workId = rset.getString("worklist_id");
+                   String Timestamp = rset.getString("delivery_timestamp");
+                   boolean isEvaluated = rset.getBoolean("delivery_isEvaluated");
+                   
+                   Worklist tull = new Worklist(DelId, StudentId, ModuleId, Desc, workId, Timestamp, isEvaluated); 
+                   notEvaluted.add(tull); 
+               } 
+               
+                for (Worklist objekt : notEvaluted)   {
+                   out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc()"</br>"); 
+               }
+        
         }
+        
+        catch(SQLException liste) {
+            
+            out.println("SQL exception: in getWorklist" + liste);
+           }
+           
     }
     
-    /**
-     *
-     * @param conn
-     * @param tableDelivery
-     */
-    public static void SortDatabaseViaMysql(Connection conn, String tableDelivery) {
-
-    try {
-        Statement stmt = conn.createStatement();
-        String cmd = "SELECT * FROM " + tableDelivery + " order by delivery_timestamp";
-
-
-        ResultSet rs = stmt.executeQuery(cmd);
-    } catch (Exception e) {
-         System.out.println(e);
-    }
-    
-}
-
-    public void SortDatabaseViaMysql(PrintWriter out) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-     /**
-     * Redundant*
-     * @param out 
-     */
-    public void skrivDeliveries(PrintWriter out) {
-    Connection conn = getConnection();
-    Statement stmt = getStatement(conn);
-
-     
-
-     System.out.println("The SQL query is: " + SLCT_ALL_DELIVERABELS); // Echo For debugging
-
-     System.out.println();
-
-     try {
-            ResultSet rset = stmt.executeQuery(SLCT_ALL_DELIVERABELS);
-
-            // Step 4: Process the ResultSet by scrolling the cursor forward via next().
-            //  For each row, retrieve the contents of the cells with getXxx(columnName).
-            out.println("To be evaluated:" +"<br>");
-            int rowCount = 0;
-            while(rset.next()) {  
-                String delID = rset.getString("delivery_id");
-                String  sID = rset.getString("student_id");
-                String delContent = rset.getString("delivery_content");
-
-
-                out.println("<br href=\"OneDel?id="+ delID+"\">" +delID +": " + sID + ", " + delContent +"</br>");
-
-                ++rowCount;
-             }  
-             out.println("Total number of records = " + rowCount);
-
-             conn.close();
-     }     
-     catch (SQLException ex) {
-            out.println("Database error: " +ex);
-     }
-      //stmt.close(); 
-    }
-
-    private void deleteUI(PrintWriter out, String deliveryID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
 
