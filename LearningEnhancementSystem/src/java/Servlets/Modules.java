@@ -33,10 +33,25 @@ public class Modules extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
         try (PrintWriter out = response.getWriter()) {  
             
-            ModuleDb db = new ModuleDb();
-            db.init();
+         ModuleDb db = new ModuleDb();
+         db.init();
+        
+        if (request.getMethod().equals("POST"))  {
+                
+                
+                
+                String modulnr = request.getParameter("Modulnummer");
+                
+                String modulnavn = request.getParameter("Modulnavn");
+         
+                String beskrivelse = request.getParameter("Beskrivelse");
+                           
+                db.addModule(out, modulnr, modulnavn, beskrivelse);
+                
+            }
             
             bst.bootstrapHeader(out, "Modules");
             
@@ -58,23 +73,6 @@ public class Modules extends HttpServlet {
             
             bst.bootstrapFooter(out);
             
-
-            ModuleDb modules = new ModuleDb();
-           
-
-            if (request.getMethod().equals("POST"))  {
-                
-                
-                String modulnr = request.getParameter("Modulnummer");
-                
-                String modulnavn = request.getParameter("Modulnavn");
-         
-                String beskrivelse = request.getParameter("Beskrivelse");
-                
-                            
-                modules.addModule(out, modulnr, modulnavn, beskrivelse);
-            }  
-         
         }
         
     }
@@ -99,6 +97,8 @@ public class Modules extends HttpServlet {
            
  
         }
+        
+        
         
             // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

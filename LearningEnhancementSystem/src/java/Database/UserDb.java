@@ -124,7 +124,7 @@ public class UserDb extends Database {
       return false;
 }
 
-    public void getStudentList(PrintWriter out)    {
+    public void getUserList(PrintWriter out)    {
         
         String list = ("select * from Users");
         
@@ -149,16 +149,16 @@ public class UserDb extends Database {
                }  
    
                for (User user : users)   {
-                   out.println(user + "<br>");
+                   out.println(user.getUserName() + "<br>");
                }
                
-                prepStatement.executeUpdate();
+                //prepStatement.executeUpdate();
  
         }
         
         catch(SQLException liste) {
             
-            out.println("SQL exception: in getStudentList" + liste);
+            out.println("SQL exception: in getStudentList " + liste);
            }
            
         } 
