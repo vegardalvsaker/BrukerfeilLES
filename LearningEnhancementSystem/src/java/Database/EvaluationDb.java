@@ -13,7 +13,7 @@ import Classes.Score;
  * @author Vegard
  */
 public class EvaluationDb extends Database{
-    private static final String ADD_DELIVERY = "insert into Evaluation values (default, ?, ?, default, '')";
+    private static final String ADD_EVALUATION = "insert into Evaluation values (default, ?, ?, '', default)";
     private static final String SELECT_ONE = "select evaluation_id from Evaluation where delivery_id = ?";
     private static final String UPDATE_EVALUATION_COMMENT = "update Evaluation set evaluation_comment = ? where delivery_id = ?";
     private static final String SELECT_EVALUATION_WITH_SCORE = "select * from Evaluation e inner join Score s on e.evaluation_id = s.evaluation_id where e.evaluation_id = ?";
@@ -29,7 +29,7 @@ public class EvaluationDb extends Database{
         } else {
             try (
                     Connection conn = getConnection();
-                    PreparedStatement ps = conn.prepareStatement(ADD_DELIVERY);
+                    PreparedStatement ps = conn.prepareStatement(ADD_EVALUATION);
                     ) {
 
                 ps.setString(1, teacher_id);

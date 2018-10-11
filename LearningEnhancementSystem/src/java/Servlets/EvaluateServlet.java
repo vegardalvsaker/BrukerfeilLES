@@ -63,7 +63,7 @@ public class EvaluateServlet extends HttpServlet {
             if (request.getParameter("start").equals("TRUE")) {
                 EvaluationDb eDb = new EvaluationDb();
                 //Sjekker om det finnes en evaluering for denne studenten allerede, og oppretter en ny evaluering hvis ikke. (Parametrene i metoden under er hardkodet frem til worklist blir ferdig
-                if (eDb.addEvaluation("100", "2")) {
+                if (eDb.addEvaluation("100", "1")) {
                     out.println("<h1> Evaluation for student " + user.getUserName() + " for " + module.getName() + "</h1>");
                     
                 //Henter de læringsmålene som lærereren skal evaluere etter    
@@ -72,15 +72,15 @@ public class EvaluateServlet extends HttpServlet {
                 //Printer begynnelsen på tabellen som lærereren skal evaluere i
                 bst.tableOpen(out);
                 
-                String youtubeUrl = getYoutubeViewHash(delivery.getDeliveryContent());
+                //String youtubeUrl = getYoutubeViewHash(delivery.getDeliveryContent());
                 //Print for å vise en embeded YouTube-video.
-                out.println("<div class=\"row\">\n" +
-                "      <div class=\"col-md-4 offset-md-3 mb-3\">\n" +
-                "    <iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"+ youtubeUrl +"?rel=0\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>\n" +
-                "  </div>");
+               // out.println("<div class=\"row\">\n" +
+               // "      <div class=\"col-md-4 offset-md-3 mb-3\">\n" +
+               // "    <iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"+ youtubeUrl +"?rel=0\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>\n" +
+               // "  </div>");
                 
                 //Form med link til servleten hvor faktisk alle poengene i evalueringen blir plottet inn i databasen. URL-parametrene er hardkodet for nå
-                out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation?deliveryid=2&studentid=1000&module_id=1&numberOfLearnGoals="+ lgoals.size() +"\" method=\"POST\">");
+                out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation?deliveryid=1&studentid=1000&module_id=1&numberOfLearnGoals="+ lgoals.size() +"\" method=\"POST\">");
                 
                 
                 //Printer radene i evalueringstabellen
