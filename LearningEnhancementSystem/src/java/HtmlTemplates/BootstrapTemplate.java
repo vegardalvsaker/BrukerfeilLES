@@ -39,17 +39,19 @@ public class BootstrapTemplate {
         String current_tab = "active";
         
         switch (tab) {
-            case "Home":    out.format(getBootstrapNavbar(), current_tab, "", "", "", "");
-                            break;
-            case "Modules": out.format(getBootstrapNavbar(), "", current_tab, "", "", "");
-                            break;
-            case "Results": out.format(getBootstrapNavbar(), "", "", current_tab, "", "");
-                            break;
-            case "Inbox":   out.format(getBootstrapNavbar(), "", "", "", current_tab, "");
-                            break;
-            case "People":  out.format(getBootstrapNavbar(), "", "", "", "", current_tab);
-                            break;
-            default:        out.format(getBootstrapNavbar(), "", "", "", "", "");
+            case "Home":        out.format(getBootstrapNavbar(), current_tab, "", "", "", "", "");
+                                break;
+            case "Modules":     out.format(getBootstrapNavbar(), "", current_tab, "", "", "", "");
+                                break;
+            case "Results":     out.format(getBootstrapNavbar(), "", "", current_tab, "", "", "");
+                                break;
+            case "Inbox":       out.format(getBootstrapNavbar(), "", "", "", current_tab, "", "");
+                                break;
+            case "Worklist":    out.format(getBootstrapNavbar(), "", "", "", "", current_tab, "");
+                                break;
+            case "People":      out.format(getBootstrapNavbar(), "", "", "", "", current_tab, "");
+                                break;
+            default:        out.format(getBootstrapNavbar(), "", "", "", "", "", "");
                             break;  
         }
     }
@@ -80,6 +82,9 @@ public class BootstrapTemplate {
 "        <li class=\"nav-item %s\" >\n" +
 "          <a class=\"nav-link disabled\" href=\"#\">Inbox </a>\n" +
 "        </li>\n" +
+"        <li class=\"nav-item %s\">\n" +
+"          <a class=\"nav-link disabled\" href=\"Worklist\">Worklist </a>\n" +
+"        </li>\n" +       
 "        <li class=\"nav-item %s dropdown\">\n" +
 "          <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
 "            People \n" +
