@@ -10,7 +10,7 @@ package Classes;
  * @author Vegard
  */
 public class User {
-    private int userId;
+    private String userId;
     private String userName;
     private String userEmail;
     private boolean userIsTeacher;
@@ -27,10 +27,10 @@ public class User {
         
     }
   
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
-    public void setUserid (int userid) {
+    public void setUserid (String userid) {
         this.userId = userid;
 
 
@@ -50,27 +50,19 @@ public class User {
         this.userEmail = useremail;
     }
     public boolean isTeacher() {
-        return isTeacher;
+        return userIsTeacher;
     }
 
     public void setTeacher(boolean isTeacher) {
-        this.isTeacher = isTeacher;
+        this.userIsTeacher = isTeacher;
     }
     
     public boolean getUserIsTeacher(){
         return userIsTeacher;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setUserId(String userID) {
+        this.userId = userID;
     }
 
     public void setUserIsTeacher(boolean userIsTeacher) {
