@@ -14,15 +14,17 @@ public class User {
     private String userName;
     private String userEmail;
     private boolean userIsTeacher;
-
     
-  /* public User(String userID, String userName, String userEmail) {
+     
+  public User(String userID, String userName, String userEmail, boolean userIsTeacher) {
         this.userId = userID;
         this.userName = userName;
         this.userEmail = userEmail;
+        this.userIsTeacher = userIsTeacher;
+        
     }
 
-*/
+
   public User() {
         
     }
@@ -32,9 +34,6 @@ public class User {
     }
     public void setUserid (String userid) {
         this.userId = userid;
-
-
-    
 
     }
     public String getUserName() {
@@ -46,6 +45,10 @@ public class User {
     public String getUserEmail() {
         return userEmail;
     }
+    public String toString()    {
+        return userID + " " + userName + " " + userEmail + " " + isTeacher + " ";
+    }
+  
     public void setUserEmail (String useremail) {
         this.userEmail = useremail;
     }

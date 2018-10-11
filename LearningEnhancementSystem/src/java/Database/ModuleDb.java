@@ -23,6 +23,8 @@ import java.sql.PreparedStatement;
  */
 public class ModuleDb extends Database {
     
+
+    private static final String SLCT_MODULE = "select * from Module";
     private static final String SLCT_ALL_MODULES = "select * from Module";
     private static final String SLCT_MODULES_WITH_GOALS = "select m.module_id, m.module_name, l.learn_goal_id, l.learn_goal_text, l.learn_goal_points from Module m inner join LearningGoal l on m.module_id = l.module_id where m.module_id = ?";
     private static final String SLCT_LEARNGOAL = "select * from LearningGoal where module_id = ?";
@@ -31,6 +33,7 @@ public class ModuleDb extends Database {
      * added to a list of modules
      * @return a list of module-objects.
      */
+
     public List<Module> getModuler(){
         List<Module> moduler = new ArrayList<>();
         
@@ -97,17 +100,14 @@ public class ModuleDb extends Database {
      * @param out 
      */
     public void skrivModuler(PrintWriter out) {
-    Connection conn = getConnection();
-    Statement stmt = getStatement(conn);
+         System.out.println("The SQL query is: " + SLCT_MODULE); // Echo For debugging
 
-     
 
-     System.out.println("The SQL query is: " + SLCT_ALL_MODULES); // Echo For debugging
 
-     System.out.println();
-
-     try {
-            ResultSet rset = stmt.executeQuery(SLCT_ALL_MODULES);
+     try( Connection connection = getConnection();
+          PreparedStatement prepStatement = connection.prepareStatement(SLCT_MODULE);
+          ResultSet rset = prepStatement.executeQuery();
+                ) {         
 
             // Step 4: Process the ResultSet by scrolling the cursor forward via next().
             //  For each row, retrieve the contents of the cells with getXxx(columnName).
@@ -117,6 +117,9 @@ public class ModuleDb extends Database {
                 String moduleID = rset.getString("module_id");
                 String  moduleName = rset.getString("module_name");
                 String moduleDescription = rset.getString("module_desc");
+                String moduleContent = rset.getString("module_content");
+                boolean isPublished = Boolean.parseBoolean(rset.getString("module_isPublished"));
+
 
                 out.println("<a href=\"OneModule?id="+ moduleID+"\">" +moduleID +": " + moduleName + ", " + moduleDescription +"</a>");
                 //if (userIsAdmin) {
@@ -127,15 +130,14 @@ public class ModuleDb extends Database {
              }  
              out.println("Total number of records = " + rowCount);
 
-             conn.close();
+             
      }     
      catch (SQLException ex) {
-            out.println("Database error: " +ex);
+            out.println("Error in function: SkrivModuler(): " + ex);
      }
-      //stmt.close(); 
     }
     
-    
+    /*
     public void addModules(HttpServletRequest req) {
         Connection conn = getConnection();
         Statement stmt = getStatement(conn);
@@ -154,7 +156,7 @@ public class ModuleDb extends Database {
         catch (SQLException ex) {
             System.out.println("Could not insert into table, because: " + ex);
         }
-    }
+    }*/
     
     private void deleteUI(PrintWriter out, String id){
       
@@ -166,24 +168,110 @@ public class ModuleDb extends Database {
     }
     
     public boolean deleteModule(HttpServletRequest req) {
-        String id = req.getParameter("id");
-        Connection conn = getConnection();
-        Statement stmt = getStatement(conn);
         
+        String id = req.getParameter("id");
+   
         String sql = "delete from Module where module_id = " + id;
         
-        try {
-            stmt.execute(sql);
-            conn.close();
-            return true;
+        try( Connection connection = getConnection();
+             PreparedStatement prepStatement = connection.prepareStatement(sql);
+             
+                ) {
+            
+                prepStatement.executeUpdate(sql);
+                
         }
+        
         catch (SQLException ex) {
             System.out.println("Could not execute statement: " + ex);
         }
         return false;
+        }
+
+    
+    
+    public boolean addModule(PrintWriter out, String modulnr, String modulnavn, String beskrivelse)  {
+        
+        init();
+        
+        String sql = "insert into Module values (default, ?, ?, ?, true)";
+        
+        try( Connection connection = getConnection();
+             PreparedStatement prepStatement = connection.prepareStatement(sql);
+             
+                ) {
+
+            //Må legge til published variabel
+            
+             
+             prepStatement.setString(1, modulnr);
+             prepStatement.setString(2, modulnavn);
+             prepStatement.setString(3, beskrivelse);
+             //prepStatement.setBoolean(5, published);
+            
+             prepStatement.executeUpdate();
+            
+            return true;
+        }
+        catch(SQLException e)   {
+            out.println("Ugyldig SQL query");
+            out.println("Feilmelding: " + e);
+            
+        }
+       
+        return false;
+     }
+    
+    public void printModules(PrintWriter out)   {
+        
+        String print = "select * from Module";
+        
+        try(
+                Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(print);
+                ResultSet rset = prepStatement.executeQuery();) {
+        
+                out.println("<h1>Moduler</h1>");
+                
+                while(rset.next())  {
+                    
+                    String moduleID = rset.getString("module_id");
+                    String moduleName = rset.getString("module_name");
+                    String moduleDesc = rset.getString("module_desc");
+                    String moduleContent = rset.getString("module_content");
+                    boolean modulePublished = Boolean.parseBoolean(rset.getString("module_isPublished"));
+                    
+                    Module moduler = new Module();
+                    
+                    
+                }
+            
+    }
+        catch(SQLException exep)   {
+            out.println("SQLException in printModules() " + exep);
+        }
+     }
+    
+    
+        
+    private void editUI(PrintWriter out)   {
+        
+        out.println("<form action=\"editModule\" method=\"POST\">");
+        out.println("<input name=\"edit\" value=\"TRUE\" style=\"visibility:hidden;\"></input>");
+        out.println("<input name=\"id\" value=\""+ id +"\" style=\"visibility:hidden;\"></input>");
+        out.println("<input type=\"submit\" value=\"Edit Module\"></submit>");
+        out.println("</form><br>");
+        
+        
     }
     
-    private void moduleBuilder(Module module) {
+
+    
+    public boolean editModule(PrintWriter out)  {
+        
+       // String edit = "alter "
+        return false;
         
     }
 }
+
