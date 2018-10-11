@@ -253,7 +253,7 @@ public class ModuleDb extends Database {
      }
     
     
-        
+    /*    
     private void editUI(PrintWriter out)   {
         
         out.println("<form action=\"editModule\" method=\"POST\">");
@@ -265,7 +265,7 @@ public class ModuleDb extends Database {
         
     }
     
-
+*/
     
     public boolean editModule(PrintWriter out)  {
         

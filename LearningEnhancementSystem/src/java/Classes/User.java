@@ -46,7 +46,7 @@ public class User {
         return userEmail;
     }
     public String toString()    {
-        return userID + " " + userName + " " + userEmail + " " + isTeacher + " ";
+        return userId + " " + userName + " " + userEmail + " " + userIsTeacher + " ";
     }
   
     public void setUserEmail (String useremail) {
