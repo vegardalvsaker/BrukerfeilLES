@@ -10,34 +10,65 @@ package Classes;
  * @author Vegard
  */
 public class User {
-    private String userID;
+    private String userId;
     private String userName;
     private String userEmail;
-    private boolean isTeacher;
+    private boolean userIsTeacher;
     
-    public User(String userID, String userName, String userEmail, boolean isTeacher) {
-        
-        this.userID = userID;
+     
+  public User(String userID, String userName, String userEmail, boolean userIsTeacher) {
+        this.userId = userID;
         this.userName = userName;
         this.userEmail = userEmail;
-        this.isTeacher = isTeacher;
+        this.userIsTeacher = userIsTeacher;
+        
     }
 
-    public String getUserID() {
-        return userID;
-    }
 
+  public User() {
+        
+    }
+  
+    public String getUserId() {
+        return userId;
+    }
+    public void setUserid (String userid) {
+        this.userId = userid;
+
+    }
     public String getUserName() {
         return userName;
     }
-
+    public void setUserName (String userName) {
+        this.userName = userName;
+    }
     public String getUserEmail() {
         return userEmail;
     }
-    public boolean getIsTeacher()   {
-        return isTeacher;
-    }
     public String toString()    {
         return userID + " " + userName + " " + userEmail + " " + isTeacher + " ";
+    }
+  
+    public void setUserEmail (String useremail) {
+        this.userEmail = useremail;
+    }
+    public boolean isTeacher() {
+        return userIsTeacher;
+    }
+
+    public void setTeacher(boolean isTeacher) {
+        this.userIsTeacher = isTeacher;
+    }
+    
+    public boolean getUserIsTeacher(){
+        return userIsTeacher;
+    }
+
+    public void setUserId(String userID) {
+        this.userId = userID;
+    }
+
+    public void setUserIsTeacher(boolean userIsTeacher) {
+        this.userIsTeacher = userIsTeacher;
     }
 }

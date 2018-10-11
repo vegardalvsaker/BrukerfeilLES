@@ -12,17 +12,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import Printers.FrontpagePrinter;
-import Database.UserDb;
-import Classes.User;
+import Database.EvaluationDb;
 
 /**
  *
  * @author Vegard
  */
-@WebServlet(name = "Index", urlPatterns = {"/Index"})
-public class Index extends HttpServlet {
+@WebServlet(name = "PublishedEvaluation", urlPatterns = {"/PublishedEvaluation"})
+public class PublishedEvaluation extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,32 +34,12 @@ public class Index extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-           
+            request.getParameter("evaluation_id");
+            EvaluationDb eDb = new EvaluationDb();
+            eDb.publish(true, request.getParameter("evaluation_id"));
+            out.println("<h1>Evalueringen er offtentliggjort!</h1>");
+            out.println("<a href=\"Index\">Gå hjem</a>");
             
-            //Sjekker om emailen er i databasen
-            UserDb userdb = new UserDb();
-            userdb.init();
-            String email = request.getParameter("email");
-            if (request.getSession().getAttribute("userLoggedIn") == null) {
-                if (userdb.checkUserExist(email)) {
-                    HttpSession ses = request.getSession();
-                    User user = userdb.getUser(email);
-                    ses.setAttribute("userLoggedIn", user);
-                    //Printing the frontpage after the user details are connected to the session
-                    FrontpagePrinter fp = new FrontpagePrinter();
-                    fp.printFrontpage(out, "LES IS-110");   
-                
-            }   else {
-                    //Sending the client back to the login page if he/she is not logged in
-                    out.println("Sorry, this user does not exist in our database");
-                    request.getRequestDispatcher("index.html").include(request, response);
-                }
-                
-            } else {
-                //Printing the frontpage if the client is already logged in
-                FrontpagePrinter fp = new FrontpagePrinter();
-                fp.printFrontpage(out, "LES IS-110"); 
-            }  
         }
     }
 

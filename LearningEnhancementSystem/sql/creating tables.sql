@@ -1,6 +1,6 @@
-create schema LearningEnhancementSystem;
+create schema LearningEnhancementSystem2;
 
-use LearningEnhancementSystem;
+use LearningEnhancementSystem2;
 
 create table Users(
 user_id integer not null auto_increment,
@@ -23,7 +23,7 @@ constraint ann_fk foreign key (teacher_id) references Users (user_id)
 );
 
 create table Module(
-module_id integer not null,
+module_id integer not null auto_increment,
 module_name varchar(30) not null,
 module_desc varchar(100),
 module_content text,
@@ -42,11 +42,14 @@ constraint learningGoal_pk primary key (learn_goal_id),
 constraint learningGoal_fk foreign key (module_id) references Module (module_id)
 );
 
+
+
 create table Comments(
 comment_id integer not null auto_increment,
 module_id integer,
 user_id integer,
 comment_timestamp timestamp default current_timestamp,
+comment_text text,
 
 constraint comment_pk primary key (comment_id),
 constraint comment_fk_1 foreign key (module_id) references Module (module_id),
@@ -58,6 +61,7 @@ reply_id integer not null auto_increment,
 comment_id integer,
 user_id integer,
 reply_timestamp timestamp default current_timestamp,
+reply_text text,
 
 constraint reply_pk primary key (reply_id),
 constraint reply_fk_1 foreign key (comment_id) references Comments (comment_id),
@@ -79,10 +83,12 @@ module_id integer,
 delivery_content text,
 worklist_id integer not null,
 delivery_timestamp timestamp default current_timestamp,
+delivery_isEvaluated boolean default false,
 
 constraint delivery_fk_1 foreign key (student_id) references Users (user_id),
 constraint delivery_fk_2 foreign key (module_id) references Module (module_id),
 constraint delivery_fk_3 foreign key (worklist_id) references Worklist (worklist_id),
+constraint unique_student_and_module unique (student_id, module_id),
 constraint delivery_pk primary key (delivery_id)
 /*constraint delivery_pk primary key (student_id, module_no)*/
 );
@@ -90,7 +96,8 @@ constraint delivery_pk primary key (delivery_id)
 create table Evaluation(
 evaluation_id integer not null auto_increment,
 teacher_id integer,
-delivery_id integer,
+delivery_id integer unique , #En delivery kan kun ha en evaluation
+evaluation_comment text,
 evaluation_isPublished boolean default false,
 
 constraint evaluation_fk_1 foreign key (teacher_id) references Users (user_id),

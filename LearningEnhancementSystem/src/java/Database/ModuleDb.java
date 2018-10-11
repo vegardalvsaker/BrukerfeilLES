@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import Classes.Module;
+import Classes.LearningGoal;
 import java.sql.PreparedStatement;
 
 /**
@@ -22,22 +23,32 @@ import java.sql.PreparedStatement;
  */
 public class ModuleDb extends Database {
     
-    static final String SLCT_MODULE = "select * from Module";
-    
-    
+
+    private static final String SLCT_MODULE = "select * from Module";
+    private static final String SLCT_ALL_MODULES = "select * from Module";
+    private static final String SLCT_MODULES_WITH_GOALS = "select m.module_id, m.module_name, l.learn_goal_id, l.learn_goal_text, l.learn_goal_points from Module m inner join LearningGoal l on m.module_id = l.module_id where m.module_id = ?";
+    private static final String SLCT_LEARNGOAL = "select * from LearningGoal where module_id = ?";
+    /**
+     * This method retrieves all of the modules in the database, create an object of each record and is then
+     * added to a list of modules
+     * @return a list of module-objects.
+     */
+
     public List<Module> getModuler(){
         List<Module> moduler = new ArrayList<>();
         
         try (
             Connection conn = getConnection();
             Statement stmt = getStatement(conn);
-            ResultSet modulSet = stmt.executeQuery(SLCT_MODULE);
+            ResultSet modulSet = stmt.executeQuery(SLCT_ALL_MODULES);
           ){
             while(modulSet.next()) {
                 Module modul = new Module();
-                modul.setNumber(modulSet.getInt("module_id"));
+                modul.setId(modulSet.getInt("module_id"));
                 modul.setName(modulSet.getString("module_name"));
-                modul.setDescription(modulSet.getString("module_description"));
+                modul.setContent(modulSet.getString("module_content"));
+                modul.setDesc(modulSet.getString("module_desc"));
+                modul.setPublished(modulSet.getBoolean("module_isPublished"));
                 moduler.add(modul);
             }
             return moduler;
@@ -47,21 +58,57 @@ public class ModuleDb extends Database {
         }
         return null;
     }
+    
+    public Module getModuleWithLearningGoals(String module_id) {
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(SLCT_MODULES_WITH_GOALS);
+            ){
+                ps.setString(1, module_id);
+                try (ResultSet rs = ps.executeQuery();) {
+    
+                    Module module = new Module();
+                    rs.first();
+                    module.setId(Integer.parseInt(module_id));
+                    module.setName(rs.getString("module_name"));
+                    LearningGoal lg = new LearningGoal();
+                    lg.setLearn_goal_id(rs.getString("learn_goal_id"));
+                    lg.setText(rs.getString("learn_goal_text"));
+                    lg.setPoints(rs.getInt("learn_goal_points"));
+
+                    module.addLearningGoal(lg);
+                    while (rs.next()) {
+                        LearningGoal lg2 = new LearningGoal();
+                        lg2.setLearn_goal_id(rs.getString("learn_goal_id"));
+                        lg2.setText(rs.getString("learn_goal_text"));
+                        lg2.setPoints(rs.getInt("learn_goal_points"));
+                        
+                        module.addLearningGoal(lg2);
+                    }
+                    return module;
+                }
+        }
+        catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
+    
     /**
      * Redundant*
      * @param out 
      */
     public void skrivModuler(PrintWriter out) {
-    
-     System.out.println("The SQL query is: " + SLCT_MODULE); // Echo For debugging
+         System.out.println("The SQL query is: " + SLCT_MODULE); // Echo For debugging
 
-     System.out.println();
+
 
      try( Connection connection = getConnection();
           PreparedStatement prepStatement = connection.prepareStatement(SLCT_MODULE);
           ResultSet rset = prepStatement.executeQuery();
-                ) {
-         
+                ) {         
+
             // Step 4: Process the ResultSet by scrolling the cursor forward via next().
             //  For each row, retrieve the contents of the cells with getXxx(columnName).
             out.println("The records selected are:" +"<br>");
@@ -72,6 +119,7 @@ public class ModuleDb extends Database {
                 String moduleDescription = rset.getString("module_desc");
                 String moduleContent = rset.getString("module_content");
                 boolean isPublished = Boolean.parseBoolean(rset.getString("module_isPublished"));
+
 
                 out.println("<a href=\"OneModule?id="+ moduleID+"\">" +moduleID +": " + moduleName + ", " + moduleDescription +"</a>");
                 //if (userIsAdmin) {
@@ -225,6 +273,5 @@ public class ModuleDb extends Database {
         return false;
         
     }
-    
 }
 
