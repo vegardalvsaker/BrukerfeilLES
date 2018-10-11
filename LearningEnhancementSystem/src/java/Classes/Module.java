@@ -12,19 +12,19 @@ import java.util.ArrayList;
  */
 public class Module {
         
-    private int id;
+    private int moduleid;
     private String name;
     private String desc;
     private String content;
     private boolean published;
     private ArrayList<LearningGoal> lgoals = new ArrayList<>();
 
-    public int getId() {
-        return id;
+    public int getModuleid() {
+        return moduleid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int moduleid) {
+        this.moduleid = moduleid;
     }
 
     public String getName() {
