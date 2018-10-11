@@ -60,7 +60,7 @@ public class UserDb extends Database {
                 rset.next();
                 user.setUserEmail(rset.getString("user_email"));
                 user.setUserName(rset.getString("user_name"));
-                user.setUserID(rset.getString("user_id"));
+                user.setUserId(rset.getString("user_id"));
                 user.setUserIsTeacher(rset.getBoolean("user_isTeacher"));
             
                 return user;
