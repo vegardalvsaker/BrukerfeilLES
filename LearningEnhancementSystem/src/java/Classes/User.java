@@ -13,19 +13,29 @@ public class User {
     private int userId;
     private String userName;
     private String userEmail;
-    private boolean isTeacher;
+    private boolean userIsTeacher;
+
     
   /* public User(String userID, String userName, String userEmail) {
         this.userId = userID;
         this.userName = userName;
         this.userEmail = userEmail;
     }
+
 */
+  public User() {
+        
+    }
+  
     public int getUserId() {
         return userId;
     }
     public void setUserid (int userid) {
         this.userId = userid;
+
+
+    
+
     }
     public String getUserName() {
         return userName;
@@ -47,4 +57,23 @@ public class User {
         this.isTeacher = isTeacher;
     }
     
+    public boolean getUserIsTeacher(){
+        return userIsTeacher;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public void setUserIsTeacher(boolean userIsTeacher) {
+        this.userIsTeacher = userIsTeacher;
+    }
 }
