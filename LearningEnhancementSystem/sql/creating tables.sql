@@ -42,11 +42,14 @@ constraint learningGoal_pk primary key (learn_goal_id),
 constraint learningGoal_fk foreign key (module_id) references Module (module_id)
 );
 
+
+
 create table Comments(
 comment_id integer not null auto_increment,
 module_id integer,
 user_id integer,
 comment_timestamp timestamp default current_timestamp,
+comment_text text,
 
 constraint comment_pk primary key (comment_id),
 constraint comment_fk_1 foreign key (module_id) references Module (module_id),
@@ -58,6 +61,7 @@ reply_id integer not null auto_increment,
 comment_id integer,
 user_id integer,
 reply_timestamp timestamp default current_timestamp,
+reply_text text,
 
 constraint reply_pk primary key (reply_id),
 constraint reply_fk_1 foreign key (comment_id) references Comments (comment_id),
@@ -79,6 +83,7 @@ module_id integer,
 delivery_content text,
 worklist_id integer not null,
 delivery_timestamp timestamp default current_timestamp,
+delivery_isEvaluated boolean default false,
 
 constraint delivery_fk_1 foreign key (student_id) references Users (user_id),
 constraint delivery_fk_2 foreign key (module_id) references Module (module_id),
