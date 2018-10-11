@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import Classes.Announcement;
@@ -62,7 +61,6 @@ public class AnnouncementDb extends Database {
                 out.println("<div class=\"container\">");
                 out.println("<h1 class=\"display-4\">Announcements:</h1>");  
                 out.println("<hr class=\"my-4\">");
-                int rowCount = 0;
                 while(rset.next()) {  
                 
                 int annoID = rset.getInt("ann_ID");
@@ -70,18 +68,15 @@ public class AnnouncementDb extends Database {
                 String  annoBody = rset.getString("ann_body");
                 Timestamp annotime = rset.getTimestamp("ann_timestamp");
                      
-                out.println("<h2>"+ annoID + ". " + annoSubject + "</h2>");
+                out.println("<h2>"+ annoSubject + "</h2>");
                 out.println("<p>" + annoBody + "</p>");
                 out.println("<small>" + annotime + "</small>");
-                out.println("<button class=\"btn btn-outline-danger my-2 my-sm-0\" type=\"submit\">Delete</button>");
-                out.println("<hr class=\"my-4\">");    
-                ++rowCount;
-                
-                /*if (ps.getMethod().equals("delete")){
-                    String annoId = ps.getParameter("annoID");
-                    int annoId = 
-                    deleteAnnouncement(annoID);
-                }*/
+                out.println("<form action=\"Announcement\" method=\"POST\">");
+                 out.println("<input type=\"text\" name=\"delete\" value=\"TRUE\"style=\"visibility:hidden;\">");
+                 out.println("<input type=\"text\" name=\"annId\" value=\""+ annoID +"\"style=\"visibility:hidden;\">");
+                 out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete\"style=\">");
+                 out.println("</form>");
+                out.println("<hr class=\"my-4\">");
             } conn.close();
         } catch (SQLException ex){
                 System.out.println("Some error with the database" + ex);
@@ -107,21 +102,16 @@ public class AnnouncementDb extends Database {
         }
 
      }
-   /* public boolean deleteAnnouncement(int annoID,HttpServletRequest req) {
-        try(
-        Connection conn = getConnection();
-        Statement stmt = getStatement(conn);
-        ResultSet rset = stmt.executeQuery(DEL_ANNOUNCEMENT);
-                ){
-            stmt.setString(1,req);
-            stmt.executeQuery();
-            conn.close();
-            return true;
-        }
-        catch (SQLException ex) {
-            System.out.println("Could not execute statement: " + ex);
-        }
-        return false;
-    }*/
-
+   public void deleteAnnouncement(int Announcementid){
+            try (
+               Connection conn = getConnection();
+               PreparedStatement ps = conn.prepareStatement(DEL_ANNOUNCEMENT)) {
+               
+               ps.setInt(1, Announcementid);
+               ps.executeUpdate();
+ 
+       } catch (SQLException ex){
+           System.out.println(ex);
+       }
+   }
 }

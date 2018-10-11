@@ -41,7 +41,13 @@ public class Announcement extends HttpServlet {
              db.init();
              bst.bootstrapHeader(out,"Announcement");
              bst.bootstrapNavbar(out,"Announcement");
-             
+             if (request.getMethod().equals("POST"))  {
+                if (request.getParameter("delete").equals("TRUE")) {
+                    String aid = request.getParameter("annId");
+                    int annId = Integer.parseInt(aid);
+                    db.deleteAnnouncement(annId);  
+                }
+             }
              bst.containerOpen(out);
              out.println("<a href=\"AddAnnouncement\"a class=\"btn btn-primary\">Add more</button></a>");
              db.skrivAnnouncement(out);
