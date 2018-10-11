@@ -5,21 +5,21 @@
  */
 package Servlets;
 
+import HtmlTemplates.BootstrapTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import Database.ModuleDb;
-
+import javax.servlet.http.HttpServletResponse; 
+import Database.AnnouncementDb;
 /**
  *
- * @author Vegard
+ * @author Marius
  */
-@WebServlet(name = "RemoveModule", urlPatterns = {"/RemoveModule"})
-public class RemoveModule extends HttpServlet {
+@WebServlet(name = "Announcement", urlPatterns = {"/Announcement"})
+public class Announcement extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,33 +30,33 @@ public class RemoveModule extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    BootstrapTemplate bst = new BootstrapTemplate();
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            ModuleDb db = new ModuleDb();
-            db.init();
-            if (request.getMethod().equals("POST")) {
-                if (request.getParameter("remove").equals("TRUE")) {
-                    db.deleteModule(request);
-                    //redirectHeader(out);
-                    out.println("<h5> Removing the module " + request.getParameter("id"));
-                } else {
-                    out.println(request.getParameter("remove"));
+             AnnouncementDb db = new AnnouncementDb();
+             db.init();
+             bst.bootstrapHeader(out,"Announcement");
+             bst.bootstrapNavbar(out,"Announcement");
+             if (request.getMethod().equals("POST"))  {
+                if (request.getParameter("delete").equals("TRUE")) {
+                    String aid = request.getParameter("annId");
+                    int annId = Integer.parseInt(aid);
+                    db.deleteAnnouncement(annId);  
                 }
-            } else {
-                out.println(request.getMethod());
-            }
-            out.println("<a href=\"Modules\">Go back</a>");
+             }
+             bst.containerOpen(out);
+             out.println("<a href=\"AddAnnouncement\"a class=\"btn btn-primary\">Add more</button></a>");
+             db.skrivAnnouncement(out);
+             
+             bst.containerClose(out);
+             bst.bootstrapFooter(out);
         }
     }
-    
-    protected void redirectHeader(PrintWriter out) {
-        out.println("<head>\n" +
-"        <meta http-equiv=\"refresh\" content=\"3;url=main\" />\n" +
-"    </head");
-    }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

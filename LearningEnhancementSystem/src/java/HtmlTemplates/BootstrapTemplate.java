@@ -130,21 +130,14 @@ public class BootstrapTemplate {
      * A bootstrap Jumbotron which displays announcements. placeholder at this moment {18.09}
      * @param out 
      */
-    public void jumbotron(PrintWriter out) {
-        out.println("<div class=\"jumbotron\">");
-        out.println("<div class=\"container\">");
-        out.println("<h1 class=\"display-4\">Announcements:</h1>");  
+    public void jumbotron(PrintWriter out,String annoSubject,String annoBody,String annoID) {
+        
+        out.println("<h2>"+ annoID + ". " + annoSubject + "</h2>");
+        out.println("<p>" + annoBody + "</p>");
         out.println("<hr class=\"my-4\">");
-        out.println("<p>This is a dummy announcement. Do not take this text seriously</p>");
-        out.println("<hr class=\"my-4\">");
-        out.println("<p>This is another dummy announcement. Do not take this text seriously, either</p>");
-
-        out.println("<p class=\"lead\">");
-        out.println("<a class=\"btn btn-primary btn-lg\" href=\"#\" role=\"button\">Learn more</a>");
-        out.println("</p>");
-        out.println("</div>");
-        out.println("</div>");
     }
+    
+    
     
     /**
      * Method for opening a bootstrap container
@@ -161,4 +154,5 @@ public class BootstrapTemplate {
     public void containerClose(PrintWriter out) {
         out.println("</div>");
     }
+
 }
