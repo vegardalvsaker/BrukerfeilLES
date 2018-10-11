@@ -93,7 +93,11 @@ module_id integer,
 delivery_content text,
 worklist_id integer not null,
 delivery_timestamp timestamp default current_timestamp,
+<<<<<<< Updated upstream
 delivery_isEvaluated boolean default false,
+=======
+delivery_isEvaluated boolean default 0,
+>>>>>>> Stashed changes
 
 
 constraint delivery_fk_1 foreign key (student_id) references Users (user_id),
