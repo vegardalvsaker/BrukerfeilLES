@@ -6,6 +6,7 @@
 package Servlets;
 
 import Database.LearningGoalDb;
+import Database.CommentDb;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import HtmlTemplates.BootstrapTemplate;
 
 /**
  *
@@ -34,16 +36,54 @@ public class OneModule extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("id");
+        
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+            BootstrapTemplate bst = new BootstrapTemplate();
             LearningGoalDb db = new LearningGoalDb();
+            CommentDb cdb = new CommentDb();
             db.init();
-            System.out.println(id);
+            cdb.init();
+            int mId = Integer.parseInt(id);
+            
+             if (request.getMethod().equals("POST"))  {
+                if (request.getParameter("delete").equals("TRUE")) {
+                    String comid = request.getParameter("comment_id");
+                    int commId = Integer.parseInt(comid);
+                    cdb.deleteComment(commId);
+                    
+                } else {
+                    String comText = request.getParameter("comment");
+                    if (comText.equals("")){
+                        out.println("Enter text before posting");
+                    } else 
+                    cdb.addComment(mId, "1", comText);
+                }
+            }
+            
+            bst.bootstrapHeader(out, "Module " + id);
+            bst.bootstrapNavbar(out, "Modules");
+
             db.printLearningGoals(id, out);
+            cdb.printComments(mId,out);
+            addComment(out,request);
+            
+            bst.bootstrapFooter(out); 
         }
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+private void addComment(PrintWriter out, HttpServletRequest request){
+            String id = request.getParameter("id");
+            out.println("<div>");
+            out.println("<form action=\"OneModule?id="+ id+"\" method=\"POST\">");
+            out.println("<input type=\"hidden\" name=\"delete\" value=\"FALSE\"");
+            out.println("<h3>Legg til kommentar</h3><br>");
+            out.println("<input type =\"text\" name=\"comment\"><br>");           
+            out.println("<br>");
+            out.println("<input type=\"submit\" value=\"Legg til\"><br>");        
+            out.println("<br>");
+            out.println("</form>");
+            out.println("</div>");
+    }
+  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

@@ -70,7 +70,7 @@ public class FrontpagePrinter {
         out.println("<div class=\"row\">");
         
             for (Module modul : modulList) {
-                int number = modul.getId();
+                int number = modul.getModuleid();
                 String name = modul.getName();
                 String desc = modul.getDesc();
                 bs.bootstrapCard(out,number, name, desc);
