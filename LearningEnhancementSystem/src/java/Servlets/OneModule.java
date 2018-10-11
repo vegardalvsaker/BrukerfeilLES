@@ -53,6 +53,9 @@ public class OneModule extends HttpServlet {
                     
                 } else {
                     String comText = request.getParameter("comment");
+                    if (comText.equals("")){
+                        out.println("Enter text before posting");
+                    } else 
                     cdb.addComment(mId, "1", comText);
                 }
             }
@@ -64,10 +67,7 @@ public class OneModule extends HttpServlet {
             cdb.printComments(mId,out);
             addComment(out,request);
             
-            bst.bootstrapFooter(out);
-    
-            
-            
+            bst.bootstrapFooter(out); 
         }
     }
 private void addComment(PrintWriter out, HttpServletRequest request){
@@ -82,7 +82,7 @@ private void addComment(PrintWriter out, HttpServletRequest request){
             out.println("<br>");
             out.println("</form>");
             out.println("</div>");
-}
+    }
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

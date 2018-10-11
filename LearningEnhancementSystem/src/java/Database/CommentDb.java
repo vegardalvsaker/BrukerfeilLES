@@ -78,8 +78,8 @@ public class CommentDb extends Database{
                  out.println("<h3>" + commenttext + "</h3>");
                  out.println("<h5>" + author + "</h5>");
                  out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
-                 out.println("<input type=\"text\" name=\"delete\" value=\"TRUE\">");
-                 out.println("<input type=\"text\" name=\"comment_id\" value=\""+ rs.getString("comment_id") +"\"/>");
+                 out.println("<input type=\"text\" name=\"delete\" value=\"TRUE\"style=\"visibility:hidden;\">");
+                 out.println("<input type=\"text\" name=\"comment_id\" value=\""+ rs.getString("comment_id") +"\"style=\"visibility:hidden;\"/>");
                  out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete comment\">");
                  out.println("</form>");
                  out.println("<hr class=\"my-4\">");
