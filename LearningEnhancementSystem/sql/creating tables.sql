@@ -32,8 +32,6 @@ module_isPublished bool default 0,
 constraint module_pk primary key (module_id)
 );
 
-
-describe LearningGoal;
 create table LearningGoal(
 learn_goal_id integer auto_increment,
 learn_goal_text text,
