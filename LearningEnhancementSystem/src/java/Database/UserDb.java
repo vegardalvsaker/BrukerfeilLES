@@ -65,7 +65,7 @@ public class UserDb extends Database {
             
                 return user;
             }
-            
+
           }
         catch (SQLException ex) {
         System.out.println(ex);
