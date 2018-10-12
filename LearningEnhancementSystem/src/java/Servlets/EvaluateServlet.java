@@ -26,9 +26,9 @@ import Database.DeliveryDb;
  */
 @WebServlet(name = "EvaluateServlet", urlPatterns = {"/EvaluateServlet"})
 public class EvaluateServlet extends HttpServlet {
-    private User user;
     private Delivery delivery;
     private Module module;
+    private String teacherId;
     private BootstrapTemplate bst = new BootstrapTemplate();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,28 +43,23 @@ public class EvaluateServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            //setup(request.getParameter("student_id"), request.getParameter("module_id"));
-            //hardkodet, metoden over vil bli brukt når worklist er ferdig
-            setup("1000", "1");
-            //Lagrer den aktuelle studenten som skal bli evaluert i session
-            request.getSession().setAttribute("student", user.getUserName());
-            
-            //User interface greier
-            bst.bootstrapHeader(out, "Evaluation for" + module.getName());
-            bst.bootstrapNavbar(out, "Home");
-            bst.containerOpen(out);
-            
-            //Lagrer den modulen som studenten har levert i session
-            request.getSession().setAttribute("module", module);
             
             //Printer en startknapp
-            out.println("<a href=\"EvaluateServlet?start=TRUE\"><button  class=\"btn btn-primary\">Start</button></a>");
+            out.println("<a href=\"EvaluateServlet?deliveryId="+ request.getParameter("deliveryId") +"&start=TRUE\"><button  class=\"btn btn-primary\">Start</button></a>");
             //Sjekker at lærereren har trykket på start
             if (request.getParameter("start").equals("TRUE")) {
+                setup(request);
+            
+            
+                //User interface greier
+                bst.bootstrapHeader(out, "Evaluation for " + module.getName());
+                bst.bootstrapNavbar(out, "Home");
+                bst.containerOpen(out);
+                request.getSession().setAttribute("module", module);
                 EvaluationDb eDb = new EvaluationDb();
                 //Sjekker om det finnes en evaluering for denne studenten allerede, og oppretter en ny evaluering hvis ikke. (Parametrene i metoden under er hardkodet frem til worklist blir ferdig
-                if (eDb.addEvaluation("100", "1")) {
-                    out.println("<h1> Evaluation for student " + user.getUserName() + " for " + module.getName() + "</h1>");
+                if (eDb.addEvaluation(teacherId, delivery.getDeliveryid())) {
+                    out.println("<h1> Evaluation for student " + delivery.getStudent_name() + " for " + module.getName() + "</h1>");
                     
                 //Henter de læringsmålene som lærereren skal evaluere etter    
                 ArrayList<LearningGoal> lgoals = module.getLearningGoals();
@@ -80,7 +75,7 @@ public class EvaluateServlet extends HttpServlet {
                // "  </div>");
                 
                 //Form med link til servleten hvor faktisk alle poengene i evalueringen blir plottet inn i databasen. URL-parametrene er hardkodet for nå
-                out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation?deliveryid=1&studentid=1000&module_id=1&numberOfLearnGoals="+ lgoals.size() +"\" method=\"POST\">");
+                out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation\" method=\"POST\">");
                 
                 
                 //Printer radene i evalueringstabellen
@@ -116,21 +111,25 @@ public class EvaluateServlet extends HttpServlet {
      * @param student_id
      * @param module_id 
      */
-    public void setup (String student_id, String module_id) {
-        UserDb uDb = new UserDb();
-        uDb.init();
-        user = uDb.getUser(student_id);
-                       
+    public void setup (HttpServletRequest request) {
+        DeliveryDb dDb = new DeliveryDb();
+        delivery = dDb.getDeliveryWithUser(request.getParameter("deliveryId"));
+        
         ModuleDb mdb = new ModuleDb();
         mdb.init();
-        module = mdb.getModuleWithLearningGoals(module_id);
+        module = mdb.getModuleWithLearningGoals(delivery.getModule_id());
+        System.out.println(module.getName());
         
-        DeliveryDb dDb = new DeliveryDb();
-        delivery = dDb.getDelivery(user.getUserID(), module.getId());
+        request.getSession().setAttribute("delivery", delivery);
         
+        //Lagrer den aktuelle studenten som skal bli evaluert i session
+        request.getSession().setAttribute("student", delivery.getStudent_name());
         
-       
+        //User teacher = (User)request.getSession().getAttribute("userLoggedIn");
+        //String teacherId = teacher.getUserID();  
+        teacherId = "100";
     }
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

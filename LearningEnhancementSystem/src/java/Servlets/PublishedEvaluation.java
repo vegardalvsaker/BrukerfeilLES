@@ -34,12 +34,11 @@ public class PublishedEvaluation extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            request.getParameter("evaluation_id");
+            String evaluationId = (String) request.getSession().getAttribute("evaluationId");
             EvaluationDb eDb = new EvaluationDb();
-            eDb.publish(true, request.getParameter("evaluation_id"));
+            eDb.publish(true, evaluationId);
             out.println("<h1>Evalueringen er offtentliggjort!</h1>");
-            out.println("<a href=\"Index\">Gå hjem</a>");
-            
+            out.println("<a href=\"Index\">Gå hjem</a>");       
         }
     }
 

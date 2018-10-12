@@ -13,17 +13,17 @@ import java.sql.*;
  */
 public class DeliveryDb extends Database{
     private static final String SELECT_DELIVERY = "select * from Delivery where (student_id, module_id) = (?,?)";
+    private static final String SELECT_DELIVERY_WITH_USER_NAME = "select u.user_name, d.delivery_id, d.delivery_timestamp, d.student_id, d.module_id,  d.worklist_id, d.delivery_content from Delivery d inner join Users u on d.student_id = u.user_id where d.delivery_id = ?";
     public DeliveryDb() {
         init();
     }
     
-    public Delivery getDelivery(String studentId, int moduleId) {
+    public Delivery getDeliveryWithUser(String deliveryId) {
         try (
                 Connection conn = getConnection();
-                PreparedStatement ps = conn.prepareStatement(SELECT_DELIVERY);
+                PreparedStatement ps = conn.prepareStatement(SELECT_DELIVERY_WITH_USER_NAME);
                 ) {
-            ps.setString(1, studentId);
-            ps.setInt(2, moduleId);
+            ps.setString(1, deliveryId);
             try (
                     ResultSet rs = ps.executeQuery();
                     ) {
@@ -33,6 +33,7 @@ public class DeliveryDb extends Database{
                 
                 delivery.setDeliveryid(rs.getString("delivery_id"));
                 delivery.setStudent_id(rs.getString("student_id"));
+                delivery.setStudent_name(rs.getString("user_name"));
                 delivery.setModule_id(rs.getString("module_id"));
                 delivery.setDeliveryContent(rs.getString("delivery_content"));
                 delivery.setWorklist_id(rs.getString("worklist_id"));
@@ -41,7 +42,7 @@ public class DeliveryDb extends Database{
                 return delivery;
             }
         } catch (SQLException ex) {
-            System.out.println("Method: getDelivery(), error: " + ex);
+            System.out.println("Method: getDeliveryWithUser(), error: " + ex);
         }
         return null;
     }

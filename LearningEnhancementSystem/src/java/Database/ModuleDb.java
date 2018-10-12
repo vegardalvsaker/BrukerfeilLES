@@ -41,7 +41,7 @@ public class ModuleDb extends Database {
           ){
             while(modulSet.next()) {
                 Module modul = new Module();
-                modul.setId(modulSet.getInt("module_id"));
+                modul.setId(modulSet.getString("module_id"));
                 modul.setName(modulSet.getString("module_name"));
                 modul.setContent(modulSet.getString("module_content"));
                 modul.setDesc(modulSet.getString("module_desc"));
@@ -66,7 +66,7 @@ public class ModuleDb extends Database {
     
                     Module module = new Module();
                     rs.first();
-                    module.setId(Integer.parseInt(module_id));
+                    module.setId(module_id);
                     module.setName(rs.getString("module_name"));
                     LearningGoal lg = new LearningGoal();
                     lg.setLearn_goal_id(rs.getString("learn_goal_id"));

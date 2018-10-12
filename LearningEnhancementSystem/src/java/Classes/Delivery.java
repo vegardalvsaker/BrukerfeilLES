@@ -12,10 +12,19 @@ package Classes;
 public class Delivery {
     private String deliveryid;
     private String student_id;
+    private String student_name;
     private String module_id;
     private String deliveryContent;
     private String worklist_id;
     private String delivery_timestamp;
+
+    public String getStudent_name() {
+        return student_name;
+    }
+
+    public void setStudent_name(String student_name) {
+        this.student_name = student_name;
+    }
 
     public String getDeliveryid() {
         return deliveryid;

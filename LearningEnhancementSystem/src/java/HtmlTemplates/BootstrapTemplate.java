@@ -104,7 +104,7 @@ public class BootstrapTemplate {
      * @param modulName
      * @param modulDesc 
      */
-    public void bootstrapCard(PrintWriter out,int modulNo, String modulName, String modulDesc) {
+    public void bootstrapCard(PrintWriter out,String modulNo, String modulName, String modulDesc) {
         out.println("<div class=\"col-4\">\n" +
 "      <div class=\"card\">\n" +
 "        <div class=\"card-body\">\n" +

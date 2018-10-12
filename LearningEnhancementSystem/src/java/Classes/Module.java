@@ -12,18 +12,18 @@ import java.util.ArrayList;
  */
 public class Module {
         
-    private int id;
+    private String id;
     private String name;
     private String desc;
     private String content;
     private boolean published;
     private ArrayList<LearningGoal> lgoals = new ArrayList<>();
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
