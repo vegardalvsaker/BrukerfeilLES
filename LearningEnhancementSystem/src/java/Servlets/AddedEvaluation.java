@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import Database.EvaluationDb;
 import Database.ScoreDb;
 import Classes.Module;
@@ -41,6 +42,7 @@ public class AddedEvaluation extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("on servlet 'AddedEvaluation'");
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             assignVariableValues(request);
@@ -110,8 +112,11 @@ public class AddedEvaluation extends HttpServlet {
         
         bst.tableClose(out);
         out.println("<h3>" + comment + "</h3>");
-        
-        request.getSession().setAttribute("Evaluation", evaluation);    
+        HttpSession session = request.getSession();
+        session.removeAttribute("module");
+        session.removeAttribute("student");
+        session.removeAttribute("delivery");
+        session.setAttribute("Evaluation", evaluation);    
         out.println("<a style=\"float: left;\" href=\"PublishedEvaluation\"><button class=\"btn btn-success\"> Publish evaluation!</button></a>");
         out.println("<a style=\"float: right;\" href=\"DeletedEvaluation\"><button class=\"btn btn-danger\"> Delete evaluation!</button></a>");
         bst.containerClose(out);

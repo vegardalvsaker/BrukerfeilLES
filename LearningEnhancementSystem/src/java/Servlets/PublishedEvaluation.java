@@ -34,21 +34,29 @@ public class PublishedEvaluation extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("on servlet 'PublishedEvaluation'");
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             Evaluation evaluation = (Evaluation) request.getSession().getAttribute("Evaluation");
-            EvaluationDb eDb = new EvaluationDb();
-            eDb.publish(true, evaluation.getEvaluationid());
-            
-            //evaluation = null;
-            HttpSession session = request.getSession();
-            Enumeration enumm = session.getAttributeNames();
-            while (enumm.hasMoreElements()) {
-                System.out.println((String) enumm.nextElement());
-        }
-            
-            out.println("<h1>Evalueringen er offtentliggjort!</h1>");
-            out.println("<a href=\"Index\">Gå hjem</a>");       
+            if (evaluation == null) {
+                out.println("<h1 style=\"text-aligned: center;\">Her skal du vel strengt tatt ikke være?</h1>");
+                out.println("<a href=\"Index\">Gå hjem igjen</a>");
+            } else {
+                EvaluationDb eDb = new EvaluationDb();
+                eDb.publish(true, evaluation.getEvaluationid());
+
+                //evaluation = null;
+                HttpSession session = request.getSession();
+                session.removeAttribute("Evaluation");
+                //debug for å sjekke hvilke objekter som er i session.
+                Enumeration enumm = session.getAttributeNames();
+                while (enumm.hasMoreElements()) {
+                    System.out.println((String) enumm.nextElement());
+                }
+
+                out.println("<h1>Evalueringen er offtentliggjort!</h1>");
+                out.println("<a href=\"Index\">Gå hjem</a>");
+            }
         }
     }
 

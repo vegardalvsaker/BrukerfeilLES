@@ -43,7 +43,7 @@ public class EvaluateServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
+            System.out.println("on servlet 'EvaluateEvaluation'");
             //Printer en startknapp
             out.println("<a href=\"EvaluateServlet?deliveryId="+ request.getParameter("deliveryId") +"&start=TRUE\"><button  class=\"btn btn-primary\">Start</button></a>");
             //Sjekker at lærereren har trykket på start
