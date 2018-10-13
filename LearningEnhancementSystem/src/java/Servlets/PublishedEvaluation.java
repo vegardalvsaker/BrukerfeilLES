@@ -10,10 +10,12 @@ import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Database.EvaluationDb;
-
+import Classes.Evaluation;
+import java.util.Enumeration;
 /**
  *
  * @author Vegard
@@ -34,9 +36,17 @@ public class PublishedEvaluation extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String evaluationId = (String) request.getSession().getAttribute("evaluationId");
+            Evaluation evaluation = (Evaluation) request.getSession().getAttribute("Evaluation");
             EvaluationDb eDb = new EvaluationDb();
-            eDb.publish(true, evaluationId);
+            eDb.publish(true, evaluation.getEvaluationid());
+            
+            //evaluation = null;
+            HttpSession session = request.getSession();
+            Enumeration enumm = session.getAttributeNames();
+            while (enumm.hasMoreElements()) {
+                System.out.println((String) enumm.nextElement());
+        }
+            
             out.println("<h1>Evalueringen er offtentliggjort!</h1>");
             out.println("<a href=\"Index\">Gå hjem</a>");       
         }

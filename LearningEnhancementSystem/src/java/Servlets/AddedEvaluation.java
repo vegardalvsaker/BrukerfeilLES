@@ -52,7 +52,7 @@ public class AddedEvaluation extends HttpServlet {
         }
     }
     /**
-     * Metode som legger inn kommentaren og poengene til evalueringen.
+     * Metode som legger inn kommentaren og poengene til evalueringen i databasen.
      */
     private void insertEvaluationAndScore(HttpServletRequest request) {
         String deliveryid = delivery.getDeliveryid();
@@ -62,12 +62,12 @@ public class AddedEvaluation extends HttpServlet {
         int i = 0;
         for (LearningGoal lg : module.getLearningGoals()) {
             String lgId = lg.getLearn_goal_id();
-            sDb.giveScore(eDb.getEvaluationId(delivery.getDeliveryid()), lgId, givenPoints.get(i) );
+            sDb.giveScore(eDb.getEvaluationId(delivery.getDeliveryid()), lgId, givenPoints.get(i));
             i++;
         }
     }
     /**
-     * MMetode som returnerer ei liste med de poengene som ble gitt i evalueringen.
+     * Metode som returnerer ei liste med de poengene som ble gitt i evalueringen.
      * @param request
      * @param numberOfGoals
      * @return 
@@ -111,12 +111,9 @@ public class AddedEvaluation extends HttpServlet {
         bst.tableClose(out);
         out.println("<h3>" + comment + "</h3>");
         
-                
-        request.getSession().setAttribute("Scores", scores);
-        String evaluationId = evaluation.getEvaluationid();
-        request.getSession().setAttribute("evaluationId", evaluationId);
-        out.println("<a style=\"float: left;\" href=\"PublishedEvaluation?evaluationid="+ evaluationId +"\"><button class=\"btn btn-success\"> Publish evaluation!</button></a>");
-        out.println("<a style=\"float: right;\" href=\"DeletedEvaluation?evaluationid="+ evaluationId +"\"><button class=\"btn btn-danger\"> Delete evaluation!</button></a>");
+        request.getSession().setAttribute("Evaluation", evaluation);    
+        out.println("<a style=\"float: left;\" href=\"PublishedEvaluation\"><button class=\"btn btn-success\"> Publish evaluation!</button></a>");
+        out.println("<a style=\"float: right;\" href=\"DeletedEvaluation\"><button class=\"btn btn-danger\"> Delete evaluation!</button></a>");
         bst.containerClose(out);
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

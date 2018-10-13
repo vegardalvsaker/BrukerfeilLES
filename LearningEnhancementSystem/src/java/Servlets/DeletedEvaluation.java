@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import Classes.Score;
+import Classes.Evaluation;
 import Database.ScoreDb;
 import Database.EvaluationDb;
 
@@ -37,16 +38,16 @@ public class DeletedEvaluation extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            Evaluation evaluation = (Evaluation) request.getSession().getAttribute("Evaluation");
             ArrayList<Score> scores = new ArrayList<>();
-            scores = (ArrayList<Score>) request.getSession().getAttribute("Scores");
-            
+            scores = evaluation.getScorelist();
             ScoreDb sDb = new ScoreDb();
             for (Score score : scores) {
                 sDb.deleteScore(score.getId());
             }
             
             EvaluationDb eDb = new EvaluationDb();
-            eDb.deleteEvaluation(request.getParameter("evaluationid"));
+            eDb.deleteEvaluation(evaluation.getEvaluationid());
             out.println("<h1>Deleted this evaluation!</h1>");
             out.println("<a href=\"Index\"> Go home </a>");
         }
