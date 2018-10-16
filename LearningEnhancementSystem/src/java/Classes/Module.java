@@ -66,4 +66,4 @@ public class Module {
     public ArrayList<LearningGoal> getLearningGoals(){
         return lgoals;
     }
-    }
+}
