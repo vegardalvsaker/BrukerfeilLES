@@ -19,7 +19,7 @@ import java.util.ArrayList;
    // private ArrayList<Evaluation> Todo = new ArrayList<>();
    // private ArrayList<Evaluation> Evaluated = new ArrayList<>();
    
-public class Worklist {
+public class WorklistNotEval {
         
     private String delivery_id;
     private String student_id;
@@ -29,7 +29,7 @@ public class Worklist {
     private String delivery_timestamp; 
     private boolean delivery_isEvaluated;
     
-    public Worklist(String delivery_id, String student_id, String module_id, String delivery_content, String worklist_id, String delivery_timestamp, boolean delivery_isEvaluated) {
+    public WorklistNotEval(String delivery_id, String student_id, String module_id, String delivery_content, String worklist_id, String delivery_timestamp, boolean delivery_isEvaluated) {
     
     this.delivery_id = delivery_id;
     this.student_id = student_id;
@@ -58,11 +58,7 @@ public class Worklist {
     }
     
     public String getTimestamp() {
-           return worklist_id;
-    }
-    
-    public String getIsEvaluated() {
-        return delivery_timestamp;
+           return delivery_timestamp;
     }
     
     public boolean delivery_isEvaluated() { 

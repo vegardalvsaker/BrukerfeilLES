@@ -15,7 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import Classes.Worklist;
+import Classes.WorklistNotEval;
 import java.sql.*;
 
 /**
@@ -26,20 +26,22 @@ public class WorklistDb extends Database {
     
     
     
-    private static final String SLCT_ALL_DELIVERABELS = "select * from Delivery";
-    private static final String SLCT_EVALUATION_WITH_DELIVERY = "select d.delivery_id, u.student_id, m.module_id, d.delivery_content, w.worklist_id, d.delivery_timestamp";
+    //private static final String SLCT_ALL_DELIVERABELS = "select * from Delivery";
+    //private static final String SLCT_EVALUATION_WITH_DELIVERY = "select d.delivery_id, u.student_id, m.module_id, d.delivery_content, w.worklist_id, d.delivery_timestamp";
     
-    public void getWorklist(PrintWriter out)    {
+    public void getWorklistNotEval(PrintWriter out)    {
         
         String list = ("select * from Delivery");
+        
         
         try(
                 Connection connection = getConnection();
                 PreparedStatement prepStatement = connection.prepareStatement(list);
                 ResultSet rset = prepStatement.executeQuery();) {
-                ArrayList<Worklist> notEvaluted = new ArrayList();
+                ArrayList<WorklistNotEval> notEvaluted = new ArrayList();
+              
                 
-               out.println("<h1>Worklist:</h1>");
+               out.println("<h1>Worklist for tasks not evaluated:</h1>");
                
                while(rset.next())   {
                    
@@ -51,11 +53,12 @@ public class WorklistDb extends Database {
                    String Timestamp = rset.getString("delivery_timestamp");
                    boolean isEvaluated = rset.getBoolean("delivery_isEvaluated");
                    
-                   Worklist tull = new Worklist(DelId, StudentId, ModuleId, Desc, workId, Timestamp, isEvaluated); 
+                   WorklistNotEval tull = new WorklistNotEval(DelId, StudentId, ModuleId, Desc, workId, Timestamp, isEvaluated); 
                    notEvaluted.add(tull); 
                } 
                
-                for (Worklist objekt : notEvaluted)   {
+               
+                for (WorklistNotEval objekt : notEvaluted)   {
                    out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc() +"</br>"); 
                }
         
