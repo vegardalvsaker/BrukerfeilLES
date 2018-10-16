@@ -13,8 +13,10 @@ import java.util.ArrayList;
  * @author Vegard & Gorm & Fosse
  */
 public class UserDb extends Database {
-    static final String SLCT_USER= "select * from Users where user_id = ?";
+    static final String USER_EXIST = "select  count(*) from Users where user_email = ?";
+    static final String SLCT_USER = "select * from Users where user_email = ?";
     
+
   // Fosse
     //Stating arraylists here to be able to split methods into get and print
     ArrayList<User> onlyStudents = new ArrayList<>();
@@ -22,43 +24,46 @@ public class UserDb extends Database {
     ArrayList<User> profileList = new ArrayList<>();
   //STOP  
     
-    public boolean checkUser(String email) {
-        PreparedStatement chckUsr = null;
-        Connection conn = null;
-        ResultSet rset = null;
-        try {
-            conn = getConnection();
-            chckUsr = conn.prepareStatement(SLCT_USER);
-            chckUsr.setString(1, email);
-            rset = chckUsr.executeQuery(); 
-            
+    /**
+     * Checks if there is a user in the database with the same name
+     * @param email
+     * @return 
+     */
+    public boolean checkUserExist(String email) {
+        try 
+            (
+                Connection conn = getConnection();
+                PreparedStatement chckUsr = conn.prepareStatement(USER_EXIST);
+            )
+            {
+                chckUsr.setString(1, email);
+            try (
+            ResultSet rset = chckUsr.executeQuery();
+                    ) {
+                rset.next();
+                if (rset.getInt("count(*)") == 1) {
+                    return true;
+                }
+            }
           }
         catch (SQLException ex) {
-            System.out.println("User does not exist:" + ex);
+            System.out.println("Method: checkUserExist() in Database.UserDb. Error: " + ex);
             return false;
-        } finally {
-            try {
-               if (rset != null) {rset.close();}
-               if (chckUsr != null) {chckUsr.close();}
-               if (conn != null) {conn.close();} 
-            }
-           catch (SQLException ex){
-               System.out.println(ex);
-           }
-        }
-        return true;
+        } 
+         
+        return false;
     }
     
-    public User getUser(String id) {
+    public User getUser(String email) {
         try (
             Connection conn = getConnection();
             PreparedStatement chckUsr = conn.prepareStatement(SLCT_USER)
         ) {
-            chckUsr.setString(1, id);
+            chckUsr.setString(1, email);
             ResultSet user = chckUsr.executeQuery();
             
             user.last();
-            String email = user.getString("user_email");
+            String id = user.getString("user_id");
             String name = user.getString("user_name");
             boolean isTeacher = user.getBoolean("isTeacher");
             
@@ -124,6 +129,46 @@ public class UserDb extends Database {
         
 
       return false;
+}
+
+    public void getUserList(PrintWriter out)    {
+        
+        String list = ("select * from Users");
+        
+        try(
+                Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(list);
+                ResultSet rset = prepStatement.executeQuery();) {
+            
+               out.println("<h1>Studentliste:</h1>");
+               
+               ArrayList<User> users = new ArrayList<>();
+               
+               while(rset.next())   {
+                   
+                   String userID = rset.getString("user_ID");
+                   String userName = rset.getString("user_name");
+                   String userEmail = rset.getString("user_email");
+                   boolean isTeacher = rset.getBoolean("user_isTeacher");
+                   
+                   User user = new User(userID, userName, userEmail, isTeacher);
+                   users.add(user);
+               }  
+   
+               for (User user : users)   {
+                   out.println(user.getUserName() + "<br>");
+               }
+               
+                //prepStatement.executeUpdate();
+ 
+        }
+        
+        catch(SQLException liste) {
+            
+            out.println("SQL exception: in getStudentList " + liste);
+           }
+           
+        } 
 }
 
     public void getStudentList(PrintWriter out)    {

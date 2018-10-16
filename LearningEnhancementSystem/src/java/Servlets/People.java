@@ -16,14 +16,11 @@ import Database.UserDb;
 @WebServlet(urlPatterns = {"/People"})
 public class People extends HttpServlet {
     BootstrapTemplate bst = new BootstrapTemplate();
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            
-
+        try (PrintWriter out = response.getWriter()) { 
             bst.bootstrapHeader(out, "People");
             bst.bootstrapNavbar(out, "People");
             
@@ -52,8 +49,7 @@ public class People extends HttpServlet {
             students.removeStudent(out, studnavn);
             
             } else if (request.getMethod().equals("GET")) {
-                 students.getStudentList(out);
-                     
+                 students.getUserList(out);
                }
         }
     }
