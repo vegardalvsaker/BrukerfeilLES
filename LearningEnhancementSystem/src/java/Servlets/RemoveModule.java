@@ -48,7 +48,7 @@ public class RemoveModule extends HttpServlet {
             } else {
                 out.println(request.getMethod());
             }
-            out.println("<a href=\"main\">Go back</a>");
+            out.println("<a href=\"Modules\">Go back</a>");
         }
     }
     

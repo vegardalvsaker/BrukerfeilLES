@@ -16,49 +16,56 @@ import Classes.User;
  * @author Vegard
  */
 public class UserDb extends Database {
-    static final String SLCT_USER= "select * from Users where user_id = ?";
+    static final String USER_EXIST = "select  count(*) from Users where user_email = ?";
+    static final String SLCT_USER = "select * from Users where user_email = ?";
     
-    public boolean checkUser(String email) {
-        PreparedStatement chckUsr = null;
-        Connection conn = null;
-        ResultSet rset = null;
-        try {
-            conn = getConnection();
-            chckUsr = conn.prepareStatement(SLCT_USER);
-            chckUsr.setString(1, email);
-            rset = chckUsr.executeQuery(); 
-            
+    /**
+     * Checks if there is a user in the database with the same name
+     * @param email
+     * @return 
+     */
+    public boolean checkUserExist(String email) {
+        try 
+            (
+                Connection conn = getConnection();
+                PreparedStatement chckUsr = conn.prepareStatement(USER_EXIST);
+            )
+            {
+                chckUsr.setString(1, email);
+            try (
+            ResultSet rset = chckUsr.executeQuery();
+                    ) {
+                rset.next();
+                if (rset.getInt("count(*)") == 1) {
+                    return true;
+                }
+            }
           }
         catch (SQLException ex) {
-            System.out.println("User does not exist:" + ex);
+            System.out.println("Method: checkUserExist() in Database.UserDb. Error: " + ex);
             return false;
-        } finally {
-            try {
-               if (rset != null) {rset.close();}
-               if (chckUsr != null) {chckUsr.close();}
-               if (conn != null) {conn.close();} 
-            }
-           catch (SQLException ex){
-               System.out.println(ex);
-           }
-        }
-        return true;
+        } 
+         
+        return false;
     }
     
-    public User getUser(String id) {
+    public User getUser(String email) {
         try (
             Connection conn = getConnection();
             PreparedStatement chckUsr = conn.prepareStatement(SLCT_USER)
         ) {
-            chckUsr.setString(1, id);
-            ResultSet user = chckUsr.executeQuery();
+            chckUsr.setString(1, email);
+            try (ResultSet rset = chckUsr.executeQuery();) {
+                User user = new User();
+                rset.next();
+                user.setUserEmail(rset.getString("user_email"));
+                user.setUserName(rset.getString("user_name"));
+                user.setUserID(rset.getString("user_id"));
+                user.setUserIsTeacher(rset.getBoolean("user_isTeacher"));
             
-            user.last();
-            String email = user.getString("user_email");
-            String name = user.getString("user_name");
-            
-            User userObj = new User(id, name, email);
-            return userObj;
+                return user;
+            }
+
           }
         catch (SQLException ex) {
         System.out.println(ex);
