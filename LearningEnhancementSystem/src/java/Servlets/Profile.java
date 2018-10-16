@@ -1,5 +1,7 @@
 package Servlets;
 
+import Database.UserDb;
+import HtmlTemplates.BootstrapTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -7,41 +9,63 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import HtmlTemplates.BootstrapTemplate;
-import Database.UserDb;
+
 /**
  *
- * @author Ingve Fosse
+ * @author Fosse
  */
-@WebServlet(urlPatterns = {"/PeopleStudents"})
-public class PeopleStudents extends HttpServlet {
+@WebServlet(name = "Profile", urlPatterns = {"/Profile"})
+public class Profile extends HttpServlet {
 
-    
-    BootstrapTemplate bst = new BootstrapTemplate();
+  BootstrapTemplate bst = new BootstrapTemplate();
     
 protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
     
+    
+    String userID = request.getParameter("id"); 
+    
+    
+    
     try (PrintWriter out = response.getWriter()) {
 
-        bst.bootstrapHeader(out, "Students");
-        bst.bootstrapNavbar(out, "Students");
+        bst.bootstrapHeader(out, "Profile");
+        bst.bootstrapNavbar(out, "Profile");
             
         bst.containerOpen(out);
         bst.containerClose(out);
         bst.bootstrapFooter(out);
               
-        UserDb students = new UserDb();
-        students.init();
+        UserDb profile = new UserDb();
+        profile.init();
         
-
-        students.getOnlyStudent(out);
-        students.printOnlyStudent(out);
+        profile.getProfile(out,userID);
+        profile.printProfile(out);
+        out.println(userID);
+        profileForm(out);
         
     }
         
 }
+
+public void profileForm(PrintWriter out) {
+
+    out.println("<!DOCTYPE html>");
+    out.println("<html>");
+    out.println("<head>");
+    out.println("<title>People</title>");            
+    out.println("</head>");
+    out.println("<body>");
+    out.println("<div>");
+    out.println("<form action=\"Profile\" method=\"POST\">");
+    out.println("<br>");
+    out.println("<input type=\"submit\" value=\"Placeholder\">");
+    out.println("</form>");
+    out.println("</div>"); 
+
+            }
+
  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

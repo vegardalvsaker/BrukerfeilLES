@@ -19,6 +19,7 @@ public class UserDb extends Database {
     //Stating arraylists here to be able to split methods into get and print
     ArrayList<User> onlyStudents = new ArrayList<>();
     ArrayList<User> onlyTeachers = new ArrayList<>();
+    ArrayList<User> profileList = new ArrayList<>();
     
     
     public boolean checkUser(String email) {
@@ -169,6 +170,41 @@ public class UserDb extends Database {
     //    | | | | | | |
     //    V V V V V V V 
     //
+    public void getProfile(PrintWriter out, String id) {
+        String oneProfile = ("select * from Users where user_id = ?");
+        try(
+            Connection connection = getConnection();
+            PreparedStatement prepStatement = connection.prepareStatement(oneProfile);
+            ResultSet rset = prepStatement.executeQuery();) {
+
+            while(rset.next())   {
+                   
+                String userID = rset.getString("user_ID");
+                String userName = rset.getString("user_name");
+                String userEmail = rset.getString("user_email");
+                boolean isTeacher = rset.getBoolean("user_isTeacher");
+                   
+                User user = new User(userID, userName, userEmail, isTeacher);
+                profileList.add(user);
+            }  
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getOnlyStudent" + liste);
+           }  
+    } 
+    
+    public void printProfile(PrintWriter out) {
+
+        for (User user : profileList) {
+                out.println("<h1>"+"Information about"+ user.getUserName() + "</h1>");
+                out.println("User ID: " + user.getUserID());
+                out.println(" Name: " + user.getUserName());
+                out.println(" Email: " + user.getUserEmail());
+                out.println("<br>");
+            }
+    }
+   
+    
     public void getOnlyStudent(PrintWriter out) {
         String studentList = ("select * from Users where user_isTeacher = 0");
         
@@ -196,9 +232,11 @@ public class UserDb extends Database {
     public void printOnlyStudent(PrintWriter out) {
         out.println("<h1>List of all students:</h1>");
         for (User user : onlyStudents) {
+                String id = user.getUserID();
                 out.println("User ID: " + user.getUserID());
                 out.println(" Name: " + user.getUserName());
                 out.println(" Email: " + user.getUserEmail());
+                out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-primary\">View Profile</button></a>");
                 out.println("<br>");
             }
     }

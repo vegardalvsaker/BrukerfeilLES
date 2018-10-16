@@ -15,13 +15,12 @@ import Database.UserDb;
  */
 @WebServlet(urlPatterns = {"/People"})
 public class People extends HttpServlet {
-
-    
     BootstrapTemplate bst = new BootstrapTemplate();
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
 
