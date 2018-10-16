@@ -42,7 +42,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         
         profile.getProfile(out,userID);
         profile.printProfile(out);
-        out.println(userID);
         profileForm(out);
         
     }
