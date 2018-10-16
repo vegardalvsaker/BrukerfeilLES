@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author ferra
+ * @author Espen
  */
 @WebServlet(name = "Worklist", urlPatterns = {"/Worklist"})
 public class Worklist extends HttpServlet {
@@ -49,6 +49,8 @@ public class Worklist extends HttpServlet {
             bst.containerOpen(out);
             
             db.getWorklistNotEval(out);
+            
+            db.getWorklistEvaluated(out);
             
             bst.containerClose(out);
             bst.bootstrapFooter(out);
