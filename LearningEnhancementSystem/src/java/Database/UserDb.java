@@ -167,9 +167,11 @@ public class UserDb extends Database {
             
             out.println("SQL exception: in getStudentList " + liste);
            }
+        
            
-        } 
-}
+ 
+    } 
+
 
     public void getStudentList(PrintWriter out)    {
         
@@ -245,7 +247,7 @@ public class UserDb extends Database {
 
         for (User user : profileList) {
             out.println("<h1>"+"Information about "+ user.getUserName() + "</h1>");
-            out.println("User ID: " + user.getUserID() + "<br>");
+            out.println("User ID: " + user.getUserId() + "<br>");
             out.println(" Name: " + user.getUserName() + "<br>");
             out.println(" Email: " + user.getUserEmail() + "<br>");
         }
@@ -279,7 +281,7 @@ public class UserDb extends Database {
         out.println("<h1>List of all students:</h1>");
         
         for (User user : onlyStudents) {
-            String id = user.getUserID();
+            String id = user.getUserId();
             out.println(" Name: " + user.getUserName() + "<br>");
             out.println(" Email: " + user.getUserEmail() + "<br>");
             out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
@@ -314,7 +316,7 @@ public class UserDb extends Database {
         out.println("<h1>List of all teachers:</h1>");
         
         for (User user : onlyTeachers) {
-            String id = user.getUserID();
+            String id = user.getUserId();
             out.println(" Name: " + user.getUserName() + "<br>");
             out.println(" Email: " + user.getUserEmail() + "<br>");
             out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
