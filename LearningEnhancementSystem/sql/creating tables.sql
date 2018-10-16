@@ -1,6 +1,6 @@
-create schema LearningEnhancementSystem2;
+create schema LearningEnhancementSystem;
 
-use LearningEnhancementSystem2;
+use LearningEnhancementSystem;
 
 create table Users(
 user_id integer not null auto_increment,
