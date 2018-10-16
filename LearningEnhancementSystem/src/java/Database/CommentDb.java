@@ -9,11 +9,10 @@ import Classes.Comment;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
- * @author Filip
+ * @author Marius
  */
 public class CommentDb extends Database{
     private static final String ADD_COMMENT = "insert into Comments values (default, ?, ?, default,?)";
@@ -65,6 +64,8 @@ public class CommentDb extends Database{
           Connection conn = getConnection();
           PreparedStatement ps = conn.prepareStatement(PRINT_COMMENT);
            ){
+           CommentReplyDb crdb = new CommentReplyDb();
+           crdb.init();
            ps.setInt(1, moduleId);
            ResultSet rs = ps.executeQuery();
            out.println("<div class=\"jumbotron\">");
@@ -74,9 +75,11 @@ public class CommentDb extends Database{
             while (rs.next()){
                  String commenttext = rs.getString("comment_text");
                  String author = rs.getString("user_name");
-
+                 String commentid = rs.getString("comment_id");
+                 int commentId = Integer.parseInt(commentid);
                  out.println("<h3>" + commenttext + "</h3>");
                  out.println("<h5>" + author + "</h5>");
+                 crdb.printReplys(commentId,out);
                  out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
                  out.println("<input type=\"text\" name=\"delete\" value=\"TRUE\"style=\"visibility:hidden;\">");
                  out.println("<input type=\"text\" name=\"comment_id\" value=\""+ rs.getString("comment_id") +"\"style=\"visibility:hidden;\"/>");
