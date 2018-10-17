@@ -7,6 +7,7 @@ package Servlets;
 
 import Database.LearningGoalDb;
 import Database.CommentDb;
+import Database.CommentReplyDb;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -41,8 +42,10 @@ public class OneModule extends HttpServlet {
             BootstrapTemplate bst = new BootstrapTemplate();
             LearningGoalDb db = new LearningGoalDb();
             CommentDb cdb = new CommentDb();
+            CommentReplyDb crdb = new CommentReplyDb();
             db.init();
             cdb.init();
+            crdb.init();
             int mId = Integer.parseInt(id);
             
              if (request.getMethod().equals("POST"))  {
@@ -50,8 +53,13 @@ public class OneModule extends HttpServlet {
                     String comid = request.getParameter("comment_id");
                     int commId = Integer.parseInt(comid);
                     cdb.deleteComment(commId);
+                    crdb.deleteAll(commId);
                     
-                } else {
+                } if (request.getParameter("deleteR").equals("TRUE")) {
+                    String repid = request.getParameter("reply_id");
+                    int replyId = Integer.parseInt(repid);
+                    crdb.deleteSingle(replyId);
+                }else {
                     String comText = request.getParameter("comment");
                     if (comText.equals("")){
                         out.println("Enter text before posting");

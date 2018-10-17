@@ -16,7 +16,8 @@ import java.util.List;
 public class CommentReplyDb extends Database{
     private static final String ADD_REPLY = "insert into CommentReply values (default, ?, ?, default,?)";
     private static final String PRINT_REPLY = "select r.reply_id, r.reply_text, u.user_name from CommentReply r inner join Users u on r.user_id = u.user_id where r.comment_id = ? order by r.reply_timestamp;";
-    private static final String DEL_REPLY = "delete from CommentReply where reply_id = ?";
+    private static final String DEL_SREPLY = "delete from CommentReply where reply_id = ?";
+    private static final String DEL_AREPLY = "delete from CommentReply where comment_id = ?";
 
     public List<CommentReply> getCommentReplys(){
         List<CommentReply> replys = new ArrayList<>();
@@ -63,22 +64,44 @@ public void printReplys(int commentId, PrintWriter out) {
            ){
            ps.setInt(1, commentId);
            ResultSet rs = ps.executeQuery();
-          // out.println("<hr class=\"my-4\">");
             while (rs.next()){
                  String commenttext = rs.getString("reply_text");
                  String author = rs.getString("user_name");
-
                  out.println("<p style=\"margin-left:2.5em;\">" + commenttext + "</p>");
                  out.println("<p style=\"margin-left:2.5em;\">" + author + "</p>");
                  out.println("<form action=\"OneModule?id="+ rs.getString("module_id")+"\" method=\"POST\">");
-               //  out.println("<input type=\"text\" name=\"delete\" value=\"TRUE\"style=\"visibility:hidden;\">");
-               //  out.println("<input type=\"text\" name=\"comment_id\" value=\""+ rs.getString("comment_id") +"\"style=\"visibility:hidden;\"/>");
-               //  out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete comment\">");
-                 out.println("<hr>");
+                 out.println("<input type=\"text\" name=\"deleteR\" value=\"TRUE\"style=\"visibility:hidden;\">");
+                 out.println("<input type=\"text\" name=\"reply_id\" value=\""+ rs.getString("reply_id") +"\"style=\"visibility:hidden;\"/>");
+                 out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete reply\">");
+                // out.println("<hr>");
                  out.println("</form>");
                 }
             } catch (SQLException ex) {
         System.out.println("Some error with the database" + ex);
         }     
     }
+public void deleteSingle(int Replyid){
+            try (
+               Connection conn = getConnection();
+               PreparedStatement ps = conn.prepareStatement(DEL_SREPLY)) {
+               
+               ps.setInt(1, Replyid);
+               ps.executeUpdate();
+ 
+       } catch (SQLException ex){
+           System.out.println(ex);
+       }
+   }
+public void deleteAll(int Commentid){
+            try (
+               Connection conn = getConnection();
+               PreparedStatement ps = conn.prepareStatement(DEL_AREPLY)) {
+               
+               ps.setInt(1, Commentid);
+               ps.executeUpdate();
+ 
+       } catch (SQLException ex){
+           System.out.println(ex);
+       }
+   }
 }
