@@ -65,7 +65,7 @@ public class UserDb extends Database {
             user.last();
             String id = user.getString("user_id");
             String name = user.getString("user_name");
-            boolean isTeacher = user.getBoolean("isTeacher");
+            boolean isTeacher = user.getBoolean("user_isTeacher");
             
             User userObj = new User(id, name, email, isTeacher);
             return userObj;
