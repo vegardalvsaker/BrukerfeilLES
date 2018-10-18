@@ -25,7 +25,7 @@ import Database.DeliveryDb;
  * @author Vegard
  */
 @WebServlet(name = "EvaluateServlet", urlPatterns = {"/EvaluateServlet"})
-public class EvaluateServlet extends HttpServlet {
+public class EvaluateServlet extends SuperServlet {
     private Delivery delivery;
     private Module module;
     private String teacherId;
@@ -125,9 +125,9 @@ public class EvaluateServlet extends HttpServlet {
         //Lagrer den aktuelle studenten som skal bli evaluert i session
         request.getSession().setAttribute("student", delivery.getStudent_name());
         setUserLoggedIn(request);
-        //User teacher = (User)request.getSession().getAttribute("userLoggedIn");
-        //String teacherId = teacher.getUserID();  
-        teacherId = "100";
+        User teacher = (User)request.getSession().getAttribute("userLoggedIn");
+        teacherId = teacher.getUserId();  
+        //teacherId = "100";
     }
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
