@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Database;
 
 import java.sql.Connection;
@@ -15,11 +10,19 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Vegard
+ * @author Vegard & Gorm & Fosse
  */
 public class UserDb extends Database {
     static final String USER_EXIST = "select  count(*) from Users where user_email = ?";
     static final String SLCT_USER = "select * from Users where user_email = ?";
+    
+
+  // Fosse
+    //Stating arraylists here to be able to split methods into get and print
+    ArrayList<User> onlyStudents = new ArrayList<>();
+    ArrayList<User> onlyTeachers = new ArrayList<>();
+    ArrayList<User> profileList = new ArrayList<>();
+  //STOP  
     
     /**
      * Checks if there is a user in the database with the same name
@@ -62,7 +65,7 @@ public class UserDb extends Database {
             user.last();
             String id = user.getString("user_id");
             String name = user.getString("user_name");
-            boolean isTeacher = user.getBoolean("isTeacher");
+            boolean isTeacher = user.getBoolean("user_isTeacher");
             
             User userObj = new User(id, name, email, isTeacher);
             return userObj;
@@ -164,6 +167,166 @@ public class UserDb extends Database {
             
             out.println("SQL exception: in getStudentList " + liste);
            }
+        
+           
+ 
+    } 
+
+
+    public void getStudentList(PrintWriter out)    {
+        
+        String list = ("select * from Users");
+        
+        try(
+                Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(list);
+                ResultSet rset = prepStatement.executeQuery();) {
+            
+               out.println("<h1>Studentliste:</h1>");
+               
+               ArrayList<User> users = new ArrayList<>();
+               
+               while(rset.next())   {
+                   
+                   String userID = rset.getString("user_ID");
+                   String userName = rset.getString("user_name");
+                   String userEmail = rset.getString("user_email");
+                   boolean isTeacher = rset.getBoolean("user_isTeacher");
+                   
+                   User user = new User(userID, userName, userEmail, isTeacher);
+                   users.add(user);
+               }  
+   
+               for (User user : users)   {
+                   out.println(user + "<br>");
+               }
+               
+                prepStatement.executeUpdate();
+ 
+        }
+        
+        catch(SQLException liste) {
+            
+            out.println("SQL exception: in getStudentList" + liste);
+           }
            
         } 
+
+    //
+    //     FOSSE SITT
+    //    | | | | | | |
+    //    V V V V V V V 
+    //
+    public void getProfile(PrintWriter out, String id) {
+        String oneProfile = ("select * from Users where user_id = ?");
+        
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(oneProfile);
+                ){
+            
+            prepStatement.setString(1, id);
+            
+            try(ResultSet rset = prepStatement.executeQuery(); ){
+                while(rset.next())   {
+                    String userID = rset.getString("user_ID");
+                    String userName = rset.getString("user_name");
+                    String userEmail = rset.getString("user_email");
+                    boolean isTeacher = rset.getBoolean("user_isTeacher");
+                   
+                    User user = new User(userID, userName, userEmail, isTeacher);
+                    profileList.add(user);
+                }  
+            }
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getProfile" + liste);
+           }  
+    } 
+    
+    public void printProfile(PrintWriter out) {
+
+        for (User user : profileList) {
+            out.println("<h1>"+"Information about "+ user.getUserName() + "</h1>");
+            out.println("User ID: " + user.getUserId() + "<br>");
+            out.println(" Name: " + user.getUserName() + "<br>");
+            out.println(" Email: " + user.getUserEmail() + "<br>");
+        }
+    }
+   
+    
+    public void getOnlyStudent(PrintWriter out) {
+        String studentList = ("select * from Users where user_isTeacher = 0");
+        
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(studentList);
+                ResultSet rset = prepStatement.executeQuery();
+                ){
+
+            while(rset.next())   {
+                String userID = rset.getString("user_ID");
+                String userName = rset.getString("user_name");
+                String userEmail = rset.getString("user_email");
+                boolean isTeacher = rset.getBoolean("user_isTeacher");
+                   
+                User user = new User(userID, userName, userEmail, isTeacher);
+                onlyStudents.add(user);
+            }  
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getOnlyStudent" + liste);
+        }  
+    } 
+    
+    public void printOnlyStudent(PrintWriter out) {
+        out.println("<h1>List of all students:</h1>");
+        
+        for (User user : onlyStudents) {
+            String id = user.getUserId();
+            out.println(" Name: " + user.getUserName() + "<br>");
+            out.println(" Email: " + user.getUserEmail() + "<br>");
+            out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
+            out.println("<br>" + "<br>");
+            }
+    }
+    
+    public void getOnlyTeacher(PrintWriter out) {
+        String teacherList = ("select * from Users where user_isTeacher = 1");
+       
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(teacherList);
+                ResultSet rset = prepStatement.executeQuery();
+                ){
+            
+            while(rset.next())   {
+                String userID = rset.getString("user_ID");
+                String userName = rset.getString("user_name");
+                String userEmail = rset.getString("user_email");
+                boolean isTeacher = rset.getBoolean("user_isTeacher");
+                   
+                User user = new User(userID, userName, userEmail, isTeacher);
+                onlyTeachers.add(user);
+            }  
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getOnlyTeacher" + liste);
+           }  
+    } 
+    
+    public void printOnlyTeacher(PrintWriter out) {
+        out.println("<h1>List of all teachers:</h1>");
+        
+        for (User user : onlyTeachers) {
+            String id = user.getUserId();
+            out.println(" Name: " + user.getUserName() + "<br>");
+            out.println(" Email: " + user.getUserEmail() + "<br>");
+            out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
+            out.println("<br>" + "<br>");
+            }
+    }
+
+//
+//    ^ ^ ^ ^ ^ ^ ^ 
+//    | | | | | | | 
+//     FOSSE SITT 
+//
 }

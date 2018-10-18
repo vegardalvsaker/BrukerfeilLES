@@ -38,7 +38,7 @@ public class Index extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
            
             
-            //Sjekker om emailen er i databasen
+           /* //Sjekker om emailen er i databasen
             UserDb userdb = new UserDb();
             userdb.init();
             String email = request.getParameter("email");
@@ -59,9 +59,10 @@ public class Index extends HttpServlet {
                 
             } else {
                 //Printing the frontpage if the client is already logged in
-                FrontpagePrinter fp = new FrontpagePrinter();
-                fp.printFrontpage(out, "LES IS-110"); 
-            }  
+                
+            }  */
+            FrontpagePrinter fp = new FrontpagePrinter();
+            fp.printFrontpage(out, "LES IS-110"); 
         }
     }
 
