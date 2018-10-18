@@ -124,7 +124,7 @@ public class EvaluateServlet extends HttpServlet {
         
         //Lagrer den aktuelle studenten som skal bli evaluert i session
         request.getSession().setAttribute("student", delivery.getStudent_name());
-        
+        setUserLoggedIn(request);
         //User teacher = (User)request.getSession().getAttribute("userLoggedIn");
         //String teacherId = teacher.getUserID();  
         teacherId = "100";
