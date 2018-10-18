@@ -5,24 +5,22 @@
  */
 package Servlets;
 
+import HtmlTemplates.BootstrapTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import Printers.FrontpagePrinter;
-import Database.UserDb;
-import Classes.User;
-
+import javax.servlet.http.HttpServletResponse; 
+import Database.AnnouncementDb;
 /**
  *
- * @author Vegard
+ * @author Marius
  */
-@WebServlet(name = "Index", urlPatterns = {"/Index"})
-public class Index extends HttpServlet {
+@WebServlet(name = "Announcement", urlPatterns = {"/Announcement"})
+public class Announcement extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,37 +30,30 @@ public class Index extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    BootstrapTemplate bst = new BootstrapTemplate();
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-           
-            
-           /* //Sjekker om emailen er i databasen
-            UserDb userdb = new UserDb();
-            userdb.init();
-            String email = request.getParameter("email");
-            if (request.getSession().getAttribute("userLoggedIn") == null) {
-                if (userdb.checkUserExist(email)) {
-                    HttpSession ses = request.getSession();
-                    User user = userdb.getUser(email);
-                    ses.setAttribute("userLoggedIn", user);
-                    //Printing the frontpage after the user details are connected to the session
-                    FrontpagePrinter fp = new FrontpagePrinter();
-                    fp.printFrontpage(out, "LES IS-110");   
-                
-            }   else {
-                    //Sending the client back to the login page if he/she is not logged in
-                    out.println("Sorry, this user does not exist in our database");
-                    request.getRequestDispatcher("index.html").include(request, response);
+             AnnouncementDb db = new AnnouncementDb();
+             db.init();
+             bst.bootstrapHeader(out,"Announcement");
+             bst.bootstrapNavbar(out,"Announcement");
+             if (request.getMethod().equals("POST"))  {
+                if (request.getParameter("delete").equals("TRUE")) {
+                    String aid = request.getParameter("annId");
+                    int annId = Integer.parseInt(aid);
+                    db.deleteAnnouncement(annId);  
                 }
-                
-            } else {
-                //Printing the frontpage if the client is already logged in
-                
-            }  */
-            FrontpagePrinter fp = new FrontpagePrinter();
-            fp.printFrontpage(out, "LES IS-110"); 
+             }
+             bst.containerOpen(out);
+             out.println("<a href=\"AddAnnouncement\"a class=\"btn btn-primary\">Add more</button></a>");
+             db.skrivAnnouncement(out);
+             
+             bst.containerClose(out);
+             bst.bootstrapFooter(out);
         }
     }
 

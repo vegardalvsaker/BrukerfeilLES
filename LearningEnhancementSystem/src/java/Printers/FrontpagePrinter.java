@@ -9,6 +9,8 @@ import HtmlTemplates.BootstrapTemplate;
 import java.io.PrintWriter;
 import Database.ModuleDb;
 import Classes.Module;
+import Database.AnnouncementDb;
+import Classes.Announcement;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -19,13 +21,16 @@ public class FrontpagePrinter {
                 
     private BootstrapTemplate bs;
     private ModuleDb mdb;
+    private AnnouncementDb adb;
     /**
      * Alltid lag ModuleDb-objekt og kall init()
      */
     public FrontpagePrinter() {
         bs = new BootstrapTemplate();
         mdb = new ModuleDb();
+        adb = new AnnouncementDb();
         mdb.init();
+        adb.init();
     }
 
     /**
@@ -35,21 +40,44 @@ public class FrontpagePrinter {
      */
     public void printFrontpage(PrintWriter out, String title) {
         List<Module> modulList = mdb.getModuler();
-        
+        List<Announcement> announcementList = adb.getAnnouncement();
         bs.bootstrapHeader(out, title);
         bs.bootstrapNavbar(out, "Home");
-        bs.jumbotron(out);
+        bs.containerOpen(out);
+        out.println("<div class=\"jumbotron\">");
+        out.println("<div class=\"container\">");
+        out.println("<h1 class=\"display-4\">Announcements:</h1>");
+        out.println("<hr class=\"my-4\">");
+        int i= 0;
+            for (Announcement announcement : announcementList){
+                if (i < 2){
+                String atitle = announcement.getSubject();
+                String adesc = announcement.getBody();
+                int id = announcement.getId();
+                String ID = String.valueOf(id);
+                       
+                bs.jumbotron(out,adesc,atitle,ID);
+                i++;
+                }
+            }
+        out.println("<a class=\"btn btn-primary btn-lg\" href=\"Announcement\" role=\"button\">View all announcements</a>");
+        out.println("<p class=\"lead\">");
+        out.println("</p>");
+        out.println("</div>");
+        out.println("</div>");
+        bs.containerClose(out);
         bs.containerOpen(out);
         out.println("<div class=\"row\">");
         
             for (Module modul : modulList) {
-                String number = modul.getId();
+                int number = modul.getModuleid();
                 String name = modul.getName();
                 String desc = modul.getDesc();
                 bs.bootstrapCard(out,number, name, desc);
             }
             
         out.println("</div>");
+        out.println("<a href=\"LogOut\">Log out</a>");
         bs.containerClose(out);
         bs.bootstrapFooter(out);
     }
