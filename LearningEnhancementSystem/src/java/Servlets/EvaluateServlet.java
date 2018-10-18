@@ -69,10 +69,7 @@ public class EvaluateServlet extends SuperServlet {
                 
                 //String youtubeUrl = getYoutubeViewHash(delivery.getDeliveryContent());
                 //Print for å vise en embeded YouTube-video.
-               // out.println("<div class=\"row\">\n" +
-               // "      <div class=\"col-md-4 offset-md-3 mb-3\">\n" +
-               // "    <iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"+ youtubeUrl +"?rel=0\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>\n" +
-               // "  </div>");
+                //printEmbeddedYouTubeVideo(out, youtubeUrl);
                 
                 //Form med link til servleten hvor faktisk alle poengene i evalueringen blir plottet inn i databasen. URL-parametrene er hardkodet for nå
                 out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation\" method=\"POST\">");
@@ -87,15 +84,8 @@ public class EvaluateServlet extends SuperServlet {
                 
                 //UI greier
                 bst.tableClose(out);
-                out.println("  <div class=\"form-group row\">\n" +
-"        <div class=\"col-md-4 offset-md-4 mb-3\">\n" +
-"          <label for=\"tekst\">Comment for the student</label>");
-                out.println("<textarea class=\"form-control\" form=\"evaluationForm\" name=\"comment\"></textarea>");
-                out.println("<button type=\"submit\" class=\"btn btn-primary\">Evaluate!</button>");
-                out.println("</div>\n" +
-"      </div>");
-                out.println("</form>");
                 
+                printEndForm(out);
                 bst.containerClose(out);
                 bst.bootstrapFooter(out);
                 
@@ -173,5 +163,23 @@ public class EvaluateServlet extends SuperServlet {
         String[] segments = url.split("=");
         System.out.println(segments);
         return segments[1];
+    }
+    
+    private void printEmbeddedYouTubeVideo(PrintWriter out, String url) {
+        //Print for å vise en embeded YouTube-video.
+                out.println("<div class=\"row\">\n" +
+                "      <div class=\"col-md-4 offset-md-3 mb-3\">\n" +
+                "    <iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"+ url +"?rel=0\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>\n" +
+                "  </div>");
+    }
+    private void printEndForm(PrintWriter out) {
+        out.println("  <div class=\"form-group row\">\n" +
+"        <div class=\"col-md-4 offset-md-4 mb-3\">\n" +
+"          <label for=\"tekst\">Comment for the student</label>");
+                out.println("<textarea class=\"form-control\" form=\"evaluationForm\" name=\"comment\"></textarea>");
+                out.println("<button type=\"submit\" class=\"btn btn-primary\">Evaluate!</button>");
+                out.println("</div>\n" +
+"      </div>");
+                out.println("</form>");
     }
 }
