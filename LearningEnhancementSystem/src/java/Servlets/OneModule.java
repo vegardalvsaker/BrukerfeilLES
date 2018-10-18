@@ -64,6 +64,7 @@ public class OneModule extends HttpServlet {
             bst.bootstrapNavbar(out, "Modules");
 
             db.printLearningGoals(id, out);
+            deliver(out,request);
             cdb.printComments(mId,out);
             addComment(out,request);
             
@@ -82,6 +83,11 @@ private void addComment(PrintWriter out, HttpServletRequest request){
             out.println("<br>");
             out.println("</form>");
             out.println("</div>");
+    }
+
+private void deliver(PrintWriter out, HttpServletRequest request){
+            String id = request.getParameter("id");
+            out.println("<a href=\"Delivery?id="+ id +" \"a class=\"btn btn-info\">Deliver!</button></a>");
     }
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
