@@ -44,7 +44,7 @@ public class OneModule extends HttpServlet {
             db.init();
             cdb.init();
             int mId = Integer.parseInt(id);
-            
+         
              if (request.getMethod().equals("POST"))  {
                 if (request.getParameter("delete").equals("TRUE")) {
                     String comid = request.getParameter("comment_id");
@@ -62,7 +62,7 @@ public class OneModule extends HttpServlet {
             
             bst.bootstrapHeader(out, "Module " + id);
             bst.bootstrapNavbar(out, "Modules");
-
+            editModuleButtonForm(out,request);
             db.printLearningGoals(id, out);
             cdb.printComments(mId,out);
             addComment(out,request);
@@ -70,6 +70,16 @@ public class OneModule extends HttpServlet {
             bst.bootstrapFooter(out); 
         }
     }
+    
+    private void editModuleButtonForm(PrintWriter out, HttpServletRequest request)    {
+        String id = request.getParameter("id");
+            out.println("<a href=\"ModuleDb\"></a>");
+            out.println("<form action=\"EditModule?id="+ id+"\" method=\"POST\">");
+            out.println("<input type=\"submit\" value=\"Rediger modul\"><br>");   
+            out.println("</form>");
+    }
+
+    
 private void addComment(PrintWriter out, HttpServletRequest request){
             String id = request.getParameter("id");
             out.println("<div>");

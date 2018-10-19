@@ -69,14 +69,14 @@ public class Modules extends HttpServlet {
             
             bst.containerClose(out);
             
-            addModuleForm(out, response);
+            addModuleForm(out);
             
             bst.bootstrapFooter(out);
             
         }
         
     }
-        private void addModuleForm(PrintWriter out, HttpServletResponse response)  {
+        private void addModuleForm(PrintWriter out)  {
             
             out.println("<div>");
             out.println("<a href=\"Modules\">");

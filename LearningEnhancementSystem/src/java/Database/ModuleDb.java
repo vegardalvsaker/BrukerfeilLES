@@ -17,13 +17,14 @@ import Classes.Module;
 import Classes.LearningGoal;
 import java.sql.PreparedStatement;
 
+
 /**
  *This class handles every database-query that has something to do with modules
  * @author Vegard
  */
 public class ModuleDb extends Database {
     
-
+    
     private static final String SLCT_MODULE = "select * from Module";
     private static final String SLCT_ALL_MODULES = "select * from Module";
     private static final String SLCT_MODULES_WITH_GOALS = "select m.module_id, m.module_name, l.learn_goal_id, l.learn_goal_text, l.learn_goal_points from Module m inner join LearningGoal l on m.module_id = l.module_id where m.module_id = ?";
@@ -75,7 +76,7 @@ public class ModuleDb extends Database {
                     lg.setLearn_goal_id(rs.getString("learn_goal_id"));
                     lg.setText(rs.getString("learn_goal_text"));
                     lg.setPoints(rs.getInt("learn_goal_points"));
-
+                    
                     module.addLearningGoal(lg);
                     while (rs.next()) {
                         LearningGoal lg2 = new LearningGoal();
@@ -88,6 +89,7 @@ public class ModuleDb extends Database {
                     return module;
                 }
         }
+        
         catch (SQLException e) {
             System.out.println(e);
         }
@@ -230,8 +232,8 @@ public class ModuleDb extends Database {
                 Connection connection = getConnection();
                 PreparedStatement prepStatement = connection.prepareStatement(print);
                 ResultSet rset = prepStatement.executeQuery();) {
-        
-                out.println("<h1>Moduler</h1>");
+                
+                 ArrayList<Module> module = new ArrayList<>();
                 
                 while(rset.next())  {
                     
@@ -241,8 +243,11 @@ public class ModuleDb extends Database {
                     String moduleContent = rset.getString("module_content");
                     boolean modulePublished = Boolean.parseBoolean(rset.getString("module_isPublished"));
                     
+               //     set metode
                     Module moduler = new Module();
-                    
+                    module.add(moduler);
+                    out.println(module);
+           //         return modul;
                     
                 }
             
@@ -267,11 +272,29 @@ public class ModuleDb extends Database {
     
 */
     
-    public boolean editModule(PrintWriter out)  {
+    public void editModule(PrintWriter out, HttpServletRequest request)  {
         
-       // String edit = "alter "
-        return false;
-        
+       String id =  request.getParameter("id");
+       String sql = "Select * from Module";
+       
+      try(
+             Connection connection = getConnection();
+             PreparedStatement prepStatement = connection.prepareStatement(sql);
+             ResultSet rset = prepStatement.executeQuery();
+              ) {
+          
+              
+          
+          
+          
+          
+          
+      }
+      catch(SQLException ex)    {
+          out.println("Excption in editModule" + ex);
+      }
+       
+       
     }
 }
 
