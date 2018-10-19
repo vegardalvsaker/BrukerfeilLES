@@ -56,7 +56,7 @@ public void addReply(int comment_id,String user_id, String reply_text){
                 System.out.println(ex);
             }
         } 
-public void printReplys(int commentId, PrintWriter out) {
+public void printReplys(int commentId, int moduleId, PrintWriter out) {
          
      try (
           Connection conn = getConnection();
@@ -64,22 +64,24 @@ public void printReplys(int commentId, PrintWriter out) {
            ){
            ps.setInt(1, commentId);
            ResultSet rs = ps.executeQuery();
+           
             while (rs.next()){
-                 String commenttext = rs.getString("reply_text");
-                 String author = rs.getString("user_name");
-                 out.println("<p style=\"margin-left:2.5em;\">" + commenttext + "</p>");
-                 out.println("<p style=\"margin-left:2.5em;\">" + author + "</p>");
-                 out.println("<form action=\"OneModule?id="+ rs.getString("module_id")+"\" method=\"POST\">");
-                 out.println("<input type=\"text\" name=\"deleteR\" value=\"TRUE\"style=\"visibility:hidden;\">");
-                 out.println("<input type=\"text\" name=\"reply_id\" value=\""+ rs.getString("reply_id") +"\"style=\"visibility:hidden;\"/>");
-                 out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete reply\">");
-                // out.println("<hr>");
-                 out.println("</form>");
-                }
+                int replyid = Integer.parseInt(rs.getString("reply_id"));
+                String replytext = rs.getString("reply_text");
+                String author = rs.getString("user_name");
+                out.println("<p style=\"margin-left:2.5em;\">" + replyid +" "+ replytext + "</p>");
+                out.println("<p style=\"margin-left:2.5em;\">" + author + "</p>");
+                out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
+                out.println("<input type=\"text\" name=\"deleteR\" value=\"TRUE\"style=\"visibility:hidden;\">");
+                out.println("<input type=\"text\" name=\"reply_id\" value=\""+ replyid +"\"style=\"visibility:hidden;\"/>");
+                out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete reply\">");
+                out.println("</form>");
+            }
+
             } catch (SQLException ex) {
-        System.out.println("Some error with the database" + ex);
-        }     
-    }
+                    System.out.println("Some error with the database" + ex);
+            } 
+        }   
 public void deleteSingle(int Replyid){
             try (
                Connection conn = getConnection();

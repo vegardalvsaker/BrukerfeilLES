@@ -67,6 +67,7 @@ public class CommentDb extends Database{
            CommentReplyDb crdb = new CommentReplyDb();
            crdb.init();
            ps.setInt(1, moduleId);
+           
            ResultSet rs = ps.executeQuery();
            out.println("<div class=\"jumbotron\">");
            out.println("<div class=\"container\">");
@@ -79,7 +80,7 @@ public class CommentDb extends Database{
                  int commentId = Integer.parseInt(commentid);
                  out.println("<h3>" + commenttext + "</h3>");
                  out.println("<h5>" + author + "</h5>");
-                 crdb.printReplys(commentId,out);
+                 crdb.printReplys(commentId,moduleId,out);
                  out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
                  out.println("<input type=\"text\" name=\"delete\" value=\"TRUE\"style=\"visibility:hidden;\">");
                  out.println("<input type=\"text\" name=\"comment_id\" value=\""+ rs.getString("comment_id") +"\"style=\"visibility:hidden;\"/>");
