@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import Classes.Notification;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -15,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Database.UserDb;
 import Classes.User;
+import Database.NotificationDb;
+import java.util.ArrayList;
+import HtmlTemplates.BootstrapTemplate;
 
 /**
  *
@@ -32,9 +36,16 @@ public class SuperServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response, String currentTab, PrintWriter out)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        BootstrapTemplate bst = new BootstrapTemplate();
+        setUserLoggedIn(request);
+        String notifications = getNotificationHtml(request); 
+        bst.bootstrapHeader(out, currentTab);
+        bst.bootstrapNavbar(out, currentTab, notifications);
+        
     }
     
     protected boolean checkIfTeacherLoggedIn(HttpServletRequest request) {
@@ -55,9 +66,7 @@ public class SuperServlet extends HttpServlet {
     
     protected boolean setUserLoggedIn(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        if ((String)session.getAttribute("userLoggedIn") != null) {
-            return true;
-        }
+        
         String email = request.getRemoteUser();
         UserDb uDb = new UserDb();
         uDb.init();
@@ -65,8 +74,33 @@ public class SuperServlet extends HttpServlet {
         if (user == null) {
             return false;
         }
-        request.getSession().setAttribute("userLoggedIn", user);
+        session.setAttribute("userLoggedIn", user);
         return true;
+    }
+    
+    protected String getNotificationHtml(HttpServletRequest request) {
+        User user = (User)request.getSession().getAttribute("userLoggedIn");
+        NotificationDb nDb = new NotificationDb();
+        
+        ArrayList<Notification> notifications = nDb.getUsersNotification(user.getUserId());
+        
+        StringBuilder sbf = new StringBuilder();
+        
+        
+        for (Notification not : notifications) {
+            if (!not.isIsNotificationSeen()) {
+                sbf.append(
+"                   <a class=\"dropdown-item\">"+ not.getNotificationContent() +"</a>\n" +
+                        "<div class=\"dropdown-divider\"></div>\n");
+                
+            } else {
+                sbf.append("<div style=\"background-color:#f3f3f3;\">" +
+"                            <a class=\"dropdown-item\">"+ not.getNotificationContent() +"</a>\n" +
+"                               </div> \n" +
+                        "<div class=\"dropdown-divider\"></div>\n");
+            }
+        }
+        return sbf.toString();
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -80,7 +114,6 @@ public class SuperServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
@@ -94,7 +127,6 @@ public class SuperServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
