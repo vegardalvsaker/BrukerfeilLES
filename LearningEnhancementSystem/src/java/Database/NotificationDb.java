@@ -17,7 +17,7 @@ import java.sql.SQLException;
  */
 public class NotificationDb extends Database {
     private static final String SELECT_NOTIFICATION = "select * from Notification where user_id = ?";
-    
+    private static final String UPDATE_NOTIFICATION = "update Notification set notification_seen = 1 where notification_id = ?";
     public NotificationDb () {
         init();
     }
@@ -33,7 +33,8 @@ public class NotificationDb extends Database {
                 ArrayList<Notification> notifications = new ArrayList<>();
                 while(rs.next()) {
                     Notification not = new Notification();
-                    not.setUser_id(rs.getString("user_id"));
+                    not.setNotificationId(rs.getString("notification_id"));
+                    not.setUserId(rs.getString("user_id"));
                     not.setNotificationContent(rs.getString("notification_content"));
                     not.setIsNotificationSeen(rs.getBoolean("notification_seen"));
                     not.setTimestamp(rs.getTimestamp("notification_timestamp"));
@@ -47,5 +48,22 @@ public class NotificationDb extends Database {
             System.out.println("Method: getUsersNotification(), Error: " + ex);
         }
         return null;
+    }
+    
+    public boolean setNotifcationIsSeen(String notificationId) {
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(UPDATE_NOTIFICATION);
+                ) {
+            ps.setString(1, notificationId);
+            if (ps.executeUpdate() == 1) {
+                    return true;
+                } else {
+                return false;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Method: setNotifcationIsSeen(), Error: " + ex);
+            return false;
+        }
     }
 }

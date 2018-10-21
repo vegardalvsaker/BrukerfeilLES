@@ -41,7 +41,11 @@ public class SuperServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         BootstrapTemplate bst = new BootstrapTemplate();
-        setUserLoggedIn(request);
+        if (!setUserLoggedIn(request)) {
+            out.println("<h1 You are not logged in</h1>");
+            out.println("<a href=\"Index\"> Please log in </a>");
+            return;
+        }
         String notifications = getNotificationHtml(request); 
         bst.bootstrapHeader(out, currentTab);
         bst.bootstrapNavbar(out, currentTab, notifications);
@@ -68,6 +72,10 @@ public class SuperServlet extends HttpServlet {
         HttpSession session = request.getSession();
         
         String email = request.getRemoteUser();
+        if (email == null) {
+            return false;
+        }
+        
         UserDb uDb = new UserDb();
         uDb.init();
         User user = uDb.getUser(email);
@@ -88,18 +96,19 @@ public class SuperServlet extends HttpServlet {
         
         
         for (Notification not : notifications) {
-            if (!not.isIsNotificationSeen()) {
+            if (not.isIsNotificationSeen()) {
                 sbf.append(
 "                   <a class=\"dropdown-item\">"+ not.getNotificationContent() +"</a>\n" +
                         "<div class=\"dropdown-divider\"></div>\n");
                 
             } else {
                 sbf.append("<div style=\"background-color:#f3f3f3;\">" +
-"                            <a class=\"dropdown-item\">"+ not.getNotificationContent() +"</a>\n" +
+"                            <a class=\"dropdown-item\"><p style=\"color: red;\">◉</p >"+ not.getNotificationContent() +"</a>\n" +
 "                               </div> \n" +
                         "<div class=\"dropdown-divider\"></div>\n");
             }
         }
+        sbf.append("<button style=\"float: right;\"class=\"btn btn-primary\" href=\"Notifications\">See all </button>");
         return sbf.toString();
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -37,7 +37,6 @@ public class BootstrapTemplate {
      */
     public void bootstrapNavbar(PrintWriter out, String tab, String notifications) {
         String current_tab = "active";
-        System.out.println(notifications);
         switch (tab) {
             case "Home":        out.format(getBootstrapNavbar(notifications), current_tab, "", "", "", "", "");
                                 break;

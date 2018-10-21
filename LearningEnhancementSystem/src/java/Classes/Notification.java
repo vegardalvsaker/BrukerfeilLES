@@ -12,17 +12,27 @@ import java.sql.Timestamp;
  */
 public class Notification {
     
-    private String user_id;
+    private String notificationId;
+    private String userId;
     private String notificationContent;
     private boolean isNotificationSeen;
     private Timestamp timestamp;
 
-    public String getUser_id() {
-        return user_id;
+    public String getNotificationId() {
+        return notificationId;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setNotificationId(String notificationId) {
+        this.notificationId = notificationId;
+    }
+
+    
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getNotificationContent() {
