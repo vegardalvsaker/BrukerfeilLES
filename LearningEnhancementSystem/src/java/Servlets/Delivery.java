@@ -48,7 +48,19 @@ public class Delivery extends HttpServlet {
         System.out.println(inInterview);
         }
     }
-
+    protected void printDeliveryform(PrintWriter out, HttpServletRequest request) {
+        //User user = (User)request.getSession().getAttribute("userLoggedIn");
+        //String userId = user.getUserId();
+        String moduleid = request.getParameter("id");
+        String inInterview = request.getParameter("module_inInterview");
+        DeliveryDb deliver = new DeliveryDb();
+        deliver.getDelivery(moduleid, out);
+        
+        if (deliver.requestgetParameter()) {
+            out.println("<h1>There are no notifications for " + user.getUserName() + "<h1>");
+        } else {
+            
+            out.println("<h1>Notifications for " + user.getUserName() + "</h1>");
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
