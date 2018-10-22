@@ -207,11 +207,11 @@ public class ModuleDb extends Database {
 
     public boolean editModule(PrintWriter out, HttpServletRequest request, String modulName, String modulDesc, String modulContent)  {
         
-       String moduleID = request.getParameter("module_id");
-       
+   //    String moduleID = request.getParameter("id");
+       String moduleID = request.getParameter("id");
        String editModuleName = "update Module set module_name = ? where module_id = ?";
-       String editModuleDesc = "update Module set module_name = ? where module_id = ?";
-       String editModuleContent = "update Module set module_name = ? where module_id = ?";
+       String editModuleDesc = "update Module set module_desc = ? where module_id = ?";
+       String editModuleContent = "update Module set module_content = ? where module_id = ?";
        
       try(
              Connection connection = getConnection();

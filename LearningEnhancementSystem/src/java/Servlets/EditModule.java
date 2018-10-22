@@ -30,7 +30,7 @@ public class EditModule extends HttpServlet {
             ModuleDb db = new ModuleDb();
             db.init();
             
-            
+             
             if (request.getMethod().equals("POST")) {
                 
                 String modulName = request.getParameter("Modulnavn");
@@ -50,7 +50,7 @@ public class EditModule extends HttpServlet {
             bootstrap.containerClose(out);
             
             editModuleForm(out, request);
-              
+            
             bootstrap.bootstrapFooter(out);
             
         }   
@@ -58,8 +58,8 @@ public class EditModule extends HttpServlet {
  
     private void editModuleForm(PrintWriter out, HttpServletRequest request)    {
             
-            String module_id = request.getParameter("id");  
-            
+         //   String module_id = request.getParameter("id");  
+            String module_id = request.getParameter("id");
             ModuleDb db = new ModuleDb();
             db.init();
             
@@ -70,7 +70,7 @@ public class EditModule extends HttpServlet {
             String modulContent = module.getContent();
             
             out.println("<h1>Rediger modul</h1>");
-            out.println("<form action=\"EditModule?moduleID="+module_id+"\" method=\"POST\">");
+            out.println("<form action=\"EditModule?id="+module_id+"\" method=\"POST\">");
             out.println("<h3>Modulnavn</h3><br>");
             out.println("<input type=\"text\" name=\"Modulnavn\" value="+ modulName +">");
             out.println("<h3>Beskrivelse</h3><br>");
@@ -80,8 +80,10 @@ public class EditModule extends HttpServlet {
             out.println("<br>");
             out.println("<input type=\"submit\" value=\"Rediger modul\"><br>");     
             out.println("</form>");
-
+            
+            
     }
+  
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
