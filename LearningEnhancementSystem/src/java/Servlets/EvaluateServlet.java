@@ -77,9 +77,9 @@ public class EvaluateServlet extends SuperServlet {
                     //Printer begynnelsen på tabellen som lærereren skal evaluere i
                     bst.tableOpen(out);
 
-                    String youtubeUrl = getYoutubeViewHash(delivery.getDeliveryContent());
+          //          String youtubeUrl = getYoutubeViewHash(delivery.getDeliveryContent());
                     //Print for å vise en embeded YouTube-video.
-                    printEmbeddedYouTubeVideo(out, youtubeUrl);
+     //               printEmbeddedYouTubeVideo(out, youtubeUrl);
 
                     //Form med link til servleten hvor faktisk alle poengene i evalueringen blir plottet inn i databasen. URL-parametrene er hardkodet for nå
                     out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation\" method=\"POST\">");
