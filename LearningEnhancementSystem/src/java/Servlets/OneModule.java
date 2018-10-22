@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
+import java.util.Map;
 
 /**
  *
@@ -35,6 +36,8 @@ public class OneModule extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Map<String, String[]> paramap = request.getParameterMap();
+        
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("id");
         
@@ -49,17 +52,19 @@ public class OneModule extends HttpServlet {
             int mId = Integer.parseInt(id);
             
              if (request.getMethod().equals("POST"))  {
-                if (request.getParameter("delete").equals("TRUE")) {
+                if (paramap.containsKey("delete")) {
+                    if (paramap.get("delete")[0].equals("TRUE")) {
                     String comid = request.getParameter("comment_id");
                     int commId = Integer.parseInt(comid);
                     cdb.deleteComment(commId);
                     crdb.deleteAll(commId);
-                    
-                } if (request.getParameter("deleteR").equals("TRUE")) {
+                    }
+                } if (paramap.containsKey("deleteR")) {
                     String repid = request.getParameter("reply_id");
                     int replyId = Integer.parseInt(repid);
                     crdb.deleteSingle(replyId);
-                }else {
+                }
+                if (paramap.containsKey("comment")) {
                     String comText = request.getParameter("comment");
                     if (comText.equals("")){
                         out.println("Enter text before posting");
