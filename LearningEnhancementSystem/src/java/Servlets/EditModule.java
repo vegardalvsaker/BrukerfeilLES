@@ -9,56 +9,78 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Database.ModuleDb;
+import HtmlTemplates.BootstrapTemplate;
 /**
  *
  * @author Gorm-Erik
  */
-@WebServlet(urlPatterns = {"/EditModule"})
+
+@WebServlet(name = "EditModule", urlPatterns = {"/EditModule"})
 public class EditModule extends HttpServlet {
 
-    
-
-  
+    BootstrapTemplate bootstrap = new BootstrapTemplate();
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
         
-        
         try (PrintWriter out = response.getWriter()) {
             
-           
-            editModuleForm(out, request, module_id);
+            ModuleDb db = new ModuleDb();
+            db.init();
+            
+            
+            if (request.getMethod().equals("POST")) {
+                
+                String modulName = request.getParameter("Modulnavn");
+                String modulDesc = request.getParameter("Beskrivelse");
+                String modulContent = request.getParameter("Innhold");
+                
+                db.editModule(out, request, modulName, modulDesc, modulContent);
+                
+            }
+            
+            bootstrap.bootstrapHeader(out, "Modules");
+            
+            bootstrap.bootstrapNavbar(out, "Modules");
+            
+            bootstrap.containerOpen(out);
+            
+            bootstrap.containerClose(out);
+            
+            editModuleForm(out, request);
+              
+            bootstrap.bootstrapFooter(out);
             
         }   
 }
  
-    
-    
-    private void editModuleForm(PrintWriter out, HttpServletRequest request, String module_id)    {
-             
+    private void editModuleForm(PrintWriter out, HttpServletRequest request)    {
             
-            String id = request.getParameter("id");  
-            
-            out.println("<h1>Rediger modul</h1>");
-            out.println("<form action=\"EditModule?="+id+"\" method=\"POST\">");
-            out.println("<h3>Modulnummer</h3><br>");
+            String module_id = request.getParameter("id");  
             
             ModuleDb db = new ModuleDb();
-            Module module = db.getModuleWithLearningGoals(module_id);
-            int modulID = module.getModuleid();
+            db.init();
             
-            out.println("<input type=\"text\" name=\"Modulnummer\" value="+modulID+"/>");
+            Module module = db.getModuleWithLearningGoals(module_id);
+            
+            String modulName = module.getName();
+            String modulDesc = module.getDesc();
+            String modulContent = module.getContent();
+            
+            out.println("<h1>Rediger modul</h1>");
+            out.println("<form action=\"EditModule?moduleID="+module_id+"\" method=\"POST\">");
             out.println("<h3>Modulnavn</h3><br>");
-            out.println("<input type=\"text\" name=\"Modulnavn\"><br>");
-            out.println("<h3>Beskrivelse av læringsmål</h3><br>");
-            out.println("<input type=\"text\" name=\"Beskrivelse\"><br>");
+            out.println("<input type=\"text\" name=\"Modulnavn\" value="+ modulName +">");
+            out.println("<h3>Beskrivelse</h3><br>");
+            out.println("<input type=\"text\" name=\"Beskrivelse\" value="+ modulDesc +"><br>");
+            out.println("<h3>Innhold</h3><br>");
+            out.println("<input type=\"text\" name=\"Innhold\" value="+ modulContent + "><br>");
             out.println("<br>");
-            out.println("<input type=\"submit\" value=\"Rediger modul\"><br>");        
-            out.println("<br>");
+            out.println("<input type=\"submit\" value=\"Rediger modul\"><br>");     
             out.println("</form>");
-            out.println("</div>");
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

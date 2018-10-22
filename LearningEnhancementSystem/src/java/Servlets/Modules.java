@@ -41,27 +41,19 @@ public class Modules extends HttpServlet {
         
         if (request.getMethod().equals("POST"))  {
                 
-                
-                
-                String modulnr = request.getParameter("Modulnummer");
-                
                 String modulnavn = request.getParameter("Modulnavn");
-         
+                
                 String beskrivelse = request.getParameter("Beskrivelse");
+         
+                String innhold = request.getParameter("Innhold");
                            
-                db.addModule(out, modulnr, modulnavn, beskrivelse);
+                db.addModule(out, modulnavn, beskrivelse, innhold);
                 
             }
             
             bst.bootstrapHeader(out, "Modules");
             
             bst.bootstrapNavbar(out, "Modules");
-            
-            
-            /*out.format(bst.hei(), "en", "to", "", "");
-            out.println();
-            out.format(bst.hei(), "", to, "", "4");*/
-            
             
             bst.containerOpen(out);
             
@@ -79,16 +71,16 @@ public class Modules extends HttpServlet {
         private void addModuleForm(PrintWriter out)  {
             
             out.println("<div>");
-            out.println("<a href=\"Modules\">");
-            out.println("</a>");
+          //  out.println("<a href=\"Modules\">");
+           // out.println("</a>");
             out.println("<h1>Legg til modul</h1>");
             out.println("<form action=\"Modules\" method=\"POST\">");
-            out.println("<h3>Modulnummer</h3><br>");
-            out.println("<input type =\"text\" name=\"Modulnummer\"><br>");
             out.println("<h3>Modulnavn</h3><br>");
-            out.println("<input type=\"text\" name=\"Modulnavn\"><br>");
-            out.println("<h3>Beskrivelse av læringsmål</h3><br>");
+            out.println("<input type =\"text\" name=\"Modulnavn\"><br>");
+            out.println("<h3>Beskrivelse</h3><br>");
             out.println("<input type=\"text\" name=\"Beskrivelse\"><br>");
+            out.println("<h3>Innhold</h3><br>");
+            out.println("<input type=\"text\" name=\"Innhold\"><br>");
             out.println("<br>");
             out.println("<input type=\"submit\" value=\"Legg til modul\"><br>");        
             out.println("<br>");
