@@ -43,68 +43,81 @@ public class EvaluateServlet extends SuperServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            if (!request.getParameterMap().containsKey("deliveryId")) {
+                out.println("<h1>Ingen delivery valgt</h1>");
+                out.println("<a href=\"Worklist\"> Gå tilbake til Worklist</a>");
+                out.println("<a href=\"Index\"> Gå hjem</a>");
+                return;
+            }
+            super.processRequest(request, response, "lol", out);
+            
             System.out.println("on servlet 'EvaluateEvaluation'");
             //Printer en startknapp
             out.println("<a href=\"EvaluateServlet?deliveryId="+ request.getParameter("deliveryId") +"&start=TRUE\"><button  class=\"btn btn-primary\">Start</button></a>");
             //Sjekker at lærereren har trykket på start
             if (request.getParameter("start").equals("TRUE")) {
-                setup(request);
-            
-            
-                //User interface greier
-                bst.bootstrapHeader(out, "Evaluation for " + module.getName());
-                bst.bootstrapNavbar(out, "Home");
-                bst.containerOpen(out);
-                request.getSession().setAttribute("module", module);
-                EvaluationDb eDb = new EvaluationDb();
-                //Sjekker om det finnes en evaluering for denne studenten allerede, og oppretter en ny evaluering hvis ikke. (Parametrene i metoden under er hardkodet frem til worklist blir ferdig
-                if (eDb.addEvaluation(teacherId, delivery.getDeliveryid())) {
-                    out.println("<h1> Evaluation for student " + delivery.getStudent_name() + " for " + module.getName() + "</h1>");
-                    
-                //Henter de læringsmålene som lærereren skal evaluere etter    
-                ArrayList<LearningGoal> lgoals = module.getLearningGoals();
-                
-                //Printer begynnelsen på tabellen som lærereren skal evaluere i
-                bst.tableOpen(out);
-                
-                //String youtubeUrl = getYoutubeViewHash(delivery.getDeliveryContent());
-                //Print for å vise en embeded YouTube-video.
-                //printEmbeddedYouTubeVideo(out, youtubeUrl);
-                
-                //Form med link til servleten hvor faktisk alle poengene i evalueringen blir plottet inn i databasen. URL-parametrene er hardkodet for nå
-                out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation\" method=\"POST\">");
-                
-                
-                //Printer radene i evalueringstabellen
-                int i = 1;
-                for (LearningGoal lg : lgoals) {
-                    bst.tableRow(out, i, lg.getText(), "<input type=\"number\" name=\"learngoal" + i + "\"/>", lg.getPoints());
-                    i++;
-                }
-                
-                //UI greier
-                bst.tableClose(out);
-                
-                printEndForm(out);
-                bst.containerClose(out);
-                bst.bootstrapFooter(out);
-                
+                if (setup(request)) {
+                    //User interface greier
+                    bst.bootstrapHeader(out, "Evaluation for " + module.getName());
+                    bst.bootstrapNavbar(out, "Home");
+                    bst.containerOpen(out);
+                    request.getSession().setAttribute("module", module);
+                    EvaluationDb eDb = new EvaluationDb();
+                    //Sjekker om det finnes en evaluering for denne studenten allerede, og oppretter en ny evaluering hvis ikke. (Parametrene i metoden under er hardkodet frem til worklist blir ferdig
+                    if (eDb.addEvaluation(teacherId, delivery.getDeliveryid())) {
+                        out.println("<h1> Evaluation for student " + delivery.getStudent_name() + " for " + module.getName() + "</h1>");
+
+                    //Henter de læringsmålene som lærereren skal evaluere etter    
+                    ArrayList<LearningGoal> lgoals = module.getLearningGoals();
+
+                    //Printer begynnelsen på tabellen som lærereren skal evaluere i
+                    bst.tableOpen(out);
+
+                    //String youtubeUrl = getYoutubeViewHash(delivery.getDeliveryContent());
+                    //Print for å vise en embeded YouTube-video.
+                    //printEmbeddedYouTubeVideo(out, youtubeUrl);
+
+                    //Form med link til servleten hvor faktisk alle poengene i evalueringen blir plottet inn i databasen. URL-parametrene er hardkodet for nå
+                    out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation\" method=\"POST\">");
+
+
+                    //Printer radene i evalueringstabellen
+                    int i = 1;
+                    for (LearningGoal lg : lgoals) {
+                        bst.tableRow(out, i, lg.getText(), "<input type=\"number\" name=\"learngoal" + i + "\"/>", lg.getPoints());
+                        i++;
+                    }
+
+                    //UI greier
+                    bst.tableClose(out);
+
+                    printEndForm(out);
+                    bst.containerClose(out);
+                    bst.bootstrapFooter(out);
+
+                    } else {
+                        out.println("Det er allerede en evaluering opprettet for denne studenten på denne modulen");
+                    }
                 } else {
-                    out.println("Det er allerede en evaluering opprettet for denne studenten på denne modulen");
+                    out.println("<h1>Deliveryen du har valgt finnes ikke</h1>");
+                    out.println("<a href=\"Worklist\">Gå til worklist</a><br>");
+                    out.println("<a href=\"Index\">Gå hjem</a><br>");
                 }
             }  
         }
     }
 
     /**
-     * Henter den studenten som skal evalueres, hvilken modul og deliveryen. Disse blir lagt i globale variabler.
-     * @param student_id
-     * @param module_id 
+     * 
+     * @param request
+     * @return true if the setup goes well, and false if the delivery does not exist. 
      */
-    public void setup (HttpServletRequest request) {
+    public boolean setup (HttpServletRequest request) {
         DeliveryDb dDb = new DeliveryDb();
         delivery = dDb.getDeliveryWithUser(request.getParameter("deliveryId"));
-        
+        if (delivery == null) {
+            return false;
+        }
         ModuleDb mdb = new ModuleDb();
         mdb.init();
         module = mdb.getModuleWithLearningGoals(delivery.getModule_id());
@@ -118,6 +131,7 @@ public class EvaluateServlet extends SuperServlet {
         User teacher = (User)request.getSession().getAttribute("userLoggedIn");
         teacherId = teacher.getUserId();  
         //teacherId = "100";
+        return true;
     }
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

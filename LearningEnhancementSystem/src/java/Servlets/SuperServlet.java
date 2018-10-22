@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Database.UserDb;
 import Classes.User;
+import java.util.ArrayList;
+import HtmlTemplates.BootstrapTemplate;
 
 /**
  *
@@ -32,9 +34,17 @@ public class SuperServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response, String currentTab, PrintWriter out)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        
+        if (!setUserLoggedIn(request)) {
+            out.println("<h1 You are not logged in</h1>");
+            out.println("<a href=\"Index\"> Please log in </a>");
+            return;
+        }
+        
     }
     
     protected boolean checkIfTeacherLoggedIn(HttpServletRequest request) {
@@ -55,17 +65,23 @@ public class SuperServlet extends HttpServlet {
     
     protected boolean setUserLoggedIn(HttpServletRequest request) {
         HttpSession session = request.getSession();
-       
+        
         String email = request.getRemoteUser();
+        if (email == null) {
+            return false;
+        }
+        
         UserDb uDb = new UserDb();
         uDb.init();
         User user = uDb.getUser(email);
         if (user == null) {
             return false;
         }
-        request.getSession().setAttribute("userLoggedIn", user);
+        session.setAttribute("userLoggedIn", user);
         return true;
     }
+    
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -78,9 +94,11 @@ public class SuperServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
+    
+    
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -92,7 +110,6 @@ public class SuperServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
