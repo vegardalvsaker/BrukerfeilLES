@@ -19,6 +19,7 @@ import Classes.*;
 import java.util.ArrayList;
 import HtmlTemplates.BootstrapTemplate;
 import Database.DeliveryDb;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -69,13 +70,16 @@ public class EvaluateServlet extends SuperServlet {
 
                     //Henter de læringsmålene som lærereren skal evaluere etter    
                     ArrayList<LearningGoal> lgoals = module.getLearningGoals();
-
+                    if (lgoals.size() == 0) {
+                        cancelEvaluation(out, request);
+                        return;
+                    }            
                     //Printer begynnelsen på tabellen som lærereren skal evaluere i
                     bst.tableOpen(out);
 
-                    //String youtubeUrl = getYoutubeViewHash(delivery.getDeliveryContent());
+                    String youtubeUrl = getYoutubeViewHash(delivery.getDeliveryContent());
                     //Print for å vise en embeded YouTube-video.
-                    //printEmbeddedYouTubeVideo(out, youtubeUrl);
+                    printEmbeddedYouTubeVideo(out, youtubeUrl);
 
                     //Form med link til servleten hvor faktisk alle poengene i evalueringen blir plottet inn i databasen. URL-parametrene er hardkodet for nå
                     out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation\" method=\"POST\">");
@@ -92,8 +96,7 @@ public class EvaluateServlet extends SuperServlet {
                     bst.tableClose(out);
 
                     printEndForm(out);
-                    bst.containerClose(out);
-                    bst.bootstrapFooter(out);
+                    
 
                     } else {
                         out.println("Det er allerede en evaluering opprettet for denne studenten på denne modulen");
@@ -103,7 +106,8 @@ public class EvaluateServlet extends SuperServlet {
                     out.println("<a href=\"Worklist\">Gå til worklist</a><br>");
                     out.println("<a href=\"Index\">Gå hjem</a><br>");
                 }
-            }  
+            }  bst.containerClose(out);
+               bst.bootstrapFooter(out);
         }
     }
 
@@ -195,5 +199,15 @@ public class EvaluateServlet extends SuperServlet {
                 out.println("</div>\n" +
 "      </div>");
                 out.println("</form>");
+    }
+    
+    private void cancelEvaluation(PrintWriter out, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.removeAttribute("module");
+        session.removeAttribute("student");
+        session.removeAttribute("delivery");
+        out.println("<h1>Modulen som deliveryen angår, har ingen læringsmål.<br> <a href=\"OneModule?id="+ module.getModuleid() + "\">Legg til noen læringsmål</a> før du evaluerer videre</h1>");
+        bst.containerClose(out);
+        bst.bootstrapFooter(out);
     }
 }

@@ -27,6 +27,7 @@ public class ModuleDb extends Database {
     private static final String SLCT_MODULE = "select * from Module";
     private static final String SLCT_ALL_MODULES = "select * from Module";
     private static final String SLCT_MODULES_WITH_GOALS = "select m.module_id, m.module_name, l.learn_goal_id, l.learn_goal_text, l.learn_goal_points from Module m inner join LearningGoal l on m.module_id = l.module_id where m.module_id = ?";
+    private static final String SELECT_ONE_MODULE = "select * from Module where module_id = ?";
     private static final String SLCT_LEARNGOAL = "select * from LearningGoal where module_id = ?";
     /**
      * This method retrieves all of the modules in the database, create an object of each record and is then
@@ -91,7 +92,7 @@ public class ModuleDb extends Database {
         catch (SQLException e) {
             System.out.println(e);
         }
-        return null;
+        return getModule(module_id);
     }
     
     
@@ -137,27 +138,30 @@ public class ModuleDb extends Database {
      }
     }
     
-    /*
-    public void addModules(HttpServletRequest req) {
-        Connection conn = getConnection();
-        Statement stmt = getStatement(conn);
-        
-        String[] values = {req.getParameter("moduleno"),
-        req.getParameter("shortDesc"),
-        req.getParameter("longDesc")};
-        
-        String sql = "insert into Module values ("+ values[0] +", '"+values[1]+"', '"+ values[2] + "')";
-        System.out.println(sql);
-        try {
-            stmt.execute(sql);
-            System.out.println("Succsessfully added a module");
-            conn.close();
-        }
-        catch (SQLException ex) {
-            System.out.println("Could not insert into table, because: " + ex);
-        }
-    }*/
-    
+    public Module getModule(String moduleId) {
+         try( Connection connection = getConnection();
+          PreparedStatement ps = connection.prepareStatement(SELECT_ONE_MODULE);
+          ) {  
+             ps.setString(1, moduleId);
+             try (ResultSet rs = ps.executeQuery();) {
+                 if(rs.first()) {
+                    Module module = new Module();
+                    module.setId(Integer.parseInt(moduleId));
+                    module.setContent(rs.getString("module_content"));
+                    module.setDesc(rs.getString("module_desc"));
+                    module.setName(rs.getString("module_name"));
+                    module.setPublished(rs.getBoolean("module_isPublished"));
+
+                    return module;
+                 }
+                 
+             }
+         } catch (SQLException ex) {
+             System.out.println("Method: getModule(), Error: " + ex);
+         }
+         
+        return null;
+    }
     private void deleteUI(PrintWriter out, String id){
       
         out.println("<form action=\"RemoveModule\" method=\"POST\">");

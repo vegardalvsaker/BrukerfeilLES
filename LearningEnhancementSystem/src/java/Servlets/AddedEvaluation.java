@@ -61,6 +61,9 @@ public class AddedEvaluation extends HttpServlet {
         eDb.finishEvaluation(deliveryid, comment);
         ArrayList<String> givenPoints = new ArrayList<>();
         givenPoints = getListOfGivenPoints(request);
+        if (givenPoints.size() == 0) {
+            return;
+        }
         int i = 0;
         for (LearningGoal lg : module.getLearningGoals()) {
             String lgId = lg.getLearn_goal_id();
