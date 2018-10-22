@@ -56,11 +56,11 @@ public class Delivery extends HttpServlet {
         DeliveryDb deliver = new DeliveryDb();
         deliver.getDelivery(moduleid, out);
         
-        if (deliver.requestgetParameter()) {
-            out.println("<h1>There are no notifications for " + user.getUserName() + "<h1>");
+        if (request.getParameter(inInterview).equals(0)) {
+            out.println("<h1>Du trenger bare å laste opp en link<h1>");
         } else {
             
-            out.println("<h1>Notifications for " + user.getUserName() + "</h1>");
+            out.println("<h1>Modulen godkjennes av lærer eller hjelpelærer</h1>");
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -99,5 +99,6 @@ public class Delivery extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+        }
+    }
 }
