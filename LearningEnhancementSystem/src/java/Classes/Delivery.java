@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 
 /**
  *
- * @author Vegard
+ * @author Marius
  */
 public class Delivery {
     

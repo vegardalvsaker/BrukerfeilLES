@@ -44,7 +44,7 @@ public class Delivery extends HttpServlet {
         DeliveryDb deliver = new DeliveryDb();
         deliver.init();
         
-        deliver.getDelivery(moduleid,out);
+        deliver.getDeliveryForm(moduleid,out);
         System.out.println(inInterview);
         }
     }
@@ -52,15 +52,9 @@ public class Delivery extends HttpServlet {
         //User user = (User)request.getSession().getAttribute("userLoggedIn");
         //String userId = user.getUserId();
         String moduleid = request.getParameter("id");
-        String inInterview = request.getParameter("module_inInterview");
         DeliveryDb deliver = new DeliveryDb();
-        deliver.getDelivery(moduleid, out);
-        
-        if (request.getParameter(inInterview).equals(0)) {
-            out.println("<h1>Du trenger bare å laste opp en link<h1>");
-        } else {
-            
-            out.println("<h1>Modulen godkjennes av lærer eller hjelpelærer</h1>");
+        deliver.getDeliveryForm(moduleid, out);
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -99,6 +93,4 @@ public class Delivery extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-        }
-    }
 }

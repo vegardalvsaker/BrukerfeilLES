@@ -12,53 +12,55 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  *
- * @author Vegard
+ * @author Marius
  */
 public class DeliveryDb extends Database{
     
-    private static final String SELECT_DELIVERY = "select m.module_id, m.module_name, d.delivery_content, m.module_inInterview from Module m inner join Delivery d where m.module_id = d.module_id and m.module_id = ?";
-    
-    public List<Delivery> getDelivery(){
-        List<Delivery> delivery = new ArrayList<>();
-        
-        try(
-            Connection conn = getConnection();
-            Statement stmt = getStatement(conn);
-            ResultSet rset = stmt.executeQuery(SELECT_DELIVERY);
-        ){
-          while (rset.next()){
-              Delivery deliv = new Delivery();
-              deliv.setDeliveryId(rset.getString("delivery_id"));
-              deliv.setDeliveryContent(rset.getString("delivery_content"));
-              delivery.add(deliv);
-          }
-               return delivery;
-               }
+    private static final String ADD_DELIVERY = "insert into Delivery values (default, ?, ?, ?, ?, default, default";
+    private static final String GET_DELIVERY_FORM ="select * from Module where module_id = ?";
+
+    public void getDeliveryForm(String moduleid, PrintWriter out) {
+            try(
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(GET_DELIVERY_FORM);
+                ){  
+                ps.setString(1, moduleid);
+                try (ResultSet rs = ps.executeQuery();) {
+                    while (rs.next()) {
+                        String desc = rs.getString("module_desc");
+                        String content = rs.getString("module_content");
+                        Boolean inInterview = rs.getBoolean("module_inInterview");
+                        out.println("<h2>"+ moduleid + "</h2>");
+                        out.println("<p>" + desc + "</p>");
+                        out.println("<p>" + content + "</p>");
+                    
+                        if (inInterview.equals(0)||(inInterview.equals(false))){
+                            out.println("<h1>Du trenger bare å laste opp en link<h1>");
+                        } else {
+                            out.println("<h1>Modulen godkjennes av lærer eller hjelpelærer</h1>");
+                    }
+                }
+            }
+        }
         catch (SQLException ex) {
             System.out.println("Query error:" + ex);
         }
-        return null;
     }
-
-    public void getDelivery(String moduleid, PrintWriter out) {
-        try(
-            Connection conn = getConnection();
-            PreparedStatement ps = conn.prepareStatement(SELECT_DELIVERY);
-                ){  
-            ps.setString(1, moduleid);
-            try (ResultSet rs = ps.executeQuery();) {
-                while (rs.next()) {
-                    String id = rs.getString("delivery_id");
-                    String content = rs.getString("delivery_content");
-                   out.println("<h2>"+ id + "</h2>");
-                out.println("<p>" + content + "</p>");
-                //out.println("<small>" + annotime + "</small>");
-            }
-        }
-    }
-    catch (SQLException e) {
+    
+    public void addDelivery(String studentid, String moduleid, String content, String worklistid) {
+        try( Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(ADD_DELIVERY);
+                ) {
+            
+            ps.setString(1,studentid);
+            ps.setString(2,moduleid);
+            ps.setString(3,content);
+            ps.setString(4,worklistid);
+            ps.executeUpdate();
             
         }
-   
+        catch(SQLException ex)   {
+            System.out.println(ex);
+        }
     }
 }
