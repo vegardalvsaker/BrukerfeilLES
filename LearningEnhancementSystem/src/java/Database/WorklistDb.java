@@ -62,7 +62,8 @@ public class WorklistDb extends Database {
                 
                 }
                 
-               for (WorklistNotEval objekt : notEvaluated)  {   
+               for (WorklistNotEval objekt : notEvaluated)  {
+                    out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc() +"</br>"); 
         }
     }
         catch(SQLException liste) {
