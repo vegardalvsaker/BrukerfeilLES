@@ -69,7 +69,7 @@ public void printReplys(int commentId, int moduleId, PrintWriter out) {
                 int replyid = Integer.parseInt(rs.getString("reply_id"));
                 String replytext = rs.getString("reply_text");
                 String author = rs.getString("user_name");
-                out.println("<p style=\"margin-left:2.5em;\">" + replyid +" "+ replytext + "</p>");
+                out.println("<p style=\"margin-left:2.5em;\">" + replytext + "</p>");
                 out.println("<p style=\"margin-left:2.5em;\">" + author + "</p>");
                 out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
                 out.println("<input type=\"text\" name=\"deleteR\" value=\"TRUE\"style=\"visibility:hidden;\">");
@@ -106,4 +106,17 @@ public void deleteAll(int Commentid){
            System.out.println(ex);
        }
    }
+public void addReplyForm(PrintWriter out, int moduleId,int commentId){
+            out.println("<div style=\"margin-left:2.5em;\">");
+            out.println("<form action=\"OneModule?id="+ moduleId +"\" method=\"POST\">");
+            out.println("<input type=\"hidden\" name=\"delete\" value=\"FALSE\"");
+            out.println("<h3> Legg til svar</h3><br>");
+            out.println("<input type =\"text\" name=\"reply\"><br>"); 
+            out.println("<input type=\"text\" name=\"comment_id\" value=\""+ commentId +"\"style=\"visibility:hidden;\"/>");
+            out.println("<br>");
+            out.println("<input type=\"submit\" value=\"Legg til\"><br>");        
+            out.println("<br>");
+            out.println("</form>");
+            out.println("</div>");
+    }
 }

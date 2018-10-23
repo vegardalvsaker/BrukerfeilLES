@@ -71,6 +71,14 @@ public class OneModule extends HttpServlet {
                     } else 
                     cdb.addComment(mId, "1", comText);
                 }
+                if (paramap.containsKey("reply") && paramap.containsKey("comment_id")){
+                    int comId = Integer.parseInt(request.getParameter("comment_id"));
+                    String repText = request.getParameter("reply");
+                    if (repText.equals("")){
+                        out.println("Enter text before posting");
+                    } else 
+                    crdb.addReply(comId, "1", repText);
+                }
             }
             
             bst.bootstrapHeader(out, "Module " + id);
@@ -78,23 +86,9 @@ public class OneModule extends HttpServlet {
 
             db.printLearningGoals(id, out);
             cdb.printComments(mId,out);
-            addComment(out,request);
-            
+            cdb.addCommentForm(out,mId);
             bst.bootstrapFooter(out); 
         }
-    }
-private void addComment(PrintWriter out, HttpServletRequest request){
-            String id = request.getParameter("id");
-            out.println("<div>");
-            out.println("<form action=\"OneModule?id="+ id+"\" method=\"POST\">");
-            out.println("<input type=\"hidden\" name=\"delete\" value=\"FALSE\"");
-            out.println("<h3>Legg til kommentar</h3><br>");
-            out.println("<input type =\"text\" name=\"comment\"><br>");           
-            out.println("<br>");
-            out.println("<input type=\"submit\" value=\"Legg til\"><br>");        
-            out.println("<br>");
-            out.println("</form>");
-            out.println("</div>");
     }
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -134,5 +128,4 @@ private void addComment(PrintWriter out, HttpServletRequest request){
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
