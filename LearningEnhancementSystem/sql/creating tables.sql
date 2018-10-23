@@ -7,8 +7,16 @@ user_id integer not null auto_increment,
 user_name varchar(60),
 user_email varchar (70),
 user_isTeacher bool not null default 0,
+user_password varchar(20),
 
 constraint user_pk primary key (user_id)
+);
+
+create table Roles(
+user_email varchar(70),
+rolename varchar(32) not null default 'Student',
+
+constraint roles_pk primary key (user_email, rolename)
 );
 
 create table Announcement(

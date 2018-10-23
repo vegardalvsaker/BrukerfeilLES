@@ -12,6 +12,12 @@ import java.sql.Timestamp;
  * @author Marius
  */
 public class Delivery {
+    private int delivery_id;
+    private int student_id;
+    private int module_id;
+    private String delivery_content;
+    private int worklist_id;
+    private timestamp delivery_timestamp;
     
     private String deliveryid;
     private String deliverycontent;
@@ -50,3 +56,5 @@ public class Delivery {
         this.isevaluated = isevaluated;
     }
 }
+
+
