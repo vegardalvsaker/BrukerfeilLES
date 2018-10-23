@@ -57,12 +57,12 @@ public class WorklistDb extends Database {
                    WorklistNotEval objekt = new WorklistNotEval(DelId, StudentId, ModuleId, Desc, workId, Timestamp, isEvaluated); 
                     //if(boolean.class.equals("delivery_isEvaluated boolean default false,") == true) {
                     notEvaluatedForTeacher1.add(objekt); 
-                    
-                    out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc() +"</br>"); 
+                   
                 
                 }
                 
-               for (WorklistNotEval objekt : notEvaluatedForTeacher1)  {   
+               for (WorklistNotEval objekt : notEvaluatedForTeacher1)  {
+                    out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc() +"</br>"); 
         }
     }
         catch(SQLException liste) {
@@ -102,7 +102,9 @@ public void getWorklistNotEvalTeacher2(PrintWriter out)    {
                 
                 }
                 
-               for (WorklistNotEval objekt : notEvaluatedForTeacher2)  {   
+               for (WorklistNotEval objekt : notEvaluatedForTeacher2)  {
+                    out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc() +"</br>"); 
+                   
         }
     }
         catch(SQLException liste) {
