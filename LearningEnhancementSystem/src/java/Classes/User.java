@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Classes;
 
-/**
- *
- * @author Vegard
- */
 public class User {
     private String userId;
     private String userName;
@@ -21,8 +12,7 @@ public class User {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userIsTeacher = userIsTeacher;
-        
-    }
+        }
 
 
   public User() {
@@ -39,12 +29,15 @@ public class User {
     public String getUserName() {
         return userName;
     }
+  
     public void setUserName (String userName) {
         this.userName = userName;
     }
+  
     public String getUserEmail() {
         return userEmail;
     }
+
     public String toString()    {
         return userId + " " + userName + " " + userEmail + " " + userIsTeacher + " ";
     }
@@ -52,10 +45,7 @@ public class User {
     public void setUserEmail (String useremail) {
         this.userEmail = useremail;
     }
-    public boolean isTeacher() {
-        return userIsTeacher;
-    }
-
+    
     public void setTeacher(boolean isTeacher) {
         this.userIsTeacher = isTeacher;
     }
@@ -72,3 +62,4 @@ public class User {
         this.userIsTeacher = userIsTeacher;
     }
 }
+
