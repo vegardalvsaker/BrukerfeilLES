@@ -72,11 +72,11 @@ public class EditModule extends HttpServlet {
             out.println("<h1>Rediger modul</h1>");
             out.println("<form action=\"EditModule?id="+module_id+"\" method=\"POST\">");
             out.println("<h3>Modulnavn</h3><br>");
-            out.println("<input type=\"text\" name=\"Modulnavn\" value="+ modulName +">");
+            out.println("<input type=\"text\" name=\"Modulnavn\" value=\""+ modulName +"\">");
             out.println("<h3>Beskrivelse</h3><br>");
-            out.println("<input type=\"text\" name=\"Beskrivelse\" value="+ modulDesc +"><br>");
+            out.println("<input type=\"text\" name=\"Beskrivelse\" value=\""+ modulDesc +"\"><br>");
             out.println("<h3>Innhold</h3><br>");
-            out.println("<input type=\"text\" name=\"Innhold\" value="+ modulContent + "><br>");
+            out.println("<input type=\"text\" name=\"Innhold\" value=\""+ modulContent + "\"><br>");
             out.println("<br>");
             out.println("<input type=\"submit\" value=\"Rediger modul\"><br>");     
             out.println("</form>");

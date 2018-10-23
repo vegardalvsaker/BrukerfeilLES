@@ -73,10 +73,16 @@ public class OneModule extends HttpServlet {
     
     private void editModuleButtonForm(PrintWriter out, HttpServletRequest request)    {
         String id = request.getParameter("id");
-            out.println("<a href=\"ModuleDb\"></a>");
-            out.println("<form action=\"EditModule?id="+ id+"\" method=\"POST\">");
-            out.println("<input type=\"submit\" value=\"Rediger modul\"><br>");   
-            out.println("</form>");
+            out.println("<a href=\"EditModule?id="+ id +"\">"
+                    + "<button>Rediger modul</button>"
+                    + "</a>");
+            
+         /*    out.println("<form action=\"EditModule?id=" + id + "\">");
+             out.println("<button>Rediger modul</button>");
+             out.println("</form>");*/
+             
+                     
+                             
     }
 
     

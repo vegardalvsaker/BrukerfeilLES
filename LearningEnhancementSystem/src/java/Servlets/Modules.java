@@ -66,7 +66,6 @@ public class Modules extends HttpServlet {
             bst.bootstrapFooter(out);
             
         }
-        
     }
         private void addModuleForm(PrintWriter out)  {
             
