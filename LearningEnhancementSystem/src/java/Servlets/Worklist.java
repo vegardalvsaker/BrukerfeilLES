@@ -5,6 +5,8 @@
  */
 package Servlets;
 
+import Servlets.SuperServlet;
+import Classes.User;
 import Database.WorklistDb;
 import HtmlTemplates.BootstrapTemplate;
 import java.io.IOException;
@@ -20,7 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author Espen
  */
 @WebServlet(name = "Worklist", urlPatterns = {"/Worklist"})
-public class Worklist extends HttpServlet {
+public class Worklist extends SuperServlet {
+    private User user;
 
     
     /**
@@ -34,28 +37,75 @@ public class Worklist extends HttpServlet {
      */
     //Objekt for å generere UI
     
+    
+    
     BootstrapTemplate bst = new BootstrapTemplate();
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            if (!checkIfLoggedIn(request)) {
+                out.println("Please log in first :)");
+                request.getRequestDispatcher("index.html").include(request, response);
+                return;
+            }
+            
+            if (User.getUserEmail == "hallgeiren@uia.no"); {
+            
             WorklistDb db = new WorklistDb();
             db.init();
             bst.bootstrapHeader(out, "Worklist");
             bst.bootstrapNavbar(out, "Worklist");
             
-            
             bst.containerOpen(out);
             
-            db.getWorklistNotEval(out);
+            db.getWorklistNotEvalTeacher1(out);
             
             db.getWorklistEvaluated(out);
             
             bst.containerClose(out);
             bst.bootstrapFooter(out);
+            
+            }
+//====================================================================================================================================           
+   
+if (User.getUserEmail == "Even@uia.no"); {
+            
+            WorklistDb db = new WorklistDb();
+            db.init();
+            bst.bootstrapHeader(out, "Worklist");
+            bst.bootstrapNavbar(out, "Worklist");
+            
+            bst.containerOpen(out);
+            
+            db.getWorklistNotEvalTeacher2(out);
+            
+            db.getWorklistEvaluated(out);
+            
+            bst.containerClose(out);
+            bst.bootstrapFooter(out);
+            }
+            
+
+//WorklistDb db = new WorklistDb();
+            //db.init();
+            //bst.bootstrapHeader(out, "Worklist");
+            //bst.bootstrapNavbar(out, "Worklist");
+            
+            //bst.containerOpen(out);
+            
+            //db.getWorklistNotEvalTeacher1(out);
+            
+            //db.getWorklistEvaluated(out);
+            
+            //bst.containerClose(out);
+            //bst.bootstrapFooter(out);
         }
     }
+    
+    
+    
     
     
 

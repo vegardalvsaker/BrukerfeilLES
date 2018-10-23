@@ -30,8 +30,8 @@ public class WorklistDb extends Database {
     //private static final String SLCT_ALL_DELIVERABELS = "select * from Delivery";
     private static final String SLCT_DELIVERY_WITH_EVALUTAION = "select delivery_id, student_id, module_id, delivery_content, worklist_id, delivery_timestamp, delivery_isEvaluated from Delivery where delivery_isEvaluated = TRUE";
     private static final String SLCT_DELIVERY_WITHOUT_EVALUTAION = "select delivery_id, student_id, module_id, delivery_content, worklist_id, delivery_timestamp, delivery_isEvaluated from Delivery where delivery_isEvaluated = FALSE";
-
-    public void getWorklistNotEval(PrintWriter out)    {
+    //Worklist for teacher 1
+    public void getWorklistNotEvalTeacher1(PrintWriter out)    {
         
         String list = SLCT_DELIVERY_WITHOUT_EVALUTAION;
         
@@ -39,7 +39,7 @@ public class WorklistDb extends Database {
                 Connection connection = getConnection();
                 PreparedStatement prepStatement = connection.prepareStatement(list);
                 ResultSet rset = prepStatement.executeQuery();) {
-                ArrayList<WorklistNotEval> notEvaluated = new ArrayList();
+                ArrayList<WorklistNotEval> notEvaluatedForTeacher1 = new ArrayList();
                 
                out.println("<h1>Worklist for tasks that are not evaluated:</h1>");
                
@@ -56,13 +56,53 @@ public class WorklistDb extends Database {
                
                    WorklistNotEval objekt = new WorklistNotEval(DelId, StudentId, ModuleId, Desc, workId, Timestamp, isEvaluated); 
                     //if(boolean.class.equals("delivery_isEvaluated boolean default false,") == true) {
-                    notEvaluated.add(objekt); 
+                    notEvaluatedForTeacher1.add(objekt); 
                     
                     out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc() +"</br>"); 
                 
                 }
                 
-               for (WorklistNotEval objekt : notEvaluated)  {   
+               for (WorklistNotEval objekt : notEvaluatedForTeacher1)  {   
+        }
+    }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getWorklist" + liste);
+        }
+    }
+    
+//Worklist for Teacher 2    
+public void getWorklistNotEvalTeacher2(PrintWriter out)    {
+        
+        String list = SLCT_DELIVERY_WITHOUT_EVALUTAION;
+        
+        try(
+                Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(list);
+                ResultSet rset = prepStatement.executeQuery();) {
+                ArrayList<WorklistNotEval> notEvaluatedForTeacher2 = new ArrayList();
+                
+               out.println("<h1>Worklist for tasks that are not evaluated:</h1>");
+               
+               while(rset.next())   {
+                   
+                   String DelId = rset.getString("delivery_id");
+                   String StudentId = rset.getString("student_id");
+                   String ModuleId = rset.getString("module_id");
+                   String Desc = rset.getString("delivery_content");
+                   String workId = rset.getString("worklist_id");
+                   String Timestamp = rset.getString("delivery_timestamp");
+                   boolean isEvaluated = rset.getBoolean("delivery_isEvaluated");
+                   
+               
+                   WorklistNotEval objekt = new WorklistNotEval(DelId, StudentId, ModuleId, Desc, workId, Timestamp, isEvaluated); 
+                    //if(boolean.class.equals("delivery_isEvaluated boolean default false,") == true) {
+                    notEvaluatedForTeacher2.add(objekt); 
+                    
+                    out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc() +"</br>"); 
+                
+                }
+                
+               for (WorklistNotEval objekt : notEvaluatedForTeacher2)  {   
         }
     }
         catch(SQLException liste) {
