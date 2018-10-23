@@ -53,11 +53,12 @@ public class WorklistDb extends Database {
                    String Timestamp = rset.getString("delivery_timestamp");
                    boolean isEvaluated = rset.getBoolean("delivery_isEvaluated");
                    
-                out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc() +"</br>"); 
-                   
+               
                    WorklistNotEval objekt = new WorklistNotEval(DelId, StudentId, ModuleId, Desc, workId, Timestamp, isEvaluated); 
                     //if(boolean.class.equals("delivery_isEvaluated boolean default false,") == true) {
                     notEvaluated.add(objekt); 
+                    
+                    out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc() +"</br>"); 
                 
                 }
                 
