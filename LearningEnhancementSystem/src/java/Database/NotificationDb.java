@@ -16,7 +16,7 @@ import java.sql.SQLException;
  * @author Vegard
  */
 public class NotificationDb extends Database {
-    private static final String SELECT_NOTIFICATION = "select * from Notification where user_id = ?";
+    private static final String SELECT_NOTIFICATION = "select * from Notification where user_id = ? order by notification_timestamp desc";
     private static final String UPDATE_NOTIFICATION = "update Notification set notification_seen = 1 where notification_id = ?";
     public NotificationDb () {
         init();

@@ -66,7 +66,7 @@ public class Notifications extends SuperServlet {
             out.println("<table class=\"table\">\n" +
     "    <thead>\n" +
     "      <tr class=\"table-info\">\n" +
-    "        <th scope=\"col\">Mark as seen</th>\n" +
+    "        <th scope=\"col\">Mark as seen<br><input type=\"checkbox\" name=\"all\" class=\"selectall\"/></th>\n" +
     "        <th scope=\"col\">Notification text</th>\n" +
     "        <th scope=\"col\">Time and date</th>\n" +
     "        <th scope=\"col\">Seen?</th>\n" +
@@ -97,6 +97,7 @@ public class Notifications extends SuperServlet {
             out.println("</table>");
             out.println("<input class=\"btn btn-secondary\" type=\"submit\" value=\"Update mark as seen\"></input>");
             out.println("</form>");
+            jsSelectAll(out);
         }
     }
     
@@ -110,7 +111,18 @@ public class Notifications extends SuperServlet {
             }
         }
     }
-
+    
+    private void jsSelectAll(PrintWriter out) {
+        out.println("<script> \n"+
+                "$('.selectall').click(function() {\n" +
+"    if ($(this).is(':checked')) {\n" +
+"        $('td input').attr('checked', true);\n" +
+"    } else {\n" +
+"        $('td input').attr('checked', false);\n" +
+"    }\n" +
+"});\n" +
+                "</script>");
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

@@ -94,21 +94,39 @@ public class SuperServlet extends HttpServlet {
         
         StringBuilder sbf = new StringBuilder();
         
-        
-        for (Notification not : notifications) {
-            if (not.isIsNotificationSeen()) {
-                sbf.append(
-"                   <a class=\"dropdown-item\">"+ not.getNotificationContent() +"</a>\n" +
-                        "<div class=\"dropdown-divider\"></div>\n");
+        if (notifications.size() < 5) {
+            for (Notification not : notifications) {
+                if (not.isIsNotificationSeen()) {
+                    sbf.append(
+    "                   <a class=\"dropdown-item\">"+ not.getNotificationContent() +"</a>\n" +
+                            "<div class=\"dropdown-divider\"></div>\n");
                 
-            } else {
-                sbf.append("<div style=\"background-color:#f3f3f3;\">" +
-"                            <a class=\"dropdown-item\"><p style=\"color: red;\">◉</p >"+ not.getNotificationContent() +"</a>\n" +
-"                               </div> \n" +
-                        "<div class=\"dropdown-divider\"></div>\n");
+            }   else {
+                    sbf.append("<div style=\"background-color:#f3f3f3;\">" +
+    "                            <a class=\"dropdown-item\"><p style=\"color: red;\">◉</p >"+ not.getNotificationContent() +"</a>\n" +
+    "                               </div> \n" +
+                            "<div class=\"dropdown-divider\"></div>\n");
+                }
             }
+            sbf.append("<button style=\"float: right;\"class=\"btn btn-primary\" href=\"Notifications\">See all</button>");
+        } else {
+            for (int i = 0; i < 5; i++) {
+                if (notifications.get(i).isIsNotificationSeen()) {
+                    sbf.append(
+    "                   <a class=\"dropdown-item\">"+ notifications.get(i).getNotificationContent() +"</a>\n" +
+                            "<div class=\"dropdown-divider\"></div>\n");
+
+                } else {
+                    sbf.append("<div style=\"background-color:#f3f3f3;\">" +
+    "                            <a class=\"dropdown-item\"><p style=\"color: red;\">◉</p >"+ notifications.get(i).getNotificationContent() +"</a>\n" +
+    "                               </div> \n" +
+                            "<div class=\"dropdown-divider\"></div>\n");
+                }
+            }
+            int moreNoti = notifications.size() - 5;
+            sbf.append("<button style=\"float: right;\"class=\"btn btn-primary\" href=\"Notifications\">See "+ moreNoti +" more</button>");
         }
-        sbf.append("<button style=\"float: right;\"class=\"btn btn-primary\" href=\"Notifications\">See all </button>");
+        
         return sbf.toString();
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
