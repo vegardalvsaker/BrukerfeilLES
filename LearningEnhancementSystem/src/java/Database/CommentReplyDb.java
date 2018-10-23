@@ -69,8 +69,9 @@ public void printReplys(int commentId, int moduleId, PrintWriter out) {
                 int replyid = Integer.parseInt(rs.getString("reply_id"));
                 String replytext = rs.getString("reply_text");
                 String author = rs.getString("user_name");
-                out.println("<p style=\"margin-left:2.5em;\">" + replytext + "</p>");
-                out.println("<p style=\"margin-left:2.5em;\">" + author + "</p>");
+                out.println("<hr class=\"my-4\">");
+                out.println("<h4 style=\"margin-left:2.5em;\">" + replytext + "</h3>");
+                out.println("<h4 style=\"margin-left:2.5em;\">" + author + "</h4>");
                 out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
                 out.println("<input type=\"text\" name=\"deleteR\" value=\"TRUE\"style=\"visibility:hidden;\">");
                 out.println("<input type=\"text\" name=\"reply_id\" value=\""+ replyid +"\"style=\"visibility:hidden;\"/>");
