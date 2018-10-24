@@ -1,12 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Classes;
-
 import java.util.ArrayList;
-
 /**
  *
  * @author Espen
@@ -44,7 +37,6 @@ public class WorklistNotEval {
     public String getDelId() {
         return delivery_id;
     }
-
     public String getStudentId() {
         return student_id;
     }
@@ -90,7 +82,6 @@ public WorklistEvaluated(String delivery_id, String student_id, String module_id
     public String getDelId() {
         return delivery_id;
     }
-
     public String getStudentId() {
         return student_id;
     }
@@ -117,7 +108,3 @@ public WorklistEvaluated(String delivery_id, String student_id, String module_id
     
     
 }
-    
-    
-    
-    

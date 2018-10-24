@@ -43,6 +43,17 @@ public class SuperServlet extends HttpServlet {
         return false;
     }
     
+    protected boolean checkIfEvenLoggedIn(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("Even@uia.no");
+        return true;
+    } 
+   
+   protected boolean checkIfHallgeirLoggedIn(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("hallgeiren@uia.no");
+        return true;
+    } 
+    
+    
     protected boolean checkIfLoggedIn(HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("userLoggedIn");
         if(user == null) {

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Database;
 
 import Classes.Evaluation;
@@ -97,8 +92,6 @@ public void getWorklistNotEvalTeacher2(PrintWriter out)    {
                    WorklistNotEval objekt = new WorklistNotEval(DelId, StudentId, ModuleId, Desc, workId, Timestamp, isEvaluated); 
                     //if(boolean.class.equals("delivery_isEvaluated boolean default false,") == true) {
                     notEvaluatedForTeacher2.add(objekt); 
-                    
-                    out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc() +"</br>"); 
                 
                 }
                 
@@ -152,5 +145,3 @@ public void getWorklistEvaluated(PrintWriter out)    {  //----------------------
     }
     
 }
-          
- 
