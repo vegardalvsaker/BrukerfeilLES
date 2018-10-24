@@ -35,9 +35,17 @@ public class DeliveryDb extends Database{
                         out.println("<p>" + content + "</p>");
                     
                         if (inInterview.equals(0)||(inInterview.equals(false))){
-                            out.println("<h1>Du trenger bare å laste opp en link<h1>");
+                            out.println("<h3>Her kan du skrive inn linken til youtube-videoen<h3>");
+                            out.println("<form action=\"OneModule?id="+ moduleid+"\" method=\"POST\">");
+                            out.println("<input type=\"text\" name=\"link\">");
+                            out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Upload\">");
+                            out.println("</form>");
                         } else {
-                            out.println("<h1>Modulen godkjennes av lærer eller hjelpelærer</h1>");
+                            out.println("<h3>Modulen godkjennes av lærer eller hjelpelærer</h3>");
+                            out.println("<form action=\"OneModule?id="+ moduleid+"\" method=\"POST\">");
+                            out.println("<p>Trykk på knappen for å gi beskjed om at du ønsker modulgodkjenning</p><br>");
+                            out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Send\">");
+                            out.println("</form>");
                     }
                 }
             }
