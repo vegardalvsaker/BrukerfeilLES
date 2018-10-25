@@ -1,5 +1,6 @@
 package Servlets;
 
+import Database.ModuleDb;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -7,23 +8,38 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import Database.ResultsDb;
+import HtmlTemplates.BootstrapTemplate;
 
 /**
  *
  * @author Gorm-Erik
  */
-@WebServlet(urlPatterns = {"/Results"})
+@WebServlet(name = "Results", urlPatterns = {"/Results"})
 public class Results extends HttpServlet {
 
-    
+    BootstrapTemplate bst = new BootstrapTemplate();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
+            ModuleDb db = new ModuleDb();
+            db.init();
+         
+            bst.bootstrapHeader(out, "Modules");
             
+            bst.bootstrapNavbar(out, "Modules");
+           
+            bst.containerOpen(out);
             
-            results(out);
+            bst.containerClose(out);
+            
+           results(out, request);
+           progress(out, request);
+            
+            bst.bootstrapFooter(out);
+            
             
             
         }
@@ -33,11 +49,16 @@ public class Results extends HttpServlet {
     }
 
     private void results(PrintWriter out, HttpServletRequest request)    {
-            
-        out.println("<h1>Resultater:</h1><br>");
-        out.println("");
         
         
+        
+        
+        
+        out.println("<h1>Dine resultater:</h1><br>");
+       
+        
+        ResultsDb rdb = new ResultsDb();
+        rdb.fetchResults(request);
         
         
     }
@@ -46,17 +67,7 @@ public class Results extends HttpServlet {
         out.println("<h1>Fremgang:</h1><br>");
         
     }
-    
-        
-            
-            
-                    
-            
-            
-        }
-
-
-
+ 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
