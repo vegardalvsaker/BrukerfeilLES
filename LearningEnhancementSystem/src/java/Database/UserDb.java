@@ -217,6 +217,10 @@ public class UserDb extends Database {
     //    | | | | | | |
     //    V V V V V V V 
     //
+    
+
+    
+    
     public void getProfile(PrintWriter out, String id) {
         String oneProfile = ("select * from Users where user_id = ?");
         
@@ -253,6 +257,14 @@ public class UserDb extends Database {
         }
     }
    
+    public void printProfileLimited(PrintWriter out) {
+
+        for (User user : profileList) {
+            out.println("<h1>"+"Information about "+ user.getUserName() + "</h1>");
+            out.println(" Name: " + user.getUserName() + "<br>");
+            out.println(" Email: " + user.getUserEmail() + "<br>");
+        }
+    }
     
     public void getOnlyStudent(PrintWriter out) {
         String studentList = ("select * from Users where user_isTeacher = 0");

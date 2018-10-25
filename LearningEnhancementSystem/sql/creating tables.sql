@@ -50,8 +50,6 @@ constraint learningGoal_pk primary key (learn_goal_id),
 constraint learningGoal_fk foreign key (module_id) references Module (module_id)
 );
 
-
-
 create table Comments(
 comment_id integer not null auto_increment,
 module_id integer,

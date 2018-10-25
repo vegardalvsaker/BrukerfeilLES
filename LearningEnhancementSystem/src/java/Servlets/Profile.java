@@ -9,13 +9,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import Classes.User;
 
 /**
  *
  * @author Fosse
  */
 @WebServlet(name = "Profile", urlPatterns = {"/Profile"})
-public class Profile extends HttpServlet {
+public class Profile extends SuperServlet {
 
   BootstrapTemplate bst = new BootstrapTemplate();
     
@@ -41,11 +43,27 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         profile.init();
         
         profile.getProfile(out,userID);
-        profile.printProfile(out);
+        //Eventuelt get PROGRESS/RESULTS
+        
+        setUserLoggedIn(request);                                 //Calls super method, fills in user-data from database into session   
+
+        HttpSession session = request.getSession();               //Sets variable "session" to current session
+        User user = (User)session.getAttribute("userLoggedIn");   //Sets variable "user" to the current user logged in  
+        
+        
+        if (request.isUserInRole("Teacher")) {
+            out.println("Du er logget inn som en lærer: ");
+            profile.printProfile(out);
+            //Eventuelt print PROGRESS/RESULTS
+        } else if (user.getUserId().equals(userID) ) {            //IF user logged in = user profile requested
+            profile.printProfile(out);
+            //Eventuelt print PROGRESS/RESULTS
+        } else {
+            out.println("Du er logget inn som en student: ");
+            profile.printProfileLimited(out);
+        }
         profileForm(out);
-        
-    }
-        
+    }    
 }
 
 public void profileForm(PrintWriter out) {

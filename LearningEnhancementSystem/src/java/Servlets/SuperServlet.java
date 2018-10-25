@@ -55,9 +55,6 @@ public class SuperServlet extends HttpServlet {
     
     protected boolean setUserLoggedIn(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        if ((String)session.getAttribute("userLoggedIn") != null) {
-            return true;
-        }
         String email = request.getRemoteUser();
         UserDb uDb = new UserDb();
         uDb.init();
