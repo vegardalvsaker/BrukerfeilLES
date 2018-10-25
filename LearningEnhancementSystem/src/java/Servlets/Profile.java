@@ -55,7 +55,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
             out.println("Du er logget inn som en lærer: ");
             profile.printProfile(out);
             //Eventuelt print PROGRESS/RESULTS
-            //Eventuelt edit student
         } else if (user.getUserId().equals(userID) ) {            //IF user logged in = user profile requested
             profile.printProfile(out);
             //Eventuelt print PROGRESS/RESULTS
@@ -63,7 +62,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
             out.println("Du er logget inn som en student: ");
             profile.printProfileLimited(out);
         }
-
         profileForm(out);
     }    
 }
