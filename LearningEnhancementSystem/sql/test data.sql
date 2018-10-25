@@ -1,3 +1,6 @@
+
+use learningenhancementsystem;
+
 insert into Roles values 
 ('vegard@uia.no', default), 
 ('Hallgeir@uia.no', 'Teacher'), 
@@ -9,16 +12,13 @@ insert into Roles values
 ('gorm-erik@uia.no', default);
 
 
-create table Users(
-user_id integer not null auto_increment,
-user_name varchar(60),
-user_email varchar (70),
-user_isTeacher bool not null default 0,
-user_password varchar(20),
-
-constraint user_pk primary key (user_id)
-);
-
 
 insert into Users values 
-(default, 'Vegard Alvsaker', 'vegard@uia.no', default, sha2(vegarda)
+(default, 'Vegard Alvsaker', 'vegard@uia.no', default, pw123),
+(default, 'Hallgeir Hallgeirsen', 'Hallgeir@uia.no', default, pw123),
+(default, 'Even Fallkurs', 'Even@uia.no', default, pw123),
+(default, 'Shivan Realboi', 'Shivan@uia.no', default, pw123),
+(default, 'Eirik SnakkeItimen', 'Eirik@uia.no', default, pw123),
+(default, 'Ingve Fosse', 'ingve@uia.no', default, pw123),
+(default, 'Espen Oftedal', 'espen@uia.no', default, pw123),
+(default, 'Gorm-Erik Aarseheim', 'gorm-erik@uia.no', default, pw123);
