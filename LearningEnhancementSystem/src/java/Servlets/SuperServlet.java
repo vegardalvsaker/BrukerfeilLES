@@ -10,8 +10,10 @@ import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import Database.UserDb;
 import Classes.User;
 
 /**
@@ -61,7 +63,19 @@ public class SuperServlet extends HttpServlet {
         }
         return true;
     }
-
+    
+    protected boolean setUserLoggedIn(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String email = request.getRemoteUser();
+        UserDb uDb = new UserDb();
+        uDb.init();
+        User user = uDb.getUser(email);
+        if (user == null) {
+            return false;
+        }
+        request.getSession().setAttribute("userLoggedIn", user);
+        return true;
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
