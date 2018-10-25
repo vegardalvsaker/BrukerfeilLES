@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  *
- * @author Marius
+ * @author Filip
  */
 public class DeliveryDb extends Database{
     
