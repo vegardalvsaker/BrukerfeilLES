@@ -58,7 +58,7 @@ public class EditModule extends HttpServlet {
  
     private void editModuleForm(PrintWriter out, HttpServletRequest request)    {
             
-         //   String module_id = request.getParameter("id");  
+        
             String module_id = request.getParameter("id");
             ModuleDb db = new ModuleDb();
             db.init();

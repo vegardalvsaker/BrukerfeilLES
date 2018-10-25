@@ -207,31 +207,24 @@ public class ModuleDb extends Database {
 
     public boolean editModule(PrintWriter out, HttpServletRequest request, String modulName, String modulDesc, String modulContent)  {
         
-   //    String moduleID = request.getParameter("id");
+   
        String moduleID = request.getParameter("id");
        String editModuleName = "update Module set module_name = ?, module_desc = ?, module_content = ? where module_id = ?";
-   //    String editModuleDesc = "update Module set module_desc = ? where module_id = ?";
-     //  String editModuleContent = "update Module set module_content = ? where module_id = ?";
-       
+   
       try(
              Connection connection = getConnection();
              PreparedStatement prepStatement = connection.prepareStatement(editModuleName);
-      //       PreparedStatement prStatement = connection.prepareStatement(editModuleDesc);
-        //     PreparedStatement pStatement = connection.prepareStatement(editModuleContent);
+     
               ) {
                
               prepStatement.setString(1, modulName);
               prepStatement.setString(2, modulDesc);
               prepStatement.setString(3, modulContent);
               prepStatement.setString(4, moduleID);
-        /*      prStatement.setString(1, modulDesc);
-              prStatement.setString(2, moduleID);
-              pStatement.setString(1, modulContent);
-              pStatement.setString(2, moduleID);*/
+        
               
               prepStatement.executeUpdate();
-         //     prStatement.executeUpdate();
-           //   pStatement.executeUpdate();
+         
               
               return true;
       }
