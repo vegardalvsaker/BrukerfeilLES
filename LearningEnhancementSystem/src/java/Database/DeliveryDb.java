@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class DeliveryDb extends Database{
     
-    private static final String ADD_DELIVERY = "insert into Delivery values (default, ?, ?, ?, ?, default, default";
+    private static final String ADD_DELIVERY = "insert into Delivery values (default, ?, ?, ?, ?, default, default)";
     private static final String GET_DELIVERY_FORM ="select * from Module where module_id = ?";
 
     public void getDeliveryForm(String moduleid, PrintWriter out) {
@@ -33,16 +33,18 @@ public class DeliveryDb extends Database{
                         out.println("<h2>"+ moduleid + "</h2>");
                         out.println("<p>" + desc + "</p>");
                         out.println("<p>" + content + "</p>");
+                        
                     
                         if (inInterview.equals(0)||(inInterview.equals(false))){
+                            out.println("<form action=\"Delivery?id="+ moduleid+"\" method=\"POST\">");
                             out.println("<h3>Her kan du skrive inn linken til youtube-videoen<h3>");
-                            out.println("<form action=\"OneModule?id="+ moduleid+"\" method=\"POST\">");
                             out.println("<input type=\"text\" name=\"link\">");
                             out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Upload\">");
+                            //out.println("<href=\"OneModule?id="+ moduleid +">");
                             out.println("</form>");
                         } else {
+                            out.println("<form action=\"Delivery?id="+ moduleid+"\" method=\"POST\">");
                             out.println("<h3>Modulen godkjennes av lærer eller hjelpelærer</h3>");
-                            out.println("<form action=\"OneModule?id="+ moduleid+"\" method=\"POST\">");
                             out.println("<p>Trykk på knappen for å gi beskjed om at du ønsker modulgodkjenning</p><br>");
                             out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Send\">");
                             out.println("</form>");

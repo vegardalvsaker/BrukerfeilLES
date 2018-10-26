@@ -43,6 +43,11 @@ public class Delivery extends HttpServlet {
         
         DeliveryDb deliver = new DeliveryDb();
         deliver.init();
+        if(request.getMethod().equals("POST")){
+            String link = request.getParameter("link");
+            
+            deliver.addDelivery("2", "1", link, "1");
+        }
         
         deliver.getDeliveryForm(moduleid,out);
         System.out.println(inInterview);
@@ -57,11 +62,7 @@ public class Delivery extends HttpServlet {
             
             deliver.addDelivery("1", "1", deliveryContent, "2")
             //db.Delivery(StudentID, ModuleId, annocontent, WorklistID);*/
-        if(request.getMethod().equals("POST")){
-            String link = request.getParameter("link");
-            
-            deliver.addDelivery("1", "1", link, "1");
-        }
+        
         
         
         }
