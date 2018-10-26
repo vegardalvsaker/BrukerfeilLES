@@ -14,8 +14,12 @@ import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import Servlets.SuperServlet;
+import Servlets.Index;
+import Servlets.LogOut;
 
 /**
  *
@@ -23,9 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "Worklist", urlPatterns = {"/Worklist"})
 public class Worklist extends SuperServlet {
-    private User user;
-
-    
+    BootstrapTemplate bst = new BootstrapTemplate();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,54 +39,45 @@ public class Worklist extends SuperServlet {
      */
     //Objekt for å generere UI
     
-    
-    
-    BootstrapTemplate bst = new BootstrapTemplate();
-    
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet session)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            if (!checkIfLoggedIn(request)) {
-                out.println("Please log in first :)");
-                request.getRequestDispatcher("index.html").include(request, response);
-                return;
+        request.getRemoteUser();
+        
+        if(request.getRemoteUser() != ("Even@uia.no")) {
+            WorklistDb db = new WorklistDb();
+            db.init();
+            bst.bootstrapHeader(out, "Worklist");
+            bst.bootstrapNavbar(out, "Worklist");
+            bst.containerOpen(out);
+                db.getWorklistNotEvalTeacher1(out);
+                db.getWorklistEvaluated(out);
+            bst.containerClose(out);
+            bst.bootstrapFooter(out);
+        
+    }else 
+            if(request.getRemoteUser() != ("hallgeiren@uia.no")) {
+            WorklistDb db = new WorklistDb();
+            db.init();
+            bst.bootstrapHeader(out, "Worklist");
+            bst.bootstrapNavbar(out, "Worklist");
+            bst.containerOpen(out);
+                db.getWorklistNotEvalTeacher2(out);
+                db.getWorklistEvaluated(out);
+            bst.containerClose(out);
+            bst.bootstrapFooter(out);
+            } else 
+                if (checkIfTeacherLoggedIn(request)) {
+                }else {
+                out.println("You do not have access to this page!");
+                request.getRequestDispatcher("Index").include(request, response);
+                }
             }
-            
- if (checkIfEvenLoggedIn(request)) {            
-            WorklistDb db = new WorklistDb();
-            db.init();
-            bst.bootstrapHeader(out, "Worklist");
-            bst.bootstrapNavbar(out, "Worklist");
-            
-            bst.containerOpen(out);
-            
-            db.getWorklistNotEvalTeacher1(out);
-            
-            db.getWorklistEvaluated(out);
-            
-            bst.containerClose(out);
-            bst.bootstrapFooter(out);
-            
-            } else {
-//====================================================================================================================================           
-   
-if (checkIfHallgeirLoggedIn(request)); {
-            
-            WorklistDb db = new WorklistDb();
-            db.init();
-            bst.bootstrapHeader(out, "Worklist");
-            bst.bootstrapNavbar(out, "Worklist");
-            
-            bst.containerOpen(out);
-            
-            db.getWorklistNotEvalTeacher2(out);
-            
-            db.getWorklistEvaluated(out);
-            
-            bst.containerClose(out);
-            bst.bootstrapFooter(out);
-            } return 
+        }
+    }
+
+
             
 
 //WorklistDb db = new WorklistDb();

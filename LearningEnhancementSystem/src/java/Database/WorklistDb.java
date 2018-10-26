@@ -23,12 +23,16 @@ public class WorklistDb extends Database {
     
     
     //private static final String SLCT_ALL_DELIVERABELS = "select * from Delivery";
-    private static final String SLCT_DELIVERY_WITH_EVALUTAION = "select delivery_id, student_id, module_id, delivery_content, worklist_id, delivery_timestamp, delivery_isEvaluated from Delivery where delivery_isEvaluated = TRUE";
-    private static final String SLCT_DELIVERY_WITHOUT_EVALUTAION = "select delivery_id, student_id, module_id, delivery_content, worklist_id, delivery_timestamp, delivery_isEvaluated from Delivery where delivery_isEvaluated = FALSE";
+    private static final String SLCT_DELIVERY_WITH_EVALUTAION =     "select delivery_id, student_id, module_id, delivery_content, worklist_id, delivery_timestamp, delivery_isEvaluated from Delivery where delivery_isEvaluated = TRUE";
+    private static final String SLCT_DELIVERY_WITHOUT_EVALUTAION =  "select delivery_id, student_id, module_id, delivery_content, worklist_id, delivery_timestamp, delivery_isEvaluated from Delivery where delivery_isEvaluated = FALSE";
+    private static final String GIVE_WORKLIST_ID =                  "insert into Worklist VALUES (1,1), (2,2), (3,1), (3,2)";      
+    private static final String GIVE_DELIVERY_WORKLISTID =          "insert into Delivery VALUES";
+    private static final String SLCT_DELIVERY_WORLISTID_1 =         "select delivery_id, student_id, delivery_content,from Delivery where worklist_id =1;";
+    private static final String SLCT_DELIVERY_WORLISTID_2 =         "select delivery_id, student_id, delivery_content,from Delivery where worklist_id =2;";
     //Worklist for teacher 1
     public void getWorklistNotEvalTeacher1(PrintWriter out)    {
         
-        String list = SLCT_DELIVERY_WITHOUT_EVALUTAION;
+        String list = SLCT_DELIVERY_WORLISTID_1;
         
         try(
                 Connection connection = getConnection();
@@ -50,14 +54,13 @@ public class WorklistDb extends Database {
                    
                
                    WorklistNotEval objekt = new WorklistNotEval(DelId, StudentId, ModuleId, Desc, workId, Timestamp, isEvaluated); 
-                    //if(boolean.class.equals("delivery_isEvaluated boolean default false,") == true) {
-                    notEvaluatedForTeacher1.add(objekt); 
+                   notEvaluatedForTeacher1.add(objekt); 
                    
                 
                 }
                 
                for (WorklistNotEval objekt : notEvaluatedForTeacher1)  {
-                    out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc() +"</br>"); 
+                    out.println("<br>" + objekt.getDelId() + "&#160;|&#160;" + objekt.getUserID() + "&#160;|&#160;"  + objekt.getDesc() +"</br>"); 
         }
     }
         catch(SQLException liste) {
@@ -68,8 +71,8 @@ public class WorklistDb extends Database {
 //Worklist for Teacher 2    
 public void getWorklistNotEvalTeacher2(PrintWriter out)    {
         
-        String list = SLCT_DELIVERY_WITHOUT_EVALUTAION;
-        
+        String list = SLCT_DELIVERY_WORLISTID_2; {
+       
         try(
                 Connection connection = getConnection();
                 PreparedStatement prepStatement = connection.prepareStatement(list);
@@ -90,13 +93,12 @@ public void getWorklistNotEvalTeacher2(PrintWriter out)    {
                    
                
                    WorklistNotEval objekt = new WorklistNotEval(DelId, StudentId, ModuleId, Desc, workId, Timestamp, isEvaluated); 
-                    //if(boolean.class.equals("delivery_isEvaluated boolean default false,") == true) {
-                    notEvaluatedForTeacher2.add(objekt); 
+                   notEvaluatedForTeacher2.add(objekt); 
                 
                 }
                 
                for (WorklistNotEval objekt : notEvaluatedForTeacher2)  {
-                    out.println("<br>" + objekt.getDelId() + objekt.getStudentId() + objekt.getDesc() +"</br>"); 
+                    out.println("<br>" + objekt.getDelId() + "&#160;|&#160;" +  objekt.getUserID() + "&#160;|&#160;" + objekt.getDesc() +"</br>"); 
                    
         }
     }
@@ -104,9 +106,10 @@ public void getWorklistNotEvalTeacher2(PrintWriter out)    {
             out.println("SQL exception: in getWorklist" + liste);
         }
     }
+}
     
     
-public void getWorklistEvaluated(PrintWriter out)    {  //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+public void getWorklistEvaluated(PrintWriter out)    {  
         
         String list = SLCT_DELIVERY_WITH_EVALUTAION;
         
@@ -121,7 +124,7 @@ public void getWorklistEvaluated(PrintWriter out)    {  //----------------------
                while(rset.next())   {
                    
                    String DelId = rset.getString("delivery_id");
-                   String StudentId = rset.getString("student_id");
+                   String UserID = rset.getString("user_id");
                    String ModuleId = rset.getString("module_id");
                    String Desc = rset.getString("delivery_content");
                    String workId = rset.getString("worklist_id");
@@ -129,14 +132,13 @@ public void getWorklistEvaluated(PrintWriter out)    {  //----------------------
                    boolean isEvaluated = rset.getBoolean("delivery_isEvaluated");
                    
                    
-                   WorklistEvaluated objekter = new WorklistEvaluated(DelId, StudentId, ModuleId, Desc, Timestamp, isEvaluated); 
-                    //if(boolean.class.equals("delivery_isEvaluated boolean default false,") == true) {
-                    evaluated.add(objekter); 
+                   WorklistEvaluated objekter = new WorklistEvaluated(DelId, UserID, ModuleId, Desc, Timestamp, isEvaluated); 
+                   evaluated.add(objekter); 
                 
                 }
                 
                for (WorklistEvaluated objekter : evaluated)  {   
-                out.println("<br>" + objekter.getDelId() + objekter.getStudentId() + objekter.getDesc() +"</br>"); 
+                out.println("<br>" + objekter.getDelId() + "&#160;|&#160;" + objekter.getUserID() + "&#160;|&#160;" + objekter.getDesc() +"</br>"); 
         }
     }
         catch(SQLException liste) {
