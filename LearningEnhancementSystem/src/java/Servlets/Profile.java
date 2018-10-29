@@ -31,9 +31,8 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
     
     
     try (PrintWriter out = response.getWriter()) {
-
-        bst.bootstrapHeader(out, "Profile");
-        bst.bootstrapNavbar(out, "Profile");
+        super.processRequest(request, response, "People", out);
+        
             
         bst.containerOpen(out);
         bst.containerClose(out);

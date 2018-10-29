@@ -15,7 +15,7 @@ import Database.ModuleDb;
  * @author Vegard
  */
 @WebServlet(name = "Modules", urlPatterns = {"/Modules"})
-public class Modules extends HttpServlet {
+public class Modules extends SuperServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,8 +34,8 @@ public class Modules extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        try (PrintWriter out = response.getWriter()) {  
-            
+        try (PrintWriter out = response.getWriter()){  
+            super.processRequest(request, response, "Modules", out);
          ModuleDb db = new ModuleDb();
          db.init();
         
@@ -53,9 +53,6 @@ public class Modules extends HttpServlet {
                 
             }
             
-            bst.bootstrapHeader(out, "Modules");
-            
-            bst.bootstrapNavbar(out, "Modules");
             
             
             /*out.format(bst.hei(), "en", "to", "", "");
