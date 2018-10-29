@@ -41,31 +41,30 @@ import static java.lang.System.out;
     
 @WebServlet(name = "Worklist", urlPatterns = {"/Worklist"})
 public class Worklist extends SuperServlet {
-    BootstrapTemplate bst = new BootstrapTemplate();
-    
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet session)
+        BootstrapTemplate bst = new BootstrapTemplate();
+protected void processRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet session)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-        setUserLoggedIn(request); 
         request.getRemoteUser();
         
-        if(request.getRemoteUser() == ("Even@uia.no")) {
+	User user = (User)request.getSession().getAttribute("userLoggedIn");
+	String userEmail = user.getUserEmail();
+	
+        if(user.getUserEmail() == null ? ("Even@uia.no") == null : user.getUserEmail().equals("Even@uia.no")) {
             WorklistDb db = new WorklistDb();
             db.init();
-            bst.bootstrapHeader(out, "Worklist");
-            bst.bootstrapNavbar(out, "Worklist");
+           super.processRequest(request, response, "NavnPåCurrentTab", out);
             bst.containerOpen(out);
                 db.getWorklistNotEvalTeacher1(out);
                 db.getWorklistEvaluated(out);
             bst.containerClose(out);
             bst.bootstrapFooter(out);
         
-    }else if(request.getRemoteUser() == ("hallgeiren@uia.no")) {
+    }else if(user.getUserEmail().equals("hallgeiren@uia.no")) {
             WorklistDb db = new WorklistDb();
             db.init();
-            bst.bootstrapHeader(out, "Worklist");
-            bst.bootstrapNavbar(out, "Worklist");
+            super.processRequest(request, response, "NavnPåCurrentTab", out);
             bst.containerOpen(out);
                 db.getWorklistNotEvalTeacher2(out);
                 db.getWorklistEvaluated(out);
@@ -79,13 +78,6 @@ public class Worklist extends SuperServlet {
             }
         }
     }
-    
-
-
-
-
-
-            
 
 //WorklistDb db = new WorklistDb();
             //db.init();
