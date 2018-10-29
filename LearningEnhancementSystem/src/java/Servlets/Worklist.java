@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author ferra
  */
 @WebServlet(name = "Worklist", urlPatterns = {"/Worklist"})
-public class Worklist extends HttpServlet {
+public class Worklist extends SuperServlet {
 
     
     /**
@@ -40,10 +40,9 @@ public class Worklist extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            super.processRequest(request, response, "Worklist", out);
             WorklistDb db = new WorklistDb();
             db.init();
-            bst.bootstrapHeader(out, "Worklist");
-            bst.bootstrapNavbar(out, "Worklist");
             
             
             bst.containerOpen(out);

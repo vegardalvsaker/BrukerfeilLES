@@ -22,7 +22,7 @@ import Classes.User;
  * @author Vegard
  */
 @WebServlet(name = "Index", urlPatterns = {"/Index"})
-public class Index extends HttpServlet {
+public class Index extends SuperServlet {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -62,7 +62,8 @@ public class Index extends HttpServlet {
                 
             }  */
             FrontpagePrinter fp = new FrontpagePrinter();
-            fp.printFrontpage(out, "LES IS-110"); 
+            setUserLoggedIn(request);
+            fp.printFrontpage(out, "LES IS-110", getNotificationHtml(request)); 
         }
     }
 
