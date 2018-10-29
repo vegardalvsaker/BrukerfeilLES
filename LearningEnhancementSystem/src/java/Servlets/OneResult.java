@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Servlets;
 
 import java.io.IOException;
@@ -10,62 +5,65 @@ import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import Database.UserDb;
-import Classes.User;
+import java.io.PrintWriter;
+import Database.EvaluationDb;
+import Classes.Worklist;
 
 /**
  *
- * @author Vegard
+ * @author Gorm-Erik
  */
-@WebServlet(name = "SuperServlet", urlPatterns = {"/SuperServlet"})
-public class SuperServlet extends HttpServlet {
+@WebServlet(name = "OneResult", urlPatterns = {"/OneResult"})
+public class OneResult extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-    }
-    
-    protected boolean checkIfTeacherLoggedIn(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("userLoggedIn");
-        if (user.getUserIsTeacher()){
-            return true;
+        try (PrintWriter out = response.getWriter()) {
+            
+            
+            
+            deliveries(out);
         }
-        return false;
+            
     }
     
-    protected boolean checkIfLoggedIn(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("userLoggedIn");
-        if(user == null) {
-            return false;
-        }
-        return true;
-    }
-    
-    protected boolean setUserLoggedIn(HttpServletRequest request) {
-        HttpSession session = request.getSession();
+    private void deliveries(PrintWriter out)   {
         
-        String email = request.getRemoteUser();
-        UserDb uDb = new UserDb();
-        uDb.init();
-        User user = uDb.getUser(email);
-        if (user == null) {
-            return false;
-        }
-        request.getSession().setAttribute("userLoggedIn", user);
-        return true;
+        out.println("<table style=\"width:50%\">");
+        out.println("<tr>");
+        out.println("<th>Modulnavn</th>");
+        out.println("<th>Lastname</th> ");
+        out.println("<th>Age</th>");
+        out.println("</tr>");
+        out.println("<tr>");
+        out.println("<td>Jill</td>");
+        out.println("<td>Smith</td> ");
+        out.println("<td>50</td>");
+        out.println("</tr>");
+        out.println("</table>");
+        
+        
     }
+    
+    private void deliveries2(PrintWriter out)   {
+        
+        EvaluationDb evaluationdb = new EvaluationDb();
+        Worklist worklist = new Worklist();
+        String deliveryId = worklist.getDelId();
+        String evaluationid = evaluationdb.getEvaluationId(deliveryId);
+        evaluationdb.getEvaluationWithScore(evaluationid);
+        
+        
+        out.println("Modulnavn: ");
+        
+        
+    }
+
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
