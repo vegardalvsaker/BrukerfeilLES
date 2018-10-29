@@ -20,18 +20,18 @@ import javax.servlet.http.HttpServletResponse;
 import Servlets.SuperServlet;
 import Servlets.Index;
 import Servlets.LogOut;
+import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+import static java.lang.System.out;
 
 /**
  *
  * @author Espen
  */
-@WebServlet(name = "Worklist", urlPatterns = {"/Worklist"})
-public class Worklist extends SuperServlet {
-    BootstrapTemplate bst = new BootstrapTemplate();
-    /**
+ /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
+     * @param <error>
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -39,12 +39,15 @@ public class Worklist extends SuperServlet {
      */
     //Objekt for å generere UI
     
+@WebServlet(name = "Worklist", urlPatterns = {"/Worklist"})
+public class Worklist extends SuperServlet {
+    BootstrapTemplate bst = new BootstrapTemplate();
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet session)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
         request.getRemoteUser();
-        
         
         if(request.getRemoteUser() == ("Even@uia.no")) {
             WorklistDb db = new WorklistDb();
@@ -57,8 +60,7 @@ public class Worklist extends SuperServlet {
             bst.containerClose(out);
             bst.bootstrapFooter(out);
         
-    }else 
-            if(request.getRemoteUser() == ("hallgeiren@uia.no")) {
+    }else if(request.getRemoteUser() == ("hallgeiren@uia.no")) {
             WorklistDb db = new WorklistDb();
             db.init();
             bst.bootstrapHeader(out, "Worklist");
@@ -68,8 +70,7 @@ public class Worklist extends SuperServlet {
                 db.getWorklistEvaluated(out);
             bst.containerClose(out);
             bst.bootstrapFooter(out);
-            } else 
-                if (checkIfTeacherLoggedIn(request)) {
+            } else if (checkIfTeacherLoggedIn(request)) {
                 }else {
                 out.println("You do not have access to this page!");
                 request.getRequestDispatcher("Index").include(request, response);
