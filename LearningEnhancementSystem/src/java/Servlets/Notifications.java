@@ -39,7 +39,7 @@ public class Notifications extends SuperServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            super.processRequest(request, response, "Home", out);
+            super.processRequest(request, response, "Notifications", out);
             updateIsSeen(request);
             bst.containerOpen(out);
             

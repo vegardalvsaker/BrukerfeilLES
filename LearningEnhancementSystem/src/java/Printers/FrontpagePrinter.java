@@ -43,7 +43,7 @@ public class FrontpagePrinter {
      * @param out
      * @param title Title for the HTML title
      */
-    public void printFrontpage(PrintWriter out, HttpServletRequest request, String title, String notifications) {
+    public void printFrontpage(PrintWriter out, String title, String notifications) {
         List<Module> modulList = mdb.getModuler();
         List<Announcement> announcementList = adb.getAnnouncement();
         bs.bootstrapHeader(out, title);

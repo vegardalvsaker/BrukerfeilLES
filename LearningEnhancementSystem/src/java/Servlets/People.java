@@ -14,15 +14,14 @@ import Database.UserDb;
  * @author gorm-erikaarsheim
  */
 @WebServlet(urlPatterns = {"/People"})
-public class People extends HttpServlet {
+public class People extends SuperServlet {
     BootstrapTemplate bst = new BootstrapTemplate();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) { 
-            bst.bootstrapHeader(out, "People");
-            bst.bootstrapNavbar(out, "People");
+            super.processRequest(request, response, "People", out);
             
             bst.containerOpen(out);
            

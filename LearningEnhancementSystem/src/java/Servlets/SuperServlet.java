@@ -41,11 +41,13 @@ public class SuperServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         BootstrapTemplate bst = new BootstrapTemplate();
+        //Hvis systemet ikke greier å legge Useren i session så blir du bedt om å logge inn på nytt
         if (!setUserLoggedIn(request)) {
             out.println("<h1 You are not logged in</h1>");
             out.println("<a href=\"Index\"> Please log in </a>");
             return;
         }
+        //Henter notifications til useren
         String notifications = getNotificationHtml(request); 
         bst.bootstrapHeader(out, currentTab);
         bst.bootstrapNavbar(out, currentTab, notifications);
@@ -94,12 +96,16 @@ public class SuperServlet extends HttpServlet {
         
         StringBuilder sbf = new StringBuilder();
         
-        if (notifications.size() < 5) {
+        if (notifications.size() == 0){
+            sbf.append("<a class=\"dropdown-item\">No notifcations</a>\n" +
+                            "<div class=\"dropdown-divider\"></div>\n");
+        }
+        
+        else if (notifications.size() < 5 && notifications.size() > 0) {
             for (Notification not : notifications) {
                 if (not.isIsNotificationSeen()) {
                     sbf.append(
-    "                   <a class=\"dropdown-item\">"+ not.getNotificationContent() +"</a>\n" +
-                            "<div class=\"dropdown-divider\"></div>\n");
+    "                   <a class=\"dropdown-item\">"+ not.getNotificationContent() +"</a>\n");
                 
             }   else {
                     sbf.append("<div style=\"background-color:#f3f3f3;\">" +
@@ -124,7 +130,7 @@ public class SuperServlet extends HttpServlet {
                 }
             }
             int moreNoti = notifications.size() - 5;
-            sbf.append("<button style=\"float: right;\"class=\"btn btn-primary\" href=\"Notifications\">See "+ moreNoti +" more</button>");
+            sbf.append("<a style=\"float: right;\"class=\"btn btn-primary\" href=\"Notifications\">See "+ moreNoti +" more</a>");
         }
         
         return sbf.toString();

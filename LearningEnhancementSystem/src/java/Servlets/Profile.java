@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Fosse
  */
 @WebServlet(name = "Profile", urlPatterns = {"/Profile"})
-public class Profile extends HttpServlet {
+public class Profile extends SuperServlet {
 
   BootstrapTemplate bst = new BootstrapTemplate();
     
@@ -29,9 +29,8 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
     
     
     try (PrintWriter out = response.getWriter()) {
-
-        bst.bootstrapHeader(out, "Profile");
-        bst.bootstrapNavbar(out, "Profile");
+        super.processRequest(request, response, "People", out);
+        
             
         bst.containerOpen(out);
         bst.containerClose(out);
