@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import Classes.User;
 
 /**
  *
@@ -44,7 +45,9 @@ public class Delivery extends SuperServlet {
         deliver.init();
         if(request.getMethod().equals("POST")){
             String link = request.getParameter("link");
-            deliver.addDelivery("2", "1", link, "1");
+            User user = (User)request.getSession().getAttribute("userLoggedIn");
+            deliver.addDelivery(user.getUserId(),moduleid , link, "1");
+            
         }
         
         deliver.getDeliveryForm(moduleid,out);
