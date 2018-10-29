@@ -45,7 +45,8 @@ public class Worklist extends SuperServlet {
         try (PrintWriter out = response.getWriter()) {
         request.getRemoteUser();
         
-        if(request.getRemoteUser() != ("Even@uia.no")) {
+        
+        if(request.getRemoteUser() == ("Even@uia.no")) {
             WorklistDb db = new WorklistDb();
             db.init();
             bst.bootstrapHeader(out, "Worklist");
@@ -57,7 +58,7 @@ public class Worklist extends SuperServlet {
             bst.bootstrapFooter(out);
         
     }else 
-            if(request.getRemoteUser() != ("hallgeiren@uia.no")) {
+            if(request.getRemoteUser() == ("hallgeiren@uia.no")) {
             WorklistDb db = new WorklistDb();
             db.init();
             bst.bootstrapHeader(out, "Worklist");

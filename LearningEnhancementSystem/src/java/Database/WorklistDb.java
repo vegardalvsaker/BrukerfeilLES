@@ -20,9 +20,7 @@ import java.sql.*;
  */
 public class WorklistDb extends Database {
     
-    
-    
-    //private static final String SLCT_ALL_DELIVERABELS = "select * from Delivery";
+    //private static final String uses the SQL database to collect the data we need and converts it to Stings so that we can use it later;
     private static final String SLCT_DELIVERY_WITH_EVALUTAION =     "select delivery_id, student_id, module_id, delivery_content, worklist_id, delivery_timestamp, delivery_isEvaluated from Delivery where delivery_isEvaluated = TRUE";
     private static final String SLCT_DELIVERY_WITHOUT_EVALUTAION =  "select delivery_id, student_id, module_id, delivery_content, worklist_id, delivery_timestamp, delivery_isEvaluated from Delivery where delivery_isEvaluated = FALSE";
     private static final String GIVE_WORKLIST_ID =                  "insert into Worklist VALUES (1,1), (2,2), (3,1), (3,2)";      
@@ -55,7 +53,6 @@ public class WorklistDb extends Database {
                
                    WorklistNotEval objekt = new WorklistNotEval(DelId, StudentId, ModuleId, Desc, workId, Timestamp, isEvaluated); 
                    notEvaluatedForTeacher1.add(objekt); 
-                   
                 
                 }
                 
@@ -90,11 +87,9 @@ public void getWorklistNotEvalTeacher2(PrintWriter out)    {
                    String workId = rset.getString("worklist_id");
                    String Timestamp = rset.getString("delivery_timestamp");
                    boolean isEvaluated = rset.getBoolean("delivery_isEvaluated");
-                   
                
                    WorklistNotEval objekt = new WorklistNotEval(DelId, StudentId, ModuleId, Desc, workId, Timestamp, isEvaluated); 
                    notEvaluatedForTeacher2.add(objekt); 
-                
                 }
                 
                for (WorklistNotEval objekt : notEvaluatedForTeacher2)  {
@@ -107,7 +102,6 @@ public void getWorklistNotEvalTeacher2(PrintWriter out)    {
         }
     }
 }
-    
     
 public void getWorklistEvaluated(PrintWriter out)    {  
         
