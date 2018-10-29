@@ -47,6 +47,7 @@ public class Worklist extends SuperServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+        setUserLoggedIn(request); 
         request.getRemoteUser();
         
         if(request.getRemoteUser() == ("Even@uia.no")) {
@@ -78,6 +79,10 @@ public class Worklist extends SuperServlet {
             }
         }
     }
+    
+
+
+
 
 
             
