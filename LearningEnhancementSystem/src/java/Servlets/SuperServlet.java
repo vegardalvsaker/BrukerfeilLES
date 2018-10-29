@@ -72,7 +72,7 @@ public class SuperServlet extends HttpServlet {
     
     protected boolean setUserLoggedIn(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        
+
         String email = request.getRemoteUser();
         if (email == null) {
             return false;
