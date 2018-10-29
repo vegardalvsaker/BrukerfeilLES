@@ -64,7 +64,7 @@ public class WorklistNotEval {
 public static class WorklistEvaluated  {
         
     private String delivery_id;
-    private String user_id;
+    private String student_id;
     private String module_id;
     private String delivery_content;
     private String worklist_id;
@@ -74,7 +74,7 @@ public static class WorklistEvaluated  {
 public WorklistEvaluated(String delivery_id, String student_id, String module_id, String delivery_content, String delivery_timestamp, boolean delivery_isEvaluated) {
     
     this.delivery_id = delivery_id;
-    this.user_id = user_id;
+    this.student_id = student_id;
     this.module_id = module_id;
     this.delivery_content = delivery_content;
     this.worklist_id = worklist_id;
@@ -86,8 +86,8 @@ public WorklistEvaluated(String delivery_id, String student_id, String module_id
     public String getDelId() {
         return delivery_id;
     }
-    public String getUserID() {
-        return user_id;
+    public String getStudentId() {
+        return student_id;
     }
     
     public String getModuleId() {

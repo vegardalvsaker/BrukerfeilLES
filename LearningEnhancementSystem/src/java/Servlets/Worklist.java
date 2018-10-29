@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import Servlets.SuperServlet;
 import Servlets.Index;
 import Servlets.LogOut;
-import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import static java.lang.System.out;
 
 /**
@@ -42,19 +41,19 @@ import static java.lang.System.out;
 @WebServlet(name = "Worklist", urlPatterns = {"/Worklist"})
 public class Worklist extends SuperServlet {
         BootstrapTemplate bst = new BootstrapTemplate();
-protected void processRequest(HttpServletRequest request, HttpServletResponse response, HttpServlet session)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+        super.processRequest(request, response, "Worklist", out);
         request.getRemoteUser();
         
 	User user = (User)request.getSession().getAttribute("userLoggedIn");
 	String userEmail = user.getUserEmail();
 	
-        if(user.getUserEmail() == null ? ("Even@uia.no") == null : user.getUserEmail().equals("Even@uia.no")) {
+        if(user.getUserEmail().equals("Even@uia.no")) {
             WorklistDb db = new WorklistDb();
             db.init();
-           super.processRequest(request, response, "NavnPåCurrentTab", out);
             bst.containerOpen(out);
                 db.getWorklistNotEvalTeacher1(out);
                 db.getWorklistEvaluated(out);
@@ -64,7 +63,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
     }else if(user.getUserEmail().equals("hallgeiren@uia.no")) {
             WorklistDb db = new WorklistDb();
             db.init();
-            super.processRequest(request, response, "NavnPåCurrentTab", out);
             bst.containerOpen(out);
                 db.getWorklistNotEvalTeacher2(out);
                 db.getWorklistEvaluated(out);
@@ -74,11 +72,9 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                 }else {
                 out.println("You do not have access to this page!");
                 request.getRequestDispatcher("Index").include(request, response);
-                }
             }
         }
     }
-
 //WorklistDb db = new WorklistDb();
             //db.init();
             //bst.bootstrapHeader(out, "Worklist");
@@ -93,4 +89,51 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
             //bst.containerClose(out);
             //bst.bootstrapFooter(out);
         
+
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}
+        
+    
+
+
+
+
 
