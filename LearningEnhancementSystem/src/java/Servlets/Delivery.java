@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Filip
  */
 @WebServlet(name = "Delivery", urlPatterns = {"/Delivery"})
-public class Delivery extends HttpServlet {
+public class Delivery extends SuperServlet {
 
     BootstrapTemplate bst = new BootstrapTemplate();
     
@@ -33,9 +33,8 @@ public class Delivery extends HttpServlet {
         String inInterview = request.getParameter("module_inInterview");
         
         try (PrintWriter out = response.getWriter()) {
-            
-        bst.bootstrapHeader(out, "Students");
-        bst.bootstrapNavbar(out, "Students");
+            super.processRequest(request, response, "Modules", out);
+        
             
         bst.containerOpen(out);
         bst.containerClose(out);
@@ -45,7 +44,6 @@ public class Delivery extends HttpServlet {
         deliver.init();
         if(request.getMethod().equals("POST")){
             String link = request.getParameter("link");
-            
             deliver.addDelivery("2", "1", link, "1");
         }
         
