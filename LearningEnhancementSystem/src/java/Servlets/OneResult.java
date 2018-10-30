@@ -1,7 +1,10 @@
 package Servlets;
 
+import Classes.Evaluation;
+import Classes.LearningGoal;
+import Classes.Module;
+import Classes.Score;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,7 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import Database.EvaluationDb;
-import Classes.Worklist;
+import Database.ModuleDb;
+import java.util.ArrayList;
 
 /**
  *
@@ -24,9 +28,10 @@ public class OneResult extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
+            init();
             
-            
-            deliveries(out);
+          
+            deliveries2(out, request);
         }
             
     }
@@ -49,16 +54,30 @@ public class OneResult extends HttpServlet {
         
     }
     
-    private void deliveries2(PrintWriter out)   {
+    private void deliveries2(PrintWriter out, HttpServletRequest request)   {
+        
         
         EvaluationDb evaluationdb = new EvaluationDb();
-        Worklist worklist = new Worklist();
-        String deliveryId = worklist.getDelId();
+        ModuleDb moduledb = new ModuleDb();
+        moduledb.init();
+        String deliveryId = request.getParameter("deliveryID");
         String evaluationid = evaluationdb.getEvaluationId(deliveryId);
-        evaluationdb.getEvaluationWithScore(evaluationid);
+        Evaluation eval = evaluationdb.getEvaluationWithScore(evaluationid);
+        
+        ArrayList<Score> scores = new ArrayList<>();
+        scores = eval.getScorelist();
+        ArrayList<LearningGoal> lgoals = new ArrayList<>();
+        String moduleID = request.getParameter("moduleID");
+        
+        Module module = moduledb.getModuleWithLearningGoals(moduleID);
+        lgoals = module.getLearningGoals();        
+                int i = 0;
+                for (LearningGoal lg : lgoals) {
+                    out.println("<li> Learning goal: " + lg.getText() + " | <p> "+ scores.get(i).getPoints() +"/"+ lg.getPoints() +"</li>");
+                    i++;
+                }
         
         
-        out.println("Modulnavn: ");
         
         
     }

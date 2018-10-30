@@ -16,7 +16,6 @@ import Database.UserDb;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import Classes.Delivery;
-import java.util.Arrays;
 /**
  *
  * @author Gorm-Erik
@@ -52,19 +51,14 @@ public class Results extends SuperServlet {
         
         for (Delivery delivery : deliveryList)  {
             String moduleName = delivery.getModuleName();
+            int deliveryID = delivery.getDeliveryID();
+            String moduleID = delivery.getModuleID();
             out.println("<ul>");
-            out.println("<li><a href=\"OneResult?id=\"" + userID + "\">\"" + moduleName + "\"</a></li>\"");
+            out.println("<li><a href=\"OneResult?userID=" + userID + "&deliveryID="+ deliveryID + "&moduleID="+ moduleID + "\">" + moduleName + "</a></li>");
             out.println("</ul>");
         }  
     }
  
-    @Override
-    public String toString()  {
-        
-        String navn = "Petter";
-        return navn;
-    } 
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
