@@ -23,7 +23,7 @@ import java.util.Map;
  * @author Vegard
  */
 @WebServlet(name = "OneModule", urlPatterns = {"/OneModule"})
-public class OneModule extends HttpServlet {
+public class OneModule extends SuperServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,6 +42,7 @@ public class OneModule extends HttpServlet {
         String id = request.getParameter("id");
         
         try (PrintWriter out = response.getWriter()) {
+            super.processRequest(request, response, "Modules", out);
             BootstrapTemplate bst = new BootstrapTemplate();
             LearningGoalDb db = new LearningGoalDb();
             CommentDb cdb = new CommentDb();
@@ -81,9 +82,6 @@ public class OneModule extends HttpServlet {
                 }
             }
             
-            bst.bootstrapHeader(out, "Module " + id);
-            bst.bootstrapNavbar(out, "Modules");
-
             db.printLearningGoals(id, out);
             cdb.printComments(mId,out);
             cdb.addCommentForm(out,mId);
