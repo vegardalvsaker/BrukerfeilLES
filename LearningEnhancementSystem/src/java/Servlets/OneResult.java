@@ -28,9 +28,6 @@ public class OneResult extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
-            init();
-            
-          
             deliveries2(out, request);
         }
             

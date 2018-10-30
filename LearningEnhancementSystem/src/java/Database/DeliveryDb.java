@@ -37,21 +37,20 @@ public class DeliveryDb extends Database{
            
            try(ResultSet rset = prepStatement.executeQuery();)  { 
             
-           Delivery del = new Delivery();
-           ArrayList <Delivery> deliveryList = new ArrayList<>();
-           
-           while(rset.next())   {
-               
-               del.setModuleName(rset.getString("module_name"));
-               del.setDeliveryID(rset.getInt("delivery_id"));
-               del.setStudentID(rset.getString("user_id"));
-               del.setModuleID(rset.getString("module_id"));
-               del.setDeliveryContent(rset.getString("delivery_content"));
-               del.setWorklistID(rset.getInt("worklist_id"));
-               del.setDeliveryTimestamp(rset.getString("delivery_timestamp"));
-               del.setIsEvaluated(rset.getBoolean("delivery_isEvaluated"));
-               
-               deliveryList.add(del);
+            ArrayList <Delivery> deliveryList = new ArrayList<>();
+
+            while(rset.next())   {
+                Delivery del = new Delivery();
+                del.setModuleName(rset.getString("module_name"));
+                del.setDeliveryID(rset.getInt("delivery_id"));
+                del.setStudentID(rset.getString("user_id"));
+                del.setModuleID(rset.getString("module_id"));
+                del.setDeliveryContent(rset.getString("delivery_content"));
+                del.setWorklistID(rset.getInt("worklist_id"));
+                del.setDeliveryTimestamp(rset.getString("delivery_timestamp"));
+                del.setIsEvaluated(rset.getBoolean("delivery_isEvaluated"));
+
+                deliveryList.add(del);
            }
            return deliveryList;
            }
