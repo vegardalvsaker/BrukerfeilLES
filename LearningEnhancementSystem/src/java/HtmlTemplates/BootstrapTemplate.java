@@ -35,33 +35,34 @@ public class BootstrapTemplate {
      * @param out
      * @param tab is a String with the name of the active tab.
      */
-    public void bootstrapNavbar(PrintWriter out, String tab) {
+    public void bootstrapNavbar(PrintWriter out, String tab, String notifications) {
         String current_tab = "active";
-        
         switch (tab) {
-            case "Home":        out.format(getBootstrapNavbar(), current_tab, "", "", "", "", "");
-                                break;
-            case "Modules":     out.format(getBootstrapNavbar(), "", current_tab, "", "", "", "");
-                                break;
-            case "Results":     out.format(getBootstrapNavbar(), "", "", current_tab, "", "", "");
-                                break;
-            case "Inbox":       out.format(getBootstrapNavbar(), "", "", "", current_tab, "", "");
-                                break;
-            case "Worklist":    out.format(getBootstrapNavbar(), "", "", "", "", current_tab, "");
-                                break;
-            case "People":      out.format(getBootstrapNavbar(), "", "", "", "", current_tab, "");
-                                break;
-            default:        out.format(getBootstrapNavbar(), "", "", "", "", "", "");
-                            break;  
+            case "Home":         out.format(getBootstrapNavbar(notifications), current_tab, "", "", "", "", "", "");
+                                 break;
+            case "Modules":      out.format(getBootstrapNavbar(notifications), "", current_tab, "", "", "", "", "");
+                                 break;
+            case "Results":      out.format(getBootstrapNavbar(notifications), "", "", current_tab, "", "", "", "");
+                                 break;
+            case "Inbox":        out.format(getBootstrapNavbar(notifications), "", "", "", current_tab, "", "", "");
+                                 break;
+            case "Worklist":     out.format(getBootstrapNavbar(notifications), "", "", "", "", current_tab, "", "");
+                                 break;
+            case "People":       out.format(getBootstrapNavbar(notifications), "", "", "", "", "", current_tab, "");
+                                 break;
+            case "Notifications":out.format(getBootstrapNavbar(notifications), "", "", "", "", "", "", current_tab);
+                                 break;
+            default:             out.format(getBootstrapNavbar(notifications), "", "", "", "", "", "", "");
+                                 break;  
         }
     }
     
     /**
-     * This method returns the html for the navigation bar
+     * This method returns the HTML for the navigation bar
      * %s is for which tab is active. This is used in bootstrapNavbar().
      * @return 
      */
-    public String getBootstrapNavbar() {
+    public String getBootstrapNavbar(String notifications) {
         return "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark \">\n" +
 "    <div class=\"container\">\n" +
 "    <a class=\"navbar-brand\" href=\"Index\">IS-110</a>\n" +
@@ -98,6 +99,15 @@ public class BootstrapTemplate {
 "          </div>\n" +
 "        </li>\n" +
 "      </ul>\n" +
+                                "<ul class=\"navbar navbar-nav navbar-right\">\n" +
+                "<li class=\"nav-item %s dropdown\">" +
+                "<a class=\"nav-link dropdown-toggle\" href=\"\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+"            Notifications </a>\n" +
+      "          <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\n" +
+                notifications +
+           "</div>\n" +
+                "</li>\n" +
+                "</ul>\n" +
 "    </div>\n" +
 "  </nav>";
         

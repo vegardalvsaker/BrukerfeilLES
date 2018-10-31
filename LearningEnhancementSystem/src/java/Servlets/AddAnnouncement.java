@@ -19,7 +19,7 @@ import Database.AnnouncementDb;
  * @author Marius
  */
 @WebServlet(name = "AddAnnouncement", urlPatterns = {"/AddAnnouncement"})
-public class AddAnnouncement extends HttpServlet {
+public class AddAnnouncement extends SuperServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +39,10 @@ public class AddAnnouncement extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            super.processRequest(request, response, "Announcement", out);
              AnnouncementDb db = new AnnouncementDb();
              db.init();
-             bst.bootstrapHeader(out,"Announcement");
-             bst.bootstrapNavbar(out,"Announcement");
+             
 
              addAnnouncement(out,response);
             

@@ -15,7 +15,7 @@ import Database.ModuleDb;
  * @author Vegard
  */
 @WebServlet(name = "Modules", urlPatterns = {"/Modules"})
-public class Modules extends HttpServlet {
+public class Modules extends SuperServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,33 +34,22 @@ public class Modules extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        try (PrintWriter out = response.getWriter()) {  
-            
+        try (PrintWriter out = response.getWriter()){  
+            super.processRequest(request, response, "Modules", out);
          ModuleDb db = new ModuleDb();
          db.init();
         
         if (request.getMethod().equals("POST"))  {
                 
-                
-                
-                String modulnr = request.getParameter("Modulnummer");
-                
                 String modulnavn = request.getParameter("Modulnavn");
-         
+                
                 String beskrivelse = request.getParameter("Beskrivelse");
+         
+                String innhold = request.getParameter("Innhold");
                            
-                db.addModule(out, modulnr, modulnavn, beskrivelse);
+                db.addModule(out, modulnavn, beskrivelse, innhold);
                 
             }
-            
-            bst.bootstrapHeader(out, "Modules");
-            
-            bst.bootstrapNavbar(out, "Modules");
-            
-            
-            /*out.format(bst.hei(), "en", "to", "", "");
-            out.println();
-            out.format(bst.hei(), "", to, "", "4");*/
             
             
             bst.containerOpen(out);
@@ -69,26 +58,25 @@ public class Modules extends HttpServlet {
             
             bst.containerClose(out);
             
-            addModuleForm(out, response);
+            addModuleForm(out);
             
             bst.bootstrapFooter(out);
             
         }
-        
     }
-        private void addModuleForm(PrintWriter out, HttpServletResponse response)  {
+        private void addModuleForm(PrintWriter out)  {
             
             out.println("<div>");
-            out.println("<a href=\"Modules\">");
-            out.println("</a>");
+          //  out.println("<a href=\"Modules\">");
+           // out.println("</a>");
             out.println("<h1>Legg til modul</h1>");
             out.println("<form action=\"Modules\" method=\"POST\">");
-            out.println("<h3>Modulnummer</h3><br>");
-            out.println("<input type =\"text\" name=\"Modulnummer\"><br>");
             out.println("<h3>Modulnavn</h3><br>");
-            out.println("<input type=\"text\" name=\"Modulnavn\"><br>");
-            out.println("<h3>Beskrivelse av læringsmål</h3><br>");
+            out.println("<input type =\"text\" name=\"Modulnavn\"><br>");
+            out.println("<h3>Beskrivelse</h3><br>");
             out.println("<input type=\"text\" name=\"Beskrivelse\"><br>");
+            out.println("<h3>Innhold</h3><br>");
+            out.println("<input type=\"text\" name=\"Innhold\"><br>");
             out.println("<br>");
             out.println("<input type=\"submit\" value=\"Legg til modul\"><br>");        
             out.println("<br>");

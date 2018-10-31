@@ -21,7 +21,7 @@ import HtmlTemplates.BootstrapTemplate;
  * @author Vegard
  */
 @WebServlet(name = "OneModule", urlPatterns = {"/OneModule"})
-public class OneModule extends HttpServlet {
+public class OneModule extends SuperServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,13 +38,14 @@ public class OneModule extends HttpServlet {
         String id = request.getParameter("id");
         
         try (PrintWriter out = response.getWriter()) {
+            super.processRequest(request, response, "Modules", out);
             BootstrapTemplate bst = new BootstrapTemplate();
             LearningGoalDb db = new LearningGoalDb();
             CommentDb cdb = new CommentDb();
             db.init();
             cdb.init();
             int mId = Integer.parseInt(id);
-            
+         
              if (request.getMethod().equals("POST"))  {
                 if (request.getParameter("delete").equals("TRUE")) {
                     String comid = request.getParameter("comment_id");
@@ -60,8 +61,10 @@ public class OneModule extends HttpServlet {
                 }
             }
             
-            bst.bootstrapHeader(out, "Module " + id);
-            bst.bootstrapNavbar(out, "Modules");
+
+           
+            editModuleButtonForm(out,request);
+
 
             db.printLearningGoals(id, out);
             cdb.printComments(mId,out);
@@ -70,6 +73,22 @@ public class OneModule extends HttpServlet {
             bst.bootstrapFooter(out); 
         }
     }
+    
+    private void editModuleButtonForm(PrintWriter out, HttpServletRequest request)    {
+        String id = request.getParameter("id");
+            out.println("<a href=\"EditModule?id="+ id +"\">"
+                    + "<button>Rediger modul</button>"
+                    + "</a>");
+            
+         /*    out.println("<form action=\"EditModule?id=" + id + "\">");
+             out.println("<button>Rediger modul</button>");
+             out.println("</form>");*/
+             
+                     
+                             
+    }
+
+    
 private void addComment(PrintWriter out, HttpServletRequest request){
             String id = request.getParameter("id");
             out.println("<div>");
