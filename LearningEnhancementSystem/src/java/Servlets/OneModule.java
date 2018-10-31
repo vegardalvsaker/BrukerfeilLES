@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
+import Classes.User;
 
 /**
  *
@@ -40,6 +41,7 @@ public class OneModule extends SuperServlet {
         
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Modules", out);
+            User user = (User)request.getSession().getAttribute("userLoggedIn");
             BootstrapTemplate bst = new BootstrapTemplate();
             LearningGoalDb db = new LearningGoalDb();
             CommentDb cdb = new CommentDb();
@@ -47,6 +49,7 @@ public class OneModule extends SuperServlet {
             db.init();
             cdb.init();
             ddb.init();
+            bst.containerOpen(out);
             int mId = Integer.parseInt(id);
             ddb.getNrOfDeliveries(id,out);
             
@@ -61,7 +64,7 @@ public class OneModule extends SuperServlet {
                     if (comText.equals("")){
                         out.println("Enter text before posting");
                     } else 
-                    cdb.addComment(mId, "1", comText);
+                    cdb.addComment(mId, user.getUserId(), comText);
                 }
             }
             
@@ -69,7 +72,7 @@ public class OneModule extends SuperServlet {
             deliver(out,request);
             cdb.printComments(mId,out);
             addComment(out,request);
-            
+            bst.containerClose(out);
             bst.bootstrapFooter(out); 
         }
     }
