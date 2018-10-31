@@ -7,6 +7,7 @@ package Servlets;
 
 import Database.LearningGoalDb;
 import Database.CommentDb;
+import Database.DeliveryDb;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -42,9 +43,12 @@ public class OneModule extends SuperServlet {
             BootstrapTemplate bst = new BootstrapTemplate();
             LearningGoalDb db = new LearningGoalDb();
             CommentDb cdb = new CommentDb();
+            DeliveryDb ddb = new DeliveryDb();
             db.init();
             cdb.init();
+            ddb.init();
             int mId = Integer.parseInt(id);
+            ddb.getNrOfDeliveries(id,out);
             
              if (request.getMethod().equals("POST"))  {
                 if (request.getParameter("delete").equals("TRUE")) {

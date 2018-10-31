@@ -5,11 +5,8 @@
  */
 package Database;
 
-import Classes.Delivery;
 import java.io.PrintWriter;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 /**
  *
  * @author Filip
@@ -18,7 +15,27 @@ public class DeliveryDb extends Database{
     
     private static final String ADD_DELIVERY = "insert into Delivery values (default, ?, ?, ?, ?, default, default)";
     private static final String GET_DELIVERY_FORM ="select * from Module where module_id = ?";
-
+    private static final String SLCT_ALL_DELIVERIES = "select * from Delivery where module_id = ?";
+        
+        public void getNrOfDeliveries(String module_id,PrintWriter out){
+           try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(SLCT_ALL_DELIVERIES); 
+                   ){
+                ps.setString(1, module_id);
+                try (ResultSet rs = ps.executeQuery();) {
+                   int i = 0; 
+                    while (rs.next()){
+                       i++;
+                    }
+                    out.println("<div class=\"alert alert-info\" role=\"alert\">For modul " + module_id + ", er det " + i + " stk som har levert"+"</div>");
+                }
+        }
+           catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
     public void getDeliveryForm(String moduleid, PrintWriter out) {
             try(
                 Connection conn = getConnection();
