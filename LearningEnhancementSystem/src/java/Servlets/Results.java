@@ -4,15 +4,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import Database.ResultsDb;
 import HtmlTemplates.BootstrapTemplate;
 import Database.ModuleDb;
 import Database.DeliveryDb;
 import Classes.User;
-import Database.UserDb;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import Classes.Delivery;
@@ -28,10 +25,11 @@ public class Results extends SuperServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
+            super.processRequest(request, response, "Results", out);
             ModuleDb db = new ModuleDb();
             db.init();
-            bst.bootstrapHeader(out, "Results");
-            bst.bootstrapNavbar(out, "Results");
+         
             bst.containerOpen(out);
             bst.containerClose(out);
             results(out, request);

@@ -16,7 +16,7 @@ import HtmlTemplates.BootstrapTemplate;
  */
 
 @WebServlet(name = "EditModule", urlPatterns = {"/EditModule"})
-public class EditModule extends HttpServlet {
+public class EditModule extends SuperServlet {
 
     BootstrapTemplate bootstrap = new BootstrapTemplate();
     
@@ -27,6 +27,7 @@ public class EditModule extends HttpServlet {
         
         try (PrintWriter out = response.getWriter()) {
             
+            super.processRequest(request, response, "Modules", out);
             ModuleDb db = new ModuleDb();
             db.init();
             
@@ -41,9 +42,8 @@ public class EditModule extends HttpServlet {
                 
             }
             
-            bootstrap.bootstrapHeader(out, "Modules");
             
-            bootstrap.bootstrapNavbar(out, "Modules");
+            
             
             bootstrap.containerOpen(out);
             
