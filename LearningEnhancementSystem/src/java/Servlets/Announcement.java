@@ -19,7 +19,7 @@ import Database.AnnouncementDb;
  * @author Marius
  */
 @WebServlet(name = "Announcement", urlPatterns = {"/Announcement"})
-public class Announcement extends HttpServlet {
+public class Announcement extends SuperServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +37,10 @@ public class Announcement extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            super.processRequest(request, response, "Announcement", out);
              AnnouncementDb db = new AnnouncementDb();
              db.init();
-             bst.bootstrapHeader(out,"Announcement");
-             bst.bootstrapNavbar(out,"Announcement");
+             
              if (request.getMethod().equals("POST"))  {
                 if (request.getParameter("delete").equals("TRUE")) {
                     String aid = request.getParameter("annId");

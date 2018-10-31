@@ -21,7 +21,7 @@ import Servlets.AddAnnouncement;
  * @author Marius
  */
 @WebServlet(name = "RedirectAnnouncement", urlPatterns = {"/RedirectAnnouncement"})
-public class RedirectAnnouncement extends HttpServlet {
+public class RedirectAnnouncement extends SuperServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +39,10 @@ public class RedirectAnnouncement extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         try (PrintWriter out = response.getWriter()) {
+            super.processRequest(request, response, "Announcement", out);
             AnnouncementDb db = new AnnouncementDb();
              db.init();
-             bst.bootstrapHeader(out,"Announcement");
-             bst.bootstrapNavbar(out,"Announcement");
+             
              bst.containerOpen(out);
             String title = request.getParameter("title");
             String description = request.getParameter("description");

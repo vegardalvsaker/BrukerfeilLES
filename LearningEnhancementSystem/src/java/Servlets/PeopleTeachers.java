@@ -14,7 +14,7 @@ import Database.UserDb;
  * @author Ingve Fosse
  */
 @WebServlet(urlPatterns = {"/PeopleTeachers"})
-public class PeopleTeachers extends HttpServlet {
+public class PeopleTeachers extends SuperServlet {
 
     
     BootstrapTemplate bst = new BootstrapTemplate();
@@ -24,9 +24,8 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
     response.setContentType("text/html;charset=UTF-8");
     
     try (PrintWriter out = response.getWriter()) {
-
-        bst.bootstrapHeader(out, "Teachers");
-        bst.bootstrapNavbar(out, "Teachers");
+        super.processRequest(request, response, "People", out);
+        
             
         bst.containerOpen(out);
         bst.containerClose(out);
