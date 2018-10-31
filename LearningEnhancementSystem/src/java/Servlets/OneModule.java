@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import Classes.User;
 import Database.LearningGoalDb;
 import Database.CommentDb;
 import Database.CommentReplyDb;
@@ -12,12 +13,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import java.util.Map;
-
 /**
  *
  * @author Vegard
@@ -25,22 +24,12 @@ import java.util.Map;
 @WebServlet(name = "OneModule", urlPatterns = {"/OneModule"})
 public class OneModule extends SuperServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        User user = (User)request.getSession().getAttribute("userLoggedIn");
         Map<String, String[]> paramap = request.getParameterMap();
-        
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("id");
-        
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Modules", out);
             BootstrapTemplate bst = new BootstrapTemplate();
@@ -70,7 +59,7 @@ public class OneModule extends SuperServlet {
                     if (comText.equals("")){
                         out.println("Enter text before posting");
                     } else 
-                    cdb.addComment(mId, "1", comText);
+                    cdb.addComment(mId, user.getUserId(), comText);
                 }
                 if (paramap.containsKey("reply") && paramap.containsKey("comment_id")){
                     int comId = Integer.parseInt(request.getParameter("comment_id"));
@@ -78,10 +67,9 @@ public class OneModule extends SuperServlet {
                     if (repText.equals("")){
                         out.println("Enter text before posting");
                     } else 
-                    crdb.addReply(comId, "1", repText);
+                    crdb.addReply(comId, user.getUserId(), repText);
                 }
             }
-            
             db.printLearningGoals(id, out);
             cdb.printComments(mId,out);
             cdb.addCommentForm(out,mId);

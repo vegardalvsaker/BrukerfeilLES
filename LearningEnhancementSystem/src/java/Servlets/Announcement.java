@@ -1,16 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Servlets;
 
+import Classes.User;
 import HtmlTemplates.BootstrapTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse; 
 import Database.AnnouncementDb;
@@ -20,21 +15,11 @@ import Database.AnnouncementDb;
  */
 @WebServlet(name = "Announcement", urlPatterns = {"/Announcement"})
 public class Announcement extends SuperServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    
     BootstrapTemplate bst = new BootstrapTemplate();
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        User user = (User)request.getSession().getAttribute("userLoggedIn");
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Announcement", out);
@@ -48,12 +33,10 @@ public class Announcement extends SuperServlet {
                     db.deleteAnnouncement(annId);  
                 }
              }
-             bst.containerOpen(out);
+             if (user.getUserIsTeacher()){
              out.println("<a href=\"AddAnnouncement\"a class=\"btn btn-primary\">Add more</button></a>");
+             }
              db.skrivAnnouncement(out);
-             
-             bst.containerClose(out);
-             bst.bootstrapFooter(out);
         }
     }
 
