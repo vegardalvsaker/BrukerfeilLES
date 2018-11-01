@@ -4,9 +4,9 @@ use learningenhancementsystem;
 insert into Users values 
 (default, 'Vegard Alvsaker', 'vegard@uia.no', default, 'pw123'),
 (default, 'Hallgeir Hallgeirsen', 'Hallgeir@uia.no', 1, 'pw123'),
-(default, 'Even Fallkurs', 'Even@uia.no', 1, 'pw123'),
-(default, 'Shivan Realboi', 'Shivan@uia.no', 1, 'pw123'),
-(default, 'Eirik SnakkeItimen', 'Eirik@uia.no', 1, 'pw123'),
+(default, 'Even Evensen', 'Even@uia.no', 1, 'pw123'),
+(default, 'Shivan Shivansen', 'Shivan@uia.no', 1, 'pw123'),
+(default, 'Eirik Eiriksen', 'Eirik@uia.no', 1, 'pw123'),
 (default, 'Ingve Fosse', 'ingve@uia.no', default, 'pw123'),
 (default, 'Espen Oftedal', 'espen@uia.no', default, 'pw123'),
 (default, 'Gorm-Erik Aarseheim', 'gorm-erik@uia.no', default, 'pw123');
