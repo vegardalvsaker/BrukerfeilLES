@@ -1,12 +1,14 @@
 
 package Classes;
 
+import java.sql.Timestamp;
+
 /**
  *
- * @author Vegard
+ * @author Filip
  */
 public class Delivery {
-    
+   
     private String moduleName;
     private int deliveryID;
     private String studentID;
@@ -81,5 +83,6 @@ public class Delivery {
     public boolean getIsEvaluted()  {
         return deliveryIsEvaluated;
     }
-    
 }
+
+

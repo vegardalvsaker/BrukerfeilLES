@@ -7,6 +7,7 @@ package Servlets;
 
 import Database.LearningGoalDb;
 import Database.CommentDb;
+import Database.DeliveryDb;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
+import Classes.User;
 
 /**
  *
@@ -39,13 +41,20 @@ public class OneModule extends SuperServlet {
         
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Modules", out);
+            User user = (User)request.getSession().getAttribute("userLoggedIn");
             BootstrapTemplate bst = new BootstrapTemplate();
             LearningGoalDb db = new LearningGoalDb();
             CommentDb cdb = new CommentDb();
+            DeliveryDb ddb = new DeliveryDb();
             db.init();
             cdb.init();
+            ddb.init();
+            bst.containerOpen(out);
             int mId = Integer.parseInt(id);
-         
+
+            ddb.getNrOfDeliveries(id,out);
+            
+
              if (request.getMethod().equals("POST"))  {
                 if (request.getParameter("delete").equals("TRUE")) {
                     String comid = request.getParameter("comment_id");
@@ -57,7 +66,7 @@ public class OneModule extends SuperServlet {
                     if (comText.equals("")){
                         out.println("Enter text before posting");
                     } else 
-                    cdb.addComment(mId, "1", comText);
+                    cdb.addComment(mId, user.getUserId(), comText);
                 }
             }
             
@@ -67,9 +76,10 @@ public class OneModule extends SuperServlet {
 
 
             db.printLearningGoals(id, out);
+            deliver(out,request);
             cdb.printComments(mId,out);
             addComment(out,request);
-            
+            bst.containerClose(out);
             bst.bootstrapFooter(out); 
         }
     }
@@ -101,6 +111,11 @@ private void addComment(PrintWriter out, HttpServletRequest request){
             out.println("<br>");
             out.println("</form>");
             out.println("</div>");
+    }
+
+private void deliver(PrintWriter out, HttpServletRequest request){
+            String id = request.getParameter("id");
+            out.println("<a href=\"Delivery?id="+ id +" \"a class=\"btn btn-info\">Deliver!</button></a>");
     }
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
