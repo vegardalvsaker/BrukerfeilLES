@@ -76,6 +76,7 @@ public class DeliveryDb extends Database{
         catch (SQLException ex) {
             System.out.println("Query error:" + ex);
         }
+    }
     public ArrayList<Delivery> getDelivery(PrintWriter out, String studentID) {
         
         String deliveries = "select d.delivery_id, d.delivery_content, d.delivery_timestamp, d.delivery_isEvaluated, w.worklist_id, s.user_id, m.module_id, m.module_name\n" +
@@ -124,7 +125,7 @@ public class DeliveryDb extends Database{
        
         return null;
     
-
+    }
     public void addDelivery(String studentid, String moduleid, String content, String worklistid) {
         try( Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(ADD_DELIVERY);
