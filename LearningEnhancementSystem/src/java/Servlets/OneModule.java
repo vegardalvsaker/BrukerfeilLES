@@ -5,17 +5,24 @@
  */
 package Servlets;
 
+import Classes.User;
 import Database.LearningGoalDb;
 import Database.CommentDb;
+
+import Database.CommentReplyDb;
+
 import Database.DeliveryDb;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
+
+import java.util.Map;
+
 import Classes.User;
 
 /**
@@ -25,50 +32,63 @@ import Classes.User;
 @WebServlet(name = "OneModule", urlPatterns = {"/OneModule"})
 public class OneModule extends SuperServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        User user = (User)request.getSession().getAttribute("userLoggedIn");
+        Map<String, String[]> paramap = request.getParameterMap();
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("id");
-        
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Modules", out);
             User user = (User)request.getSession().getAttribute("userLoggedIn");
             BootstrapTemplate bst = new BootstrapTemplate();
             LearningGoalDb db = new LearningGoalDb();
             CommentDb cdb = new CommentDb();
-            DeliveryDb ddb = new DeliveryDb();
+            CommentReplyDb crdb = new CommentReplyDb();
             db.init();
             cdb.init();
+            crdb.init();
+
+            DeliveryDb ddb = new DeliveryDb();
             ddb.init();
             bst.containerOpen(out);
+
             int mId = Integer.parseInt(id);
 
             ddb.getNrOfDeliveries(id,out);
             
 
              if (request.getMethod().equals("POST"))  {
-                if (request.getParameter("delete").equals("TRUE")) {
+                if (paramap.containsKey("delete")) {
+                    if (paramap.get("delete")[0].equals("TRUE")) {
                     String comid = request.getParameter("comment_id");
                     int commId = Integer.parseInt(comid);
                     cdb.deleteComment(commId);
-                    
-                } else {
+                    crdb.deleteAll(commId);
+                    }
+                } if (paramap.containsKey("deleteR")) {
+                    String repid = request.getParameter("reply_id");
+                    int replyId = Integer.parseInt(repid);
+                    crdb.deleteSingle(replyId);
+                }
+                if (paramap.containsKey("comment")) {
                     String comText = request.getParameter("comment");
                     if (comText.equals("")){
                         out.println("Enter text before posting");
                     } else 
                     cdb.addComment(mId, user.getUserId(), comText);
+
+                }
+                if (paramap.containsKey("reply") && paramap.containsKey("comment_id")){
+                    int comId = Integer.parseInt(request.getParameter("comment_id"));
+                    String repText = request.getParameter("reply");
+                    if (repText.equals("")){
+                        out.println("Enter text before posting");
+                    } else 
+                    crdb.addReply(comId, user.getUserId(), repText);
                 }
             }
+
             
 
            
@@ -78,6 +98,9 @@ public class OneModule extends SuperServlet {
             db.printLearningGoals(id, out);
             deliver(out,request);
             cdb.printComments(mId,out);
+
+            cdb.addCommentForm(out,mId);
+          
             addComment(out,request);
             bst.containerClose(out);
             bst.bootstrapFooter(out); 
@@ -117,6 +140,7 @@ private void deliver(PrintWriter out, HttpServletRequest request){
             String id = request.getParameter("id");
             out.println("<a href=\"Delivery?id="+ id +" \"a class=\"btn btn-info\">Deliver!</button></a>");
     }
+
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -155,5 +179,4 @@ private void deliver(PrintWriter out, HttpServletRequest request){
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

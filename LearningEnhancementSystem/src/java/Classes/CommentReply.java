@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 public class CommentReply {
     private int replyid;
     private Timestamp replytimestamp;
+    private String replytext;
 
     public int getReplyid(){
         return replyid;
@@ -27,6 +28,12 @@ public class CommentReply {
     public void setReplyTimestamp(Timestamp replytimestamp){
        this.replytimestamp= replytimestamp;
    }
+    public String getReplyText(){
+        return replytext;
+    }
+    public void setReplyText(String replytext){
+        this.replytext = replytext;
+    }
 }
 
 
