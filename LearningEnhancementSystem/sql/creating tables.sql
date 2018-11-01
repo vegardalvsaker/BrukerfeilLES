@@ -47,6 +47,7 @@ module_name varchar(30) not null,
 module_desc varchar(100),
 module_content text,
 module_isPublished bool default 0,
+module_inInterview boolean not null,
 
 constraint module_pk primary key (module_id)
 );
