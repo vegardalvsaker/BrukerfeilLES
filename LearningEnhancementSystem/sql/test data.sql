@@ -28,10 +28,16 @@ insert into Announcement values
 (default, '5', default, 'Subject TEST Eirik', 'Body TEST Eirik');
 
 insert into Module values
-(default, 'Modul 1', 'Module 1 description', 'Module 1 content is very long', 1),
-(default, 'Modul 2', 'Module 2 description', 'Module 2 content is very long', 1),
-(default, 'Modul 3', 'Module 3 description', 'Module 3 content is very long', 0),
-(default, 'Modul 4', 'Module 4 description', 'Module 4 content is very long', 0);
+(default, 'Modul 1', 'Module 1 description', 'Module 1 content is very long', 1, false),
+(default, 'Modul 2', 'Module 2 description', 'Module 2 content is very long', 1, true),
+(default, 'Modul 3', 'Module 3 description', 'Module 3 content is very long', 0, false),
+(default, 'Modul 4', 'Module 4 description', 'Module 4 content is very long', 0, true);
+
+insert into Notification values
+(default, 1, 'Møt på rektors kontor', default, default),
+(default, 1, 'Ingen forelesning i dag', default, default),
+(default, 2, 'Møt på rektors kontor', default, default),
+(default, 2, 'Møt på rektors kontor', default, default);
 
 insert into LearningGoal values
 ##(learn_goal_id, learn_goal_text, learn_goal_points, module_id)
