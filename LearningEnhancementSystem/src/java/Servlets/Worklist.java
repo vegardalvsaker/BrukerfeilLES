@@ -5,7 +5,6 @@
  */
 package Servlets;
 
-import Servlets.SuperServlet;
 import Classes.User;
 import Database.WorklistDb;
 import HtmlTemplates.BootstrapTemplate;
@@ -13,14 +12,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import Servlets.SuperServlet;
-import Servlets.Index;
-import Servlets.LogOut;
-import static java.lang.System.out;
 
 /**
  *
