@@ -5,7 +5,6 @@
  */
 package Servlets;
 
-import Classes.User;
 import Database.LearningGoalDb;
 import Database.CommentDb;
 
@@ -40,7 +39,7 @@ public class OneModule extends SuperServlet {
         String id = request.getParameter("id");
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Modules", out);
-            User user = (User)request.getSession().getAttribute("userLoggedIn");
+            
             BootstrapTemplate bst = new BootstrapTemplate();
             LearningGoalDb db = new LearningGoalDb();
             CommentDb cdb = new CommentDb();
