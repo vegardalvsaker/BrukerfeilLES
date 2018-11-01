@@ -39,6 +39,10 @@ public class Worklist {
     this.delivery_timestamp = delivery_timestamp;
     this.delivery_isEvaluated = delivery_isEvaluated;
     }
+    
+    public Worklist()   {
+        
+    }
    
   
     public String getDelId() {

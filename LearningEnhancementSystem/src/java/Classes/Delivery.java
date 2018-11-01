@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Classes;
 
 import java.sql.Timestamp;
@@ -12,48 +8,80 @@ import java.sql.Timestamp;
  * @author Filip
  */
 public class Delivery {
-    private int delivery_id;
-    private int student_id;
-    private int module_id;
-    private String delivery_content;
-    private int worklist_id;
-    private Timestamp delivery_timestamp;
+   
+    private String moduleName;
+    private int deliveryID;
+    private String studentID;
+    private String moduleID;
+    private String deliveryContent;
+    private int worklistID;
+    private String deliveryTimestamp;
+    private boolean deliveryIsEvaluated;
     
-    private String deliveryid;
-    private String deliverycontent;
-    private Timestamp deliverytimestamp;
-    private boolean isevaluated;
-    
-    public String getDeliveryId(){
-        return deliveryid;
+
+    public String getModuleName()   {
+        return moduleName;
     }
     
-    public void setDeliveryId(String deliveryid){
-        this.deliveryid = deliveryid;
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+        
     }
     
-    public String getDeliveryContent(){
-        return deliverycontent;
+    public void setDeliveryID(int deliveryID)    {
+        this.deliveryID = deliveryID;
     }
     
-    public void setDeliveryContent(String deliverycontent){
-        this.deliverycontent = deliverycontent;
+    public int getDeliveryID()  {
+        return deliveryID;
     }
     
-    public Timestamp getDeliveryTimestamp(){
-        return deliverytimestamp;
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
     }
     
-    public void setDeliveryTimestamp(Timestamp deliverytimestamp){
-        this.deliverytimestamp = deliverytimestamp;
+    public String getStudentID()   {
+        return studentID;
     }
     
-    public boolean getIsEvaluated(){
-        return isevaluated;
+    public void setModuleID(String moduleID)   {
+        this.moduleID = moduleID;
     }
     
-    public void setIsEvaluated(boolean isevaluated){
-        this.isevaluated = isevaluated;
+    public String getModuleID()    {
+        return moduleID;
+    }
+    
+    public void setDeliveryContent(String deliveryContent)  {
+        this.deliveryContent = deliveryContent;
+    }
+    
+    public String getDeliveryContent()  {
+        return deliveryContent;
+    }
+    
+    public void setWorklistID(int worklistID)   {
+        this.worklistID = worklistID;
+    }
+    
+    public int getWorklistID()  {
+        return worklistID;
+    }
+    
+    public void setDeliveryTimestamp(String worklistTimestamp)  {
+        this.deliveryTimestamp = worklistTimestamp;
+    }
+    
+    public String getDeliveryTimestamp()    {
+        return deliveryTimestamp;
+    }
+    
+    public void setIsEvaluated(boolean deliveryIsEvaluated) {
+        this.deliveryIsEvaluated = deliveryIsEvaluated;
+    }
+    
+    public boolean getIsEvaluted()  {
+        return deliveryIsEvaluated;
     }
 }
 
