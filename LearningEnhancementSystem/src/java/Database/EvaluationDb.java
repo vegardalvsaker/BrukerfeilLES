@@ -97,6 +97,9 @@ public class EvaluationDb extends Database{
         return null;
     }
     
+  
+    
+    
     public Evaluation getEvaluationWithScore(String evaluationid) {
         try (
                 Connection conn = getConnection();
