@@ -78,7 +78,7 @@ public class BootstrapTemplate {
 "          <a class=\"nav-link\" href=\"Modules\">Modules </a>\n" +
 "        </li>\n" +
 "        <li class=\"nav-item %s\" >\n" +
-"          <a class=\"nav-link disabled\" href=\"#\">Results </a>\n" +
+"          <a class=\"nav-link disabled\" href=\"Results\">Results </a>\n" +
 "        </li>\n" +
 "        <li class=\"nav-item %s\" >\n" +
 "          <a class=\"nav-link disabled\" href=\"#\">Inbox </a>\n" +

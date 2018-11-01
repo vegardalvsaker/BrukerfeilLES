@@ -51,8 +51,10 @@ public class OneModule extends SuperServlet {
             ddb.init();
             bst.containerOpen(out);
             int mId = Integer.parseInt(id);
+
             ddb.getNrOfDeliveries(id,out);
             
+
              if (request.getMethod().equals("POST"))  {
                 if (request.getParameter("delete").equals("TRUE")) {
                     String comid = request.getParameter("comment_id");
@@ -68,6 +70,11 @@ public class OneModule extends SuperServlet {
                 }
             }
             
+
+           
+            editModuleButtonForm(out,request);
+
+
             db.printLearningGoals(id, out);
             deliver(out,request);
             cdb.printComments(mId,out);
@@ -76,6 +83,22 @@ public class OneModule extends SuperServlet {
             bst.bootstrapFooter(out); 
         }
     }
+    
+    private void editModuleButtonForm(PrintWriter out, HttpServletRequest request)    {
+        String id = request.getParameter("id");
+            out.println("<a href=\"EditModule?id="+ id +"\">"
+                    + "<button>Rediger modul</button>"
+                    + "</a>");
+            
+         /*    out.println("<form action=\"EditModule?id=" + id + "\">");
+             out.println("<button>Rediger modul</button>");
+             out.println("</form>");*/
+             
+                     
+                             
+    }
+
+    
 private void addComment(PrintWriter out, HttpServletRequest request){
             String id = request.getParameter("id");
             out.println("<div>");
