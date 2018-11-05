@@ -86,9 +86,11 @@ public class EvaluateServlet extends SuperServlet {
 
 
                     //Printer radene i evalueringstabellen
+                    css(out);
                     int i = 1;
                     for (LearningGoal lg : lgoals) {
-                        bst.tableRow(out, i, lg.getText(), "<input type=\"number\" name=\"learngoal" + i + "\"/>", lg.getPoints());
+                        int maxPoints = lg.getPoints();
+                        bst.tableRow(out, i, lg.getText(), "<input type=\"number\" minlength=\"1\" required=\"true\" max=\""+ maxPoints+"\" name=\"learngoal" + i + "\"/>", maxPoints);
                         i++;
                     }
 
@@ -194,7 +196,7 @@ public class EvaluateServlet extends SuperServlet {
         out.println("  <div class=\"form-group row\">\n" +
 "        <div class=\"col-md-4 offset-md-4 mb-3\">\n" +
 "          <label for=\"tekst\">Comment for the student</label>");
-                out.println("<textarea class=\"form-control\" form=\"evaluationForm\" name=\"comment\"></textarea>");
+                out.println("<textarea minlength=\"1\" class=\"form-control\" form=\"evaluationForm\" name=\"comment\"></textarea>");
                 out.println("<button type=\"submit\" class=\"btn btn-primary\">Evaluate!</button>");
                 out.println("</div>\n" +
 "      </div>");
@@ -209,5 +211,13 @@ public class EvaluateServlet extends SuperServlet {
         out.println("<h1>Modulen som deliveryen angår, har ingen læringsmål.<br> <a href=\"OneModule?id="+ module.getModuleid() + "\">Legg til noen læringsmål</a> før du evaluerer videre</h1>");
         bst.containerClose(out);
         bst.bootstrapFooter(out);
+    }
+    
+    private void css(PrintWriter out) {
+        out.println("<style> input:invalid {"
+                + "background-color: #ff5b5b; }"
+                + "input:valid {"
+                + "background-color: #a4f293; }"
+                + "</style>");
     }
 }

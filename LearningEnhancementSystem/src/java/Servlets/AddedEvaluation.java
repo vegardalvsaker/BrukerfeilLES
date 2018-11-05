@@ -28,9 +28,9 @@ public class AddedEvaluation extends HttpServlet {
     private Delivery delivery;
     private String comment;
     private Evaluation evaluation;
-    private BootstrapTemplate bst = new BootstrapTemplate();
-    private EvaluationDb eDb = new EvaluationDb();;
-    private ScoreDb sDb = new ScoreDb();
+    private final BootstrapTemplate bst = new BootstrapTemplate();
+    private final EvaluationDb eDb = new EvaluationDb();;
+    private final ScoreDb sDb = new ScoreDb();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -67,6 +67,10 @@ public class AddedEvaluation extends HttpServlet {
         int i = 0;
         for (LearningGoal lg : module.getLearningGoals()) {
             String lgId = lg.getLearn_goal_id();
+            int points = Integer.parseInt(givenPoints.get(i));
+            if (points < 0 || points > lg.getPoints()) {
+                return;
+            }
             sDb.giveScore(eDb.getEvaluationId(delivery.getDeliveryid()), lgId, givenPoints.get(i));
             i++;
         }
