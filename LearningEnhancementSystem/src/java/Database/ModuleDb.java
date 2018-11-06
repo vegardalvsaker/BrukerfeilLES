@@ -174,23 +174,34 @@ public class ModuleDb extends Database {
 
     
     
-    public boolean addModule(PrintWriter out, String modulnavn, String beskrivelse, String innhold)  {
+    public boolean addModule(PrintWriter out, String modulnavn, String beskrivelse, String innhold, boolean leveringsform)  {
         
         init();
         
-        String sql = "insert into Module values (default, ?, ?, ?, true)";
+        String sql = "insert into Module values (default, ?, ?, ?, true, ?)";
         
         try( Connection connection = getConnection();
              PreparedStatement prepStatement = connection.prepareStatement(sql);
              
                 ) {
 
-            //Må legge til published variabel
+             //Må legge til published variabel
              prepStatement.setString(1, modulnavn);
              prepStatement.setString(2, beskrivelse);
              prepStatement.setString(3, innhold);
              //prepStatement.setBoolean(5, published);
-            
+             
+             if (leveringsform == true) {
+             prepStatement.setBoolean(4, true);
+             
+                     }
+             else if (leveringsform == false)  {
+                 prepStatement.setBoolean(4, false);
+             }
+             else {
+                 return false;
+             }
+             
             prepStatement.executeUpdate();
             
             return true;
@@ -224,7 +235,7 @@ public class ModuleDb extends Database {
         
               
               prepStatement.executeUpdate();
-         
+              
               
               return true;
       }
