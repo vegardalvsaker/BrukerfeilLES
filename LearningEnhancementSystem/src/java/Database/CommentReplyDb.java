@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class CommentReplyDb extends Database{
     private static final String ADD_REPLY = "insert into CommentReply values (default, ?, ?, default,?)";
-    private static final String ALL_REPLYS = "select r.comment_id, r.reply_text, u.user_name from CommentReply r inner join Users u on r.user_id = u.user_id where r.comment_id = ? order by r.reply_timestamp;";
+    private static final String ALL_REPLYS = "select r.comment_id, r.reply_text, u.user_name from CommentReply r inner join Users u on r.user_id = u.user_id order by r.reply_timestamp;";
     private static final String PRINT_REPLY = "select r.reply_id, r.reply_text, u.user_name from CommentReply r inner join Users u on r.user_id = u.user_id where r.comment_id = ? order by r.reply_timestamp;";
     private static final String DEL_SREPLY = "delete from CommentReply where reply_id = ?";
     private static final String DEL_AREPLY = "delete from CommentReply where comment_id = ?";
@@ -84,24 +84,24 @@ public void printReplys(int commentId, int moduleId, PrintWriter out) {
                     System.out.println("Some error with the database" + ex);
             } 
         }   
-public void deleteSingle(int Replyid){
+public void deleteSingle(String Replyid){
             try (
                Connection conn = getConnection();
                PreparedStatement ps = conn.prepareStatement(DEL_SREPLY)) {
                
-               ps.setInt(1, Replyid);
+               ps.setString(1, Replyid);
                ps.executeUpdate();
  
        } catch (SQLException ex){
            System.out.println(ex);
        }
    }
-public void deleteAll(int Commentid){
+public void deleteAll(String Commentid){
             try (
                Connection conn = getConnection();
                PreparedStatement ps = conn.prepareStatement(DEL_AREPLY)) {
                
-               ps.setInt(1, Commentid);
+               ps.setString(1, Commentid);
                ps.executeUpdate();
  
        } catch (SQLException ex){
