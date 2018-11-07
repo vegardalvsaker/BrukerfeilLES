@@ -12,37 +12,47 @@ import java.sql.Timestamp;
  */
 public class Announcement {
     
-    private int id;
-    private String subject;
-    private String body;
-    private Timestamp timestamp;
+    private String annId;
+    private String annSubject;
+    private String annBody;
+    private Timestamp annTimestamp;
+    private String annUserId;
+    private String annUserName;
     
-    public int getId() {
-        return id;
+    public String getAnnId() {
+        return annId;
     }
-
-    public String getSubject() {
-        return subject;
+    public void setAnnId(String id){
+        this.annId = annId;
     }
-    
-    public String getBody() {
-        return body;
+    public String getAnnSubject() {
+        return annSubject;
     }
-    public Timestamp getTime() {
-        return timestamp;
+    public void setAnnSubject(String annSubject) {
+        this.annSubject = annSubject;
     }
-    public void setId(int id){
-        this.id = id;
+    public String getAnnBody() {
+        return annBody;
     }
-   
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setAnnBody(String annBody) {
+        this.annBody = annBody;
     }
-    
-    public void setBody(String body) {
-        this.body = body;
+    public Timestamp getAnnTime() {
+        return annTimestamp;
     }
-    public void setTime(Timestamp timestamp){
-       this.timestamp= timestamp;
-   }
+    public void setAnnTime(Timestamp annTimestamp){
+       this.annTimestamp = annTimestamp;
+    }
+    public String getAnnUserId() {
+       return annUserId;
+    }
+    public void setAnnUserId(String annUserId) {
+       this.annUserId = annUserId;
+    }
+    public String getAnnUserName() {
+       return annUserName;
+    }
+    public void setAnnUserName(String annUserName) {
+       this.annUserName = annUserName;
+    }  
 }

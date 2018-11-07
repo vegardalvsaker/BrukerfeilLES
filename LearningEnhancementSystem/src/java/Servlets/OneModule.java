@@ -1,18 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Servlets;
-
+import Classes.User;
 import Classes.Comment;
 import Classes.CommentReply;
+
 import Database.LearningGoalDb;
 import Database.CommentDb;
-
 import Database.CommentReplyDb;
-
 import Database.DeliveryDb;
+
+import java.util.Map;
+import java.util.List;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,12 +18,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
-
-import java.util.Map;
-
-import Classes.User;
-import java.util.List;
-
 /**
  *
  * @author Vegard
@@ -47,29 +38,25 @@ public class OneModule extends SuperServlet {
             LearningGoalDb db = new LearningGoalDb();
             CommentDb cdb = new CommentDb();
             CommentReplyDb crdb = new CommentReplyDb();
+            DeliveryDb ddb = new DeliveryDb();
             db.init();
             cdb.init();
             crdb.init();
-
-            DeliveryDb ddb = new DeliveryDb();
             ddb.init();
+            
             bst.containerOpen(out);
-
-            int mId = Integer.parseInt(id);
 
             ddb.getNrOfDeliveries(id,out);
             
-            
-
              if (request.getMethod().equals("POST"))  {
                 if (paramap.containsKey("delete")) {
                     if (paramap.get("delete")[0].equals("TRUE")) {
                     String comid = request.getParameter("comment_id");
-                    int commId = Integer.parseInt(comid);
-                    cdb.deleteComment(commId);
+                    cdb.deleteComment(comid);
                     crdb.deleteAll(comid);
                     }
-                } if (paramap.containsKey("deleteR")) {
+                } 
+                if (paramap.containsKey("deleteR")) {
                     String repid = request.getParameter("reply_id");
                     crdb.deleteSingle(repid);
                 }
@@ -78,11 +65,11 @@ public class OneModule extends SuperServlet {
                     if (comText.equals("")){
                         out.println("Enter text before posting");
                     } else 
-                    cdb.addComment(mId, user.getUserId(), comText);
+                    cdb.addComment(id, user.getUserId(), comText);
 
                 }
                 if (paramap.containsKey("reply") && paramap.containsKey("comment_id")){
-                    int comId = Integer.parseInt(request.getParameter("comment_id"));
+                    String comId = request.getParameter("comment_id");
                     String repText = request.getParameter("reply");
                     if (repText.equals("")){
                         out.println("Enter text before posting");
@@ -91,11 +78,7 @@ public class OneModule extends SuperServlet {
                 }
             }
 
-            
-
-           
             editModuleButtonForm(out,request);
-
 
             db.printLearningGoals(id, out);
             deliver(out,request);
@@ -106,10 +89,10 @@ public class OneModule extends SuperServlet {
             out.println("<p>");
             out.println("<div class=\"jumbotron\">");
             out.println("<div class=\"container\">");
-            out.println("<button class=\"btn btn-link\" data-toggle=\"collapse\" data-target=\"#collapse\" aria-expanded=\"true\" aria-controls=\"collapse\">");
+            out.println("<button class=\"btn btn-outline-secondary\" data-toggle=\"collapse\" data-target=\"#collapse\" aria-expanded=\"true\" aria-controls=\"collapse\">");
             out.println("<h4 class=\"display-4\">Kommentarer</h4>");
-            out.println("<hr class=\"my-4\">");
             out.println("</button>");
+            out.println("<hr class=\"my-4\">");
             out.println("<div class=\"collapse\" id=\"collapse\">");
             out.println("<div class=\"card-body\">");
             for (Comment comment : commentList){
@@ -137,10 +120,6 @@ public class OneModule extends SuperServlet {
                     out.println("<hr class=\"my-4\">");
                 }
             }
-            //cdb.printComments(mId,out);
-
-           // cdb.addCommentForm(out,mId);
-          
             addComment(out,request);
             out.println("</div>");
             out.println("</div>");
@@ -168,23 +147,23 @@ public class OneModule extends SuperServlet {
             out.println("</div>");
     }
 
-private void deleteReply(PrintWriter out, String moduleId, String replyid )  {
+    private void deleteReply(PrintWriter out, String moduleId, String replyid )  {
             out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
             out.println("<input type=\"text\" name=\"deleteR\" value=\"TRUE\"style=\"visibility:hidden;\">");
             out.println("<input type=\"text\" name=\"reply_id\" value=\""+ replyid +"\"style=\"visibility:hidden;\"/>");
             out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete reply\">");
             out.println("</form>");
-}  
+    }  
 
-private void deleteComment(PrintWriter out, String moduleId, String commentId) {
+    private void deleteComment(PrintWriter out, String moduleId, String commentId) {
             out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
             out.println("<input type=\"text\" name=\"delete\" value=\"TRUE\"style=\"visibility:hidden;\">");
             out.println("<input type=\"text\" name=\"comment_id\" value=\""+ commentId +"\"style=\"visibility:hidden;\"/>");
             out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete comment\">");
             out.println("</form>");
-}
+    }
     
-private void addComment(PrintWriter out, HttpServletRequest request){
+    private void addComment(PrintWriter out, HttpServletRequest request){
             String id = request.getParameter("id");
             out.println("<div>");
             out.println("<form action=\"OneModule?id="+ id+"\" method=\"POST\">");
@@ -196,7 +175,7 @@ private void addComment(PrintWriter out, HttpServletRequest request){
             out.println("</div>");
     }
 
-private void deliver(PrintWriter out, HttpServletRequest request){
+    private void deliver(PrintWriter out, HttpServletRequest request){
             String id = request.getParameter("id");
             out.println("<a href=\"Delivery?id="+ id +" \"a class=\"btn btn-info\">Deliver!</button></a>");
     }

@@ -57,12 +57,11 @@ public class FrontpagePrinter {
         int i= 0;
             for (Announcement announcement : announcementList){
                 if (i < 2){
-                String atitle = announcement.getSubject();
-                String adesc = announcement.getBody();
-                int id = announcement.getId();
-                String ID = String.valueOf(id);
+                String atitle = announcement.getAnnSubject();
+                String adesc = announcement.getAnnBody();
+                String author = announcement.getAnnUserName();
                        
-                bs.jumbotron(out,adesc,atitle,ID);
+                bs.jumbotron(out,adesc,atitle,author);
                 i++;
                 }
             }

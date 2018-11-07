@@ -42,13 +42,13 @@ public class CommentReplyDb extends Database{
         }
         return null;
     }
-public void addReply(int comment_id,String user_id, String reply_text){
+    public void addReply(String comment_id,String user_id, String reply_text){
         
             try (
                     Connection conn = getConnection();
                     PreparedStatement ps = conn.prepareStatement(ADD_REPLY);
                     ) {
-                         ps.setInt(1, comment_id);
+                         ps.setString(1, comment_id);
                          ps.setString(2, user_id);
                          ps.setString(3,reply_text);
                          ps.executeUpdate();
@@ -57,13 +57,13 @@ public void addReply(int comment_id,String user_id, String reply_text){
                 System.out.println(ex);
             }
         } 
-public void printReplys(int commentId, int moduleId, PrintWriter out) {
+    /*public void printReplys(String commentId, String moduleId, PrintWriter out) {
          
-     try (
+        try (
           Connection conn = getConnection();
           PreparedStatement ps = conn.prepareStatement(PRINT_REPLY);
            ){
-           ps.setInt(1, commentId);
+           ps.setString(1, commentId);
            ResultSet rs = ps.executeQuery();
            
             while (rs.next()){
@@ -83,8 +83,8 @@ public void printReplys(int commentId, int moduleId, PrintWriter out) {
             } catch (SQLException ex) {
                     System.out.println("Some error with the database" + ex);
             } 
-        }   
-public void deleteSingle(String Replyid){
+        }*/   
+    public void deleteSingle(String Replyid){
             try (
                Connection conn = getConnection();
                PreparedStatement ps = conn.prepareStatement(DEL_SREPLY)) {
@@ -95,8 +95,8 @@ public void deleteSingle(String Replyid){
        } catch (SQLException ex){
            System.out.println(ex);
        }
-   }
-public void deleteAll(String Commentid){
+    }
+    public void deleteAll(String Commentid){
             try (
                Connection conn = getConnection();
                PreparedStatement ps = conn.prepareStatement(DEL_AREPLY)) {
@@ -107,8 +107,8 @@ public void deleteAll(String Commentid){
        } catch (SQLException ex){
            System.out.println(ex);
        }
-   }
-public void addReplyForm(PrintWriter out, int moduleId,int commentId){
+    }
+    /*public void addReplyForm(PrintWriter out, String moduleId,String commentId){
             out.println("<div style=\"margin-left:2.5em;\">");
             out.println("<form action=\"OneModule?id="+ moduleId +"\" method=\"POST\">");
             out.println("<input type=\"hidden\" name=\"delete\" value=\"FALSE\"");
@@ -120,5 +120,5 @@ public void addReplyForm(PrintWriter out, int moduleId,int commentId){
             out.println("<br>");
             out.println("</form>");
             out.println("</div>");
-    }
+    }*/
 }
