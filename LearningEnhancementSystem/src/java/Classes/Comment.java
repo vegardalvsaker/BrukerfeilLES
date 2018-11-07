@@ -1,27 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Classes;
 
 import java.sql.Timestamp;
 
 /**
  *
- * @author Frozk
+ * @author Marius
  */
 public class Comment {
 
-    private int commentid;
+    private String commentid;
+    private String moduleid;
+    private String userid;
+    private String username;
     private Timestamp commenttimestamp;
     private String commenttext;
 
-    public int getCommentId() {
+    public String getCommentId() {
         return commentid;
     }
-    public void setCommentId (int commentid) {
+    public void setCommentId (String commentid) {
         this.commentid = commentid;
+    }
+    public String getModuleId() {
+        return moduleid;
+    }
+    public void setModuleId (String moduleid) {
+        this.moduleid = moduleid;
+    }
+    public String getUserId() {
+        return userid;
+    }
+    public void setUserId (String userid) {
+        this.userid = userid;
+    }
+    public String getUserName() {
+        return username;
+    }
+    public void setUserName (String username) {
+        this.username = username;
     }
     public Timestamp getCommentTime(){
        return commenttimestamp;

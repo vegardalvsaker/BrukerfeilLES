@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class CommentDb extends Database{
     private static final String ADD_COMMENT = "insert into Comments values (default, ?, ?, default,?)";
+    private static final String ALL_COMMENTS = "select c.module_id, c.comment_id, c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id order by c.comment_timestamp";
     private static final String PRINT_COMMENT = "select c.comment_id, c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id where c.module_id = ? order by c.comment_timestamp;";
     private static final String DEL_COMMENT = "delete from Comments where comment_id = ?";
     
@@ -25,13 +26,14 @@ public class CommentDb extends Database{
         try (
              Connection conn = getConnection();
              Statement stmt = getStatement(conn);
-             ResultSet commentSet = stmt.executeQuery(PRINT_COMMENT);
+             ResultSet commentSet = stmt.executeQuery(ALL_COMMENTS);
             ){ 
               while(commentSet.next()){
                   Comment com = new Comment();
-                  com.setCommentId(commentSet.getInt("comment_id"));
-                  com.setCommentTime(commentSet.getTimestamp("comment_timestamp"));
+                  com.setCommentId(commentSet.getString("comment_id"));
+                  com.setModuleId(commentSet.getString("module_id"));
                   com.setCommentText(commentSet.getString("comment_text"));
+                  com.setUserName(commentSet.getString("user_name"));
                   comments.add(com);
               }
               return comments;
