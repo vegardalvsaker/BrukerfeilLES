@@ -19,7 +19,26 @@ public class WorklistDb extends Database {
     private static final String GIVE_DELIVERY_WORKLISTID =          "insert into Delivery VALUES";
     private static final String SLCT_DELIVERY_WORLISTID_1 =         "select delivery_id, student_id, module_id, delivery_content, worklist_id, delivery_timestamp, delivery_isEvaluated from Delivery where worklist_id =1 and delivery_isEvaluated =0;";
     private static final String SLCT_DELIVERY_WORLISTID_2 =         "select delivery_id, student_id, module_id, delivery_content, worklist_id, delivery_timestamp, delivery_isEvaluated from Delivery where worklist_id =2 and delivery_isEvaluated =0;";
-    //Worklist for teacher 1
+    private static final String GET_WORKLIST_ID =                   "select worklist_id from Worklist where teacher_id = ?";
+//Worklist for teacher 1
+    
+    public String getWorklistId(String userId) {
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(GET_WORKLIST_ID)) {
+            ps.setString(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while(rs.next()) {
+                return rs.getString("worklist_id");
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Method: getWorklistId, error:" + ex);
+            return null;
+        }
+        return null;
+    }
+    
     public void getWorklistNotEvalTeacher1(PrintWriter out)    {
         
         String list = SLCT_DELIVERY_WORLISTID_1;

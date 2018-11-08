@@ -6,7 +6,10 @@
 package Servlets;
 
 import Classes.User;
+import Classes.Delivery;
+import java.util.ArrayList;
 import Database.WorklistDb;
+import Database.DeliveryDb;
 import HtmlTemplates.BootstrapTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -39,13 +42,46 @@ public class Worklist extends SuperServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
         super.processRequest(request, response, "Worklist", out);
-        request.getRemoteUser();
-        
+        bst.containerOpen(out);
+        WorklistDb db = new WorklistDb();
+        db.init();
 	User user = (User)request.getSession().getAttribute("userLoggedIn");
-	String userEmail = user.getUserEmail();
+        String worklistId = db.getWorklistId(user.getUserId());
 	
+        DeliveryDb dDb = new DeliveryDb();
+        ArrayList<Delivery> deliveries = dDb.getUnevaluatedDeliveriesWithinWorklist(worklistId);
+        
+        if (deliveries == null) {
+            lblbalbalba
+        }
+        printTable(out);
+        for (Delivery del : deliveries) {
+            out.println("<tr>");
+            out.println("<td>" + del.getDelivery_id());
+            out.println("<td>" + del.getModule_id());
+            out.println("<td>" + del.getUser_id());
+            out.println("<td>" + del.getDelivery_content());
+            out.println("<td>" + del.getDelivery_timestamp());
+            out.println("<a href=\"EvaluateServlet?deliveryId=" + del.getDelivery_id() +"\" class=\"btn btn-primary\">Evaluate!</a>");
+            out.println("</tr>");
+
+        }
+        out.println("</tbody>");
+        out.println("</table>");
+        
+        
+        bst.containerClose(out);
+        bst.bootstrapFooter(out);
+        
+        
+        
+        
+        
+        
+        
+        
+        /*
         if(user.getUserEmail().equals("Even@uia.no")) {
-            WorklistDb db = new WorklistDb();
             db.init();
             bst.containerOpen(out);
                 db.getWorklistNotEvalTeacher1(out);
@@ -54,7 +90,6 @@ public class Worklist extends SuperServlet {
             bst.bootstrapFooter(out);
         
     }else if(user.getUserEmail().equals("hallgeiren@uia.no")) {
-            WorklistDb db = new WorklistDb();
             db.init();
             bst.containerOpen(out);
                 db.getWorklistNotEvalTeacher2(out);
@@ -65,9 +100,23 @@ public class Worklist extends SuperServlet {
                 }else {
                 out.println("You do not have access to this page!");
                 request.getRequestDispatcher("Index").include(request, response);
-            }
+            }*/
         }
+        
+       
     }
+    
+     private void printTable(PrintWriter out) {
+        out.println("<table>");
+        out.println("<thead>");
+        out.println("<th> Delivery ID</th>");
+        out.println("<th> Module ID</th>");
+        out.println("<th> Student ID</th>");
+        out.println("<th> Delivery Content</th>");
+        out.println("<th> Timestamp</th>");
+        out.println("</thead>");
+        out.println("<tbody>");
+        }
 //WorklistDb db = new WorklistDb();
             //db.init();
             //bst.bootstrapHeader(out, "Worklist");
