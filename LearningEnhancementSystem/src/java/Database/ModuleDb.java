@@ -247,5 +247,30 @@ public class ModuleDb extends Database {
        
     } 
     
+// VVVVV Fosse VVVVV
+    
+    public int getModuleCount(PrintWriter out) {
+        String modules = ("select * from Module where module_isPublished = 1");
+        int moduleCount = 0;
+        
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(modules);
+                ResultSet rset = prepStatement.executeQuery();
+                ){
+
+            while(rset.next())   {
+                moduleCount++;
+            }  
+            return moduleCount;
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getModuleCount" + liste);
+        }  
+        return moduleCount;
+    } 
+    
+// ^^^^ Fosse ^^^^
+    
+    
 }
 

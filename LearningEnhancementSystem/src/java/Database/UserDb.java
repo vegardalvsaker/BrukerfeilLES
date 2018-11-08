@@ -335,6 +335,26 @@ public class UserDb extends Database {
             out.println("<br>" + "<br>");
             }
     }
+    
+    public int getStudentCount(PrintWriter out) {
+        String modules = ("select * from Users where user_isTeacher = 0");
+        int studentCount = 0;
+        
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(modules);
+                ResultSet rset = prepStatement.executeQuery();
+                ){
+
+            while(rset.next())   {
+                studentCount++;
+            }  
+            return studentCount;
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getStudentCount" + liste);
+        }  
+        return studentCount;
+    }
 
 //
 //    ^ ^ ^ ^ ^ ^ ^ 
