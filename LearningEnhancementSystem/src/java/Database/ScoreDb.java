@@ -13,6 +13,7 @@ import java.sql.*;
 public class ScoreDb extends Database{
     private static final String INSERT_SCORE = "insert into Score values (default, ?, ?, ?)";
     private static final String DELETE_SCORE = "delete from Score where score_id = ?";
+    private static final String UPDATE_SCORE = "update Score set score_points = ? where score_id = ?";
     
     public ScoreDb() {
         init();
@@ -36,6 +37,35 @@ public class ScoreDb extends Database{
                 Connection conn = getConnection();
                 PreparedStatement ps = conn.prepareStatement(DELETE_SCORE)) {
             ps.setString(1, scoreid);
+            ps.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println(ex);
+    }
+}
+    
+    public boolean updateScore(String points, String scoreId) {
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(UPDATE_SCORE)
+                ) {
+            ps.setString(1, points);
+            ps.setString(2, scoreId);
+            ps.executeUpdate();
+            return true;
+            
+        } catch (SQLException ex) {
+            System.out.println("Method: updateScore(), error: "+ ex);
+            return false;
+        }
+                
+    }
+    
+    public void deleteScores(String evaluationId) {
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(DELETE_SCORE)) {
+            ps.setString(1, evaluationId);
             ps.executeUpdate();
         } 
         catch (SQLException ex) {
