@@ -26,9 +26,8 @@ public class ModuleDb extends Database {
     
     
     private static final String SLCT_MODULE = "select * from Module";
-    private static final String SLCT_ALL_MODULES = "select * from Module";
     private static final String SLCT_MODULES_WITH_GOALS = "select * from Module m inner join LearningGoal l on m.module_id = l.module_id where m.module_id = ?";
-    private static final String SLCT_LEARNGOAL = "select * from LearningGoal where module_id = ?";
+    //private static final String SLCT_LEARNGOAL = "select * from LearningGoal where module_id = ?";
     /**
      * This method retrieves all of the modules in the database, create an object of each record and is then
      * added to a list of modules
@@ -41,15 +40,16 @@ public class ModuleDb extends Database {
         try (
             Connection conn = getConnection();
             Statement stmt = getStatement(conn);
-            ResultSet modulSet = stmt.executeQuery(SLCT_ALL_MODULES);
+            ResultSet modulSet = stmt.executeQuery(SLCT_MODULE);
           ){
             while(modulSet.next()) {
                 Module modul = new Module();
-                modul.setId(modulSet.getInt("module_id"));
-                modul.setName(modulSet.getString("module_name"));
-                modul.setContent(modulSet.getString("module_content"));
-                modul.setDesc(modulSet.getString("module_desc"));
-                modul.setPublished(modulSet.getBoolean("module_isPublished"));
+                modul.setModuleId(modulSet.getString("module_id"));
+                modul.setModuleName(modulSet.getString("module_name"));
+                modul.setModuleDesc(modulSet.getString("module_desc"));
+                modul.setModuleContent(modulSet.getString("module_content"));
+                modul.setIsPublished(modulSet.getBoolean("module_isPublished"));
+                modul.setInInterview(modulSet.getBoolean("module_inInterview"));
                 moduler.add(modul);
             }
             return moduler;
@@ -70,22 +70,22 @@ public class ModuleDb extends Database {
     
                     Module module = new Module();
                     rs.first();
-                    module.setId(Integer.parseInt(module_id));
-                    module.setName(rs.getString("module_name"));
-                    module.setDesc(rs.getString("module_desc"));
-                    module.setContent(rs.getString("module_content"));
+                    module.setModuleId(rs.getString("module_id"));
+                    module.setModuleName(rs.getString("module_name"));
+                    module.setModuleDesc(rs.getString("module_desc"));
+                    module.setModuleContent(rs.getString("module_content"));
                     LearningGoal lg = new LearningGoal();
-                    lg.setLearn_goal_id(rs.getString("learn_goal_id"));
-                    lg.setText(rs.getString("learn_goal_text"));
-                    lg.setPoints(rs.getInt("learn_goal_points"));
+                    lg.setLearnGoalId(rs.getString("learn_goal_id"));
+                    lg.setLearnGoalText(rs.getString("learn_goal_text"));
+                    lg.setLearnGoalPoints(rs.getString("learn_goal_points"));
                     
                     module.addLearningGoal(lg);
                     
                     while (rs.next()) {
                         LearningGoal lg2 = new LearningGoal();
-                        lg2.setLearn_goal_id(rs.getString("learn_goal_id"));
-                        lg2.setText(rs.getString("learn_goal_text"));
-                        lg2.setPoints(rs.getInt("learn_goal_points"));
+                        lg2.setLearnGoalId(rs.getString("learn_goal_id"));
+                        lg2.setLearnGoalText(rs.getString("learn_goal_text"));
+                        lg2.setLearnGoalPoints(rs.getString("learn_goal_points"));
                         
                         module.addLearningGoal(lg2);
                     }

@@ -12,60 +12,60 @@ import java.util.ArrayList;
  */
 public class Module {
         
-    private int moduleid;
-    private String name;
-    private String desc;
-    private String content;
-    private boolean published;
-    private boolean interview;
+    private String moduleId;
+    private String moduleName;
+    private String moduleDesc;
+    private String moduleContent;
+    private boolean isPublished;
+    private boolean inInterview;
     private ArrayList<LearningGoal> lgoals = new ArrayList<>();
 
-    public int getModuleid() {
-        return moduleid;
+    public String getModuleId() {
+        return moduleId;
     }
 
-    public void setId(int moduleid) {
-        this.moduleid = moduleid;
+    public void setModuleId(String moduleId) {
+        this.moduleId = moduleId;
     }
 
-    public String getName() {
-        return name;
+    public String getModuleName() {
+        return moduleName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setModuleName(String ModuleName) {
+        this.moduleName = ModuleName;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getModuleDesc() {
+        return moduleDesc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setModuleDesc(String moduleDesc) {
+        this.moduleDesc = moduleDesc;
     }
 
-    public String getContent() {
-        return content;
+    public String getModuleContent() {
+        return moduleContent;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setModuleContent(String moduleContent) {
+        this.moduleContent = moduleContent;
     }
     
-    public boolean isPublished() {
-        return published;
+    public boolean getIsPublished() {
+        return isPublished;
     }
 
-    public void setPublished(boolean published) {
-        this.published = published;
+    public void setIsPublished(boolean isPublished) {
+        this.isPublished = isPublished;
     }
     
-    public boolean inInterview() {
-        return interview;
+    public boolean getInInterview() {
+        return inInterview;
     }
 
-    public void setinInterview(boolean interview) {
-        this.interview = interview;
+    public void setInInterview(boolean inInterview) {
+        this.inInterview = inInterview;
     }
 
     public void addLearningGoal(LearningGoal lg) {

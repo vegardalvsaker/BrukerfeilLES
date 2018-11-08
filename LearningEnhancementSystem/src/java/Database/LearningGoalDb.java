@@ -13,18 +13,42 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import Classes.LearningGoal;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 /**
  *
  * @author Vegard
  */
 public class LearningGoalDb extends Database {
-    /**
-     * Må helst refactore denne metoden. Få den heller til å returnere ei liste med learninggoals
-     * for så at en annen metode printer dem.
-     * @param id
-     * @param out 
-     */
+   
+    private static final String SLCT_LEARNGOAL = "select * from LearningGoal";
+    
+     public List<LearningGoal> getGoals(){
+        List<LearningGoal> goals = new ArrayList<>();
+        
+        try (
+            Connection conn = getConnection();
+            Statement stmt = getStatement(conn);
+            ResultSet lSet = stmt.executeQuery(SLCT_LEARNGOAL);
+          ){
+            while(lSet.next()) {
+                LearningGoal lgoals = new LearningGoal();
+                lgoals.setLearnGoalId(lSet.getString("learn_goal_id"));
+                lgoals.setLearnGoalText(lSet.getString("learn_goal_text"));
+                lgoals.setLearnGoalPoints(lSet.getString("learn_goal_points"));
+                lgoals.setModuleId(lSet.getString("module_id"));
+                goals.add(lgoals);
+            }
+            return goals;
+        }
+        catch (SQLException ex) {
+            System.out.println("Query error:" + ex);
+        }
+        return null;
+    }
+    
+    
+    
     public void printLearningGoals(String id, PrintWriter out) {
         Connection conn = getConnection();
         Statement stmt = getStatement(conn);
@@ -96,10 +120,10 @@ public class LearningGoalDb extends Database {
                     
                     LearningGoal lgoal = new LearningGoal();
                     
-                    lgoal.setLearn_goal_id(rset.getString("learn_goal_id"));
-                    lgoal.setText(rset.getString("learn_goal_text"));
-                    lgoal.setPoints(rset.getInt("learn_goal_points"));
-                    lgoal.setModuleID(rset.getString("module_id"));
+                    lgoal.setLearnGoalId(rset.getString("learn_goal_id"));
+                    lgoal.setLearnGoalText(rset.getString("learn_goal_text"));
+                    lgoal.setLearnGoalPoints(rset.getString("learn_goal_points"));
+                    lgoal.setModuleId(rset.getString("module_id"));
                     
                     lgList.add(lgoal);
                 }

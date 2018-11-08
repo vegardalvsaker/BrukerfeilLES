@@ -77,43 +77,41 @@ public class OneModule extends SuperServlet {
                     crdb.addReply(comId, user.getUserId(), repText);
                 }
             }
-
+            if(user.getUserIsTeacher()){
             editModuleButtonForm(out,request);
-
+            }
             db.printLearningGoals(id, out);
             deliver(out,request);
             
             List<Comment> commentList = cdb.getComments();
             List<CommentReply> replyList = crdb.getCommentReplys();
 
-            out.println("<p>");
-            out.println("<div class=\"jumbotron\">");
-            out.println("<div class=\"container\">");
-            out.println("<button class=\"btn btn-outline-secondary\" data-toggle=\"collapse\" data-target=\"#collapse\" aria-expanded=\"true\" aria-controls=\"collapse\">");
-            out.println("<h4 class=\"display-4\">Kommentarer</h4>");
-            out.println("</button>");
-            out.println("<hr class=\"my-4\">");
-            out.println("<div class=\"collapse\" id=\"collapse\">");
-            out.println("<div class=\"card-body\">");
+            bst.collapseTop(out);
             for (Comment comment : commentList){
                 String commentId = comment.getCommentId();
                 String commentText = comment.getCommentText();
                 String commentUserName = comment.getUserName();
+                String commentUserId = comment.getUserId();
                 String commentModuleId = comment.getModuleId();
                 if (commentModuleId.equals(id)){
                     out.println("<p>" + commentText + "</p>");
                     out.println("<p>" + commentUserName + "</p>");
+                    if (user.getUserIsTeacher()||(user.getUserId().equals(commentUserId))){
                     deleteComment(out,commentModuleId,commentId);
+                    }
                     for (CommentReply reply : replyList){
                         String replyId = reply.getReplyId();
                         String replyText = reply.getReplyText();
                         String replyUserName = reply.getUserName();
+                        String replyUserId = reply.getUserId();
                         String replyCommentId = reply.getCommentId();
                         if (commentId.equals(replyCommentId)){
                             out.println("<hr class=\"my-4\">");
                             out.println("<p style=\"margin-left:2.5em;\">" + replyText + "</p>");
                             out.println("<p style=\"margin-left:2.5em;\">" + replyUserName + "</p>");
+                            if (user.getUserIsTeacher()||(user.getUserId().equals(replyUserId))){
                             deleteReply(out,commentModuleId,replyId);
+                            }
                         }
                     }
                     addReply(out,commentModuleId,commentId);
@@ -121,8 +119,7 @@ public class OneModule extends SuperServlet {
                 }
             }
             addComment(out,request);
-            out.println("</div>");
-            out.println("</div>");
+            bst.collapseBottom(out);
             bst.containerClose(out);
             bst.bootstrapFooter(out); 
         }

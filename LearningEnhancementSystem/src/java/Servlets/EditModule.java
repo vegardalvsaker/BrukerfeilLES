@@ -65,9 +65,9 @@ public class EditModule extends SuperServlet {
             
             Module module = db.getModuleWithLearningGoals(module_id);
             
-            String modulName = module.getName();
-            String modulDesc = module.getDesc();
-            String modulContent = module.getContent();
+            String modulName = module.getModuleName();
+            String modulDesc = module.getModuleDesc();
+            String modulContent = module.getModuleContent();
             
             out.println("<h1>Rediger modul</h1>");
             out.println("<form action=\"EditModule?id="+module_id+"\" method=\"POST\">");

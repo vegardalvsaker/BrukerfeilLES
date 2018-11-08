@@ -119,7 +119,7 @@ public class BootstrapTemplate {
      * @param modulName
      * @param modulDesc 
      */
-    public void bootstrapCard(PrintWriter out,int modulNo, String modulName, String modulDesc) {
+    public void bootstrapCard(PrintWriter out,String modulNo, String modulName, String modulDesc) {
         out.println("<div class=\"col-4\">\n" +
 "      <div class=\"card\">\n" +
 "        <div class=\"card-body\">\n" +
@@ -153,7 +153,22 @@ public class BootstrapTemplate {
         out.println("<hr class=\"my-4\">");
     }
     
+    public void collapseTop(PrintWriter out) {
+            out.println("<p>");
+            out.println("<div class=\"jumbotron\">");
+            out.println("<div class=\"container\">");
+            out.println("<button class=\"btn btn-outline-secondary\" data-toggle=\"collapse\" data-target=\"#collapse\" aria-expanded=\"true\" aria-controls=\"collapse\">");
+            out.println("<h4 class=\"display-4\">Kommentarer</h4>");
+            out.println("</button>");
+            out.println("<hr class=\"my-4\">");
+            out.println("<div class=\"collapse\" id=\"collapse\">");
+            out.println("<div class=\"card-body\">");
+    }
     
+    public void collapseBottom(PrintWriter out) {
+            out.println("</div>");
+            out.println("</div>");
+    }
     
     /**
      * Method for opening a bootstrap container

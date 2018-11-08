@@ -49,7 +49,7 @@ public class AddedEvaluation extends HttpServlet {
             
             int i = 0;
             for (LearningGoal lg : module.getLearningGoals()) {
-                String lgId = lg.getLearn_goal_id();
+                String lgId = lg.getLearnGoalId();
                 sDb.giveScore(evaluationId, lgId, givenPoints.get(i) );
                 i++;
             }
@@ -88,7 +88,7 @@ public class AddedEvaluation extends HttpServlet {
                 
                 int i = 0;
                 for (LearningGoal lg : lgoals) {
-                    out.println("<li> Learning goal: " + lg.getText() + " | <p> "+ scores.get(i).getPoints() +"/"+ lg.getPoints() +"</li>");
+                    out.println("<li> Learning goal: " + lg.getLearnGoalText() + " | <p> "+ scores.get(i).getPoints() +"/"+ lg.getLearnGoalPoints() +"</li>");
                     i++;
                 }
                 

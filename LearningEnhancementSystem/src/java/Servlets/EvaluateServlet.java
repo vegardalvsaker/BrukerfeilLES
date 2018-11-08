@@ -55,13 +55,13 @@ public class EvaluateServlet extends SuperServlet {
                 if (request.getParameter("start").equals("TRUE")) {
                     EvaluationDb eDb = new EvaluationDb();
                     if (eDb.addEvaluation("100", "2")) {
-                        out.println("<h1> Evaluation for student " + user.getUserName() + " for " + module.getName());
+                        out.println("<h1> Evaluation for student " + user.getUserName() + " for " + module.getModuleName());
                     out.println("<ul>");
                     ArrayList<LearningGoal> lgoals = module.getLearningGoals();
                     out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation?deliveryid=2&studentid=1000&module_id=1&numberOfLearnGoals="+ lgoals.size() +"\" method=\"POST\">");
                     int i = 1;
                     for (LearningGoal lg : lgoals) {
-                        out.println("<li> Learning goal: " + lg.getText() + " | <input type=\"text\" name=\"learngoal" + i + "\"/>/"+ lg.getPoints() +"</li>");
+                        out.println("<li> Learning goal: " + lg.getLearnGoalText() + " | <input type=\"text\" name=\"learngoal" + i + "\"/>/"+ lg.getLearnGoalPoints() +"</li>");
                         i++;
                     }
                     out.println("<textarea form=\"evaluationForm\" name=\"comment\"></textarea>");

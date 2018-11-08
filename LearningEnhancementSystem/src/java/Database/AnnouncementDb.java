@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import Classes.Announcement;
+import Classes.AnnouncementC;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 /**
@@ -25,8 +25,8 @@ public class AnnouncementDb extends Database {
     private static final String ADD_ANNOUNCEMENT = "insert into Announcement values (default, ?, default, ?, ?)";
     private static final String DEL_ANNOUNCEMENT = "delete from Announcement where ann_id = ?";
     
-    public List<Announcement> getAnnouncement(){
-        List<Announcement> announcements = new ArrayList<>();
+    public List<AnnouncementC> getAnnouncement(){
+        List<AnnouncementC> announcements = new ArrayList<>();
         
         try (
             Connection conn = getConnection();
@@ -35,7 +35,7 @@ public class AnnouncementDb extends Database {
 
           ){
             while(announcementSet.next()) {
-                Announcement announcemen = new Announcement();
+                AnnouncementC announcemen = new AnnouncementC();
                 announcemen.setAnnId(announcementSet.getString("ann_id"));
                 announcemen.setAnnBody(announcementSet.getString("ann_subject"));
                 announcemen.setAnnSubject(announcementSet.getString("ann_body"));

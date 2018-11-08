@@ -44,7 +44,7 @@ public class Worklist extends SuperServlet {
 	User user = (User)request.getSession().getAttribute("userLoggedIn");
 	String userEmail = user.getUserEmail();
 	
-        if(user.getUserEmail().equals("Even@uia.no")) {
+       /* if(user.getUserEmail().equals("Even@uia.no")) {
             WorklistDb db = new WorklistDb();
             db.init();
             bst.containerOpen(out);
@@ -77,12 +77,13 @@ public class Worklist extends SuperServlet {
             
             //db.getWorklistNotEvalTeacher1(out);
             
-            //db.getWorklistEvaluated(out);
+            //db.getWorklistEvaluated(out);*/
             
             //bst.containerClose(out);
             //bst.bootstrapFooter(out);
         
-
+        }
+    }
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

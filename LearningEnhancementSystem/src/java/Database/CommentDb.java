@@ -6,7 +6,6 @@
 package Database;
 import java.sql.*;
 import Classes.Comment;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +15,8 @@ import java.util.List;
  */
 public class CommentDb extends Database{
     private static final String ADD_COMMENT = "insert into Comments values (default, ?, ?, default,?)";
-    private static final String ALL_COMMENTS = "select c.module_id, c.comment_id, c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id order by c.comment_timestamp";
-    private static final String PRINT_COMMENT = "select c.comment_id, c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id where c.module_id = ? order by c.comment_timestamp;";
+    private static final String ALL_COMMENTS = "select c.module_id, c.comment_id, c.comment_text, u.user_name, u.user_id from Comments c inner join Users u on c.user_id = u.user_id order by c.comment_timestamp";
+    //private static final String PRINT_COMMENT = "select c.comment_id, c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id where c.module_id = ? order by c.comment_timestamp;";
     private static final String DEL_COMMENT = "delete from Comments where comment_id = ?";
     
     public List<Comment> getComments(){
@@ -34,6 +33,7 @@ public class CommentDb extends Database{
                   com.setModuleId(commentSet.getString("module_id"));
                   com.setCommentText(commentSet.getString("comment_text"));
                   com.setUserName(commentSet.getString("user_name"));
+                  com.setUserId(commentSet.getString("user_id"));
                   comments.add(com);
               }
               return comments;
@@ -60,6 +60,18 @@ public class CommentDb extends Database{
                 System.out.println(ex);
             }
         }
+    public void deleteComment(String Commentid){
+            try (
+               Connection conn = getConnection();
+               PreparedStatement ps = conn.prepareStatement(DEL_COMMENT)) {
+               
+               ps.setString(1, Commentid);
+               ps.executeUpdate();
+ 
+       } catch (SQLException ex){
+           System.out.println(ex);
+       }
+   }
  /*public void printComments(String moduleId, PrintWriter out) {
          
      try (
@@ -95,19 +107,7 @@ public class CommentDb extends Database{
         System.out.println("Some error with the database" + ex);
         }     
     }*/
- 
-   public void deleteComment(String Commentid){
-            try (
-               Connection conn = getConnection();
-               PreparedStatement ps = conn.prepareStatement(DEL_COMMENT)) {
-               
-               ps.setString(1, Commentid);
-               ps.executeUpdate();
- 
-       } catch (SQLException ex){
-           System.out.println(ex);
-       }
-   }
+
    /*public void addCommentForm(PrintWriter out, String moduleId){
             out.println("<div>");
             out.println("<form action=\"OneModule?id="+ moduleId +"\" method=\"POST\">");

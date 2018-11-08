@@ -70,7 +70,7 @@ public class OneResult extends HttpServlet {
         lgoals = module.getLearningGoals();        
                 int i = 0;
                 for (LearningGoal lg : lgoals) {
-                    out.println("<li> Learning goal: " + lg.getText() + " | <p> "+ scores.get(i).getPoints() +"/"+ lg.getPoints() +"</li>");
+                    out.println("<li> Learning goal: " + lg.getLearnGoalText() + " | <p> "+ scores.get(i).getPoints() +"/"+ lg.getLearnGoalPoints() +"</li>");
                     i++;
                 }
         

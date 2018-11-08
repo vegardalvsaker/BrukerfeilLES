@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  *
  * @author Marius
  */
-public class Announcement {
+public class AnnouncementC {
     
     private String annId;
     private String annSubject;

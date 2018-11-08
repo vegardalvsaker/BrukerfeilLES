@@ -7,44 +7,44 @@ package Classes;
 
 /**
  *
- * @author Vegard
+ * @author Marius
  */
 public class LearningGoal {
     
-    private String learn_goal_id;
-    private int points;
-    private String text;
-    private String moduleID;
+    private String learnGoalId;
+    private String learnGoalText;
+    private String learnGoalPoints;
+    private String moduleId;
     
-    public void setLearn_goal_id(String learn_goal_id){
-        this.learn_goal_id = learn_goal_id;
+    public void setLearnGoalId(String learnGoalId){
+        this.learnGoalId = learnGoalId;
     }
     
-    public String getLearn_goal_id() {
-        return learn_goal_id;
+    public String getLearnGoalId() {
+        return learnGoalId;
     }
     
-    public int getPoints() {
-        return points;
+    public String getLearnGoalText() {
+        return learnGoalText;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
+    public void setLearnGoalText(String learnGoalText) {
+        this.learnGoalText = learnGoalText;
     }
     
-    public void setModuleID(String moduleID)    {
-        this.moduleID = moduleID;
+    public String getLearnGoalPoints() {
+        return learnGoalPoints;
+    }
+
+    public void setLearnGoalPoints(String learnGoalPoints) {
+        this.learnGoalPoints = learnGoalPoints;
+    }
+
+    public void setModuleId(String moduleId)    {
+        this.moduleId = moduleId;
     }
     
-    public String getModuleID() {
-        return moduleID;
+    public String getModuleId() {
+        return moduleId;
     }
 }

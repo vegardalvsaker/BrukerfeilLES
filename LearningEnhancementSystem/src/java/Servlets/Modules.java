@@ -1,6 +1,7 @@
 package Servlets;
 
 
+import Classes.Module;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import Database.ModuleDb;
+import Classes.User;
+import java.util.List;
 /**
  *
  * @author Vegard
@@ -32,6 +35,7 @@ public class Modules extends SuperServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        User user = (User)request.getSession().getAttribute("userLoggedIn");
         response.setContentType("text/html;charset=UTF-8");
         
         try (PrintWriter out = response.getWriter()){  
@@ -55,17 +59,27 @@ public class Modules extends SuperServlet {
                 
             }
             
-            
             bst.containerOpen(out);
             
-            db.skrivModuler(out);
+            //db.skrivModuler(out);
             
+            List<Module> moduleList = db.getModuler();
+            for (Module modul : moduleList){
+                String moduleId = modul.getModuleId();
+                String moduleName = modul.getModuleName();
+                String moduleDesc = modul.getModuleDesc();
+                //String moduleContent = modul.getModuleContent();
+                //Boolean moduleIsPublished = modul.getIsPublished();
+                //Boolean moduleInInterview = modul.getInInterview();
+                out.println("<a href=\"OneModule?id="+ moduleId+"\">"+ moduleName + ", " + moduleDesc +"</a>");
+                deleteModule(out,moduleId);
+            }
             bst.containerClose(out);
             
-            addModuleForm(out);
-            
+            if(user.getUserIsTeacher()){
+                addModuleForm(out);
+            }
             bst.bootstrapFooter(out);
-            
         }
     }
         private void addModuleForm(PrintWriter out)  {
@@ -99,7 +113,14 @@ public class Modules extends SuperServlet {
             out.println("</form>");
  
         }
-        
+        private void deleteModule(PrintWriter out, String id){
+      
+        out.println("<form action=\"RemoveModule\" method=\"POST\">");
+        out.println("<input name=\"remove\" value=\"TRUE\" style=\"visibility:hidden;\"></input>");
+        out.println("<input name=\"id\" value=\""+ id +"\" style=\"visibility:hidden;\"></input>");
+        out.println("<input type=\"submit\" value=\"Remove module\"></submit>");
+        out.println("</form><br>");
+    }
     
         
             // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

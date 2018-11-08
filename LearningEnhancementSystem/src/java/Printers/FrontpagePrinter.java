@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import Database.ModuleDb;
 import Classes.Module;
 import Database.AnnouncementDb;
-import Classes.Announcement;
+import Classes.AnnouncementC;
 import java.util.ArrayList;
 import Classes.Notification;
 import Classes.User;
@@ -45,7 +45,7 @@ public class FrontpagePrinter {
      */
     public void printFrontpage(PrintWriter out, String title, String notifications) {
         List<Module> modulList = mdb.getModuler();
-        List<Announcement> announcementList = adb.getAnnouncement();
+        List<AnnouncementC> announcementList = adb.getAnnouncement();
         bs.bootstrapHeader(out, title);
         bs.bootstrapNavbar(out, "Home", notifications);
         
@@ -55,7 +55,7 @@ public class FrontpagePrinter {
         out.println("<h1 class=\"display-4\">Announcements:</h1>");
         out.println("<hr class=\"my-4\">");
         int i= 0;
-            for (Announcement announcement : announcementList){
+            for (AnnouncementC announcement : announcementList){
                 if (i < 2){
                 String atitle = announcement.getAnnSubject();
                 String adesc = announcement.getAnnBody();
@@ -75,9 +75,9 @@ public class FrontpagePrinter {
         out.println("<div class=\"row\">");
         
             for (Module modul : modulList) {
-                int number = modul.getModuleid();
-                String name = modul.getName();
-                String desc = modul.getDesc();
+                String number = modul.getModuleId();
+                String name = modul.getModuleName();
+                String desc = modul.getModuleDesc();
                 bs.bootstrapCard(out,number, name, desc);
             }
             
