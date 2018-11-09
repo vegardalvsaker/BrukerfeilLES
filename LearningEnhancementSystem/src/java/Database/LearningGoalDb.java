@@ -7,10 +7,13 @@ package Database;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import Classes.LearningGoal;
+import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 /**
  *
  * @author Vegard
@@ -55,4 +58,84 @@ public class LearningGoalDb extends Database {
             out.println("Couldn't retrieve from database, because" + ex);
         }
     }
+    
+    public boolean addLearningGoals(PrintWriter out, String learnGoalText, int learnGoalPoints, String moduleID)  {
+        
+        String addLearnGoal = "insert into LearningGoal values (default, ?, ?, ?";
+        
+        try( Connection connection = getConnection();
+             PreparedStatement prepStatement = connection.prepareStatement(addLearnGoal);
+            
+                ) {
+            
+                prepStatement.setString(1, learnGoalText);
+                prepStatement.setInt(2, learnGoalPoints);
+                prepStatement.setString(3, moduleID);
+                
+                prepStatement.executeUpdate();
+                return true;
+        }
+        catch(SQLException ex)  {
+            out.println("Error in function addLearningGoals(): " + ex);
+        }
+        return false;
+    }
+    
+    public ArrayList<LearningGoal> writeLearningGoals(PrintWriter out, String moduleID)    {
+        
+        String getLearngoals = "select * from LearningGoal";
+        
+        try( Connection connection = getConnection();
+             PreparedStatement prepStatement = connection.prepareStatement(getLearngoals);
+             ResultSet rset = prepStatement.executeQuery();
+            )   {
+            
+                ArrayList<LearningGoal> lgList = new ArrayList<>();
+                
+                while(rset.next())  {
+                    
+                    LearningGoal lgoal = new LearningGoal();
+                    
+                    lgoal.setLearn_goal_id(rset.getString("learn_goal_id"));
+                    lgoal.setText(rset.getString("learn_goal_text"));
+                    lgoal.setPoints(rset.getInt("learn_goal_points"));
+                    lgoal.setModuleID(rset.getString("module_id"));
+                    
+                    lgList.add(lgoal);
+                }
+                
+                
+            return lgList;
+        }
+        catch(SQLException e)   {
+            out.println("Error in function writeLearningGoals(): " + e);
+        }
+        return null; 
+            
+    }
+    
+    public boolean editLearnGoals(PrintWriter out, HttpServletRequest request, String learnGoalText, int learnGoalPoints, String learnGoalID)    {
+        
+        String editLearnGoals = "update LearningGoal set learn_goal_text = ?, learn_goal_points = ? where learn_goal_id = ? ";
+        
+         try( Connection connection = getConnection();
+             PreparedStatement prepStatement = connection.prepareStatement(editLearnGoals);
+             
+            )   {
+             
+             prepStatement.setString(1, learnGoalText);
+             prepStatement.setInt(2, learnGoalPoints);
+             prepStatement.setString(3, learnGoalID);
+             
+             prepStatement.executeQuery();
+             return true;
+         }
+          catch(SQLException ex) {
+             out.println("SQL Exception in function editLearnGoals(): " + ex);
+         }
+         
+         return false;
+    }
+    
+    
 }

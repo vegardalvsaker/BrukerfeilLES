@@ -1,16 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Servlets;
 
+import Classes.User;
 import HtmlTemplates.BootstrapTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse; 
 import Database.AnnouncementDb;
@@ -19,87 +14,43 @@ import Database.AnnouncementDb;
  * @author Marius
  */
 @WebServlet(name = "AddAnnouncement", urlPatterns = {"/AddAnnouncement"})
-public class AddAnnouncement extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    
+public class AddAnnouncement extends SuperServlet {
     BootstrapTemplate bst = new BootstrapTemplate();
-    
-    
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        User user = (User)request.getSession().getAttribute("userLoggedIn"); 
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            super.processRequest(request, response, "Announcement", out);
              AnnouncementDb db = new AnnouncementDb();
              db.init();
-             bst.bootstrapHeader(out,"Announcement");
-             bst.bootstrapNavbar(out,"Announcement");
-
-             addAnnouncement(out,response);
-            
-             bst.bootstrapFooter(out);
+             out.println("<a href=\"Announcement\"a class=\"btn btn-primary\">Go back</button></a>");
+             addAnnouncement(out);
              
               if (request.getMethod().equals("POST"))  {
-               
-                String teacherId = request.getParameter("TeacherId");
-                int teacherID = Integer.parseInt(teacherId);
-                
-                String annoSubject = request.getParameter("Subject");
-                
-                String annoBody = request.getParameter("Body");
-         
-              // String annoAuthor = request.getParameter("author");
-             
-                db.addAnnouncement(teacherID, annoSubject, annoBody);
+               String annoSubject = request.getParameter("Subject");
+               String annoBody = request.getParameter("Body");
+               db.addAnnouncement(user.getUserId(), annoSubject, annoBody);
             }
         }
-    
     }  
 
-        private void addAnnouncement(PrintWriter out, HttpServletResponse response)  {
-            
+        private void addAnnouncement(PrintWriter out)  {
             out.println("<div>");
-            out.println("<a href=\"Announcement\">");
-            out.println("</a>");
             out.println("<h1>Legg til kunngjøring</h1>");
             out.println("<form action=\"AddAnnouncement\" method=\"POST\">");
             out.println("<h3>Subject</h3><br>");
             out.println("<input type =\"text\" name=\"Subject\"><br>");           
             out.println("<h3>Body</h3><br>");
             out.println("<input type=\"text\" name=\"Body\"><br>");
-            out.println("<h3>Lærer-nummer</h3><br>");
-            out.println("<input type=\"number\" name=\"TeacherId\"><br>");
             out.println("<br>");
             out.println("<input type=\"submit\" value=\"Legg til\"><br>");        
             out.println("<br>");
             out.println("</form>");
             out.println("</div>");
-            /*
-            out.println("<form>");
-            out.println("<div class=\"form-group\">");
-            out.println("<label for=\"AddAnnouncement\">Overskrift</label>");
-            out.println("<input type=\"text\" class=\"form-control\" name=\"Subject\">");
-            out.println("</div>");
-            out.println(" <div class=\"form-group\">");
-            out.println("<label for=\"AddAnnouncement\">Hoveddel</label>");
-            out.println("<input type=\"text\" class=\"form-control\" name=\"Body\">");
-            out.println("</div>");
-            out.println("<div class=\"form-group\">");
-            out.println("<label for=\"AddAnnouncement\">Lærer-id</label>");
-            out.println("<input type=\"number\" class=\"form-control\" name=\"TeacherId\">");
-            out.println("</div>");
-            out.println("<button type=\"submit\" class=\"btn btn-primary\">Submit</button>");
-            out.println("</form>");*/
         }
+    
         // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

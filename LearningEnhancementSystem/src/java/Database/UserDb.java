@@ -217,6 +217,10 @@ public class UserDb extends Database {
     //    | | | | | | |
     //    V V V V V V V 
     //
+    
+
+    
+    
     public void getProfile(PrintWriter out, String id) {
         String oneProfile = ("select * from Users where user_id = ?");
         
@@ -253,6 +257,14 @@ public class UserDb extends Database {
         }
     }
    
+    public void printProfileLimited(PrintWriter out) {
+
+        for (User user : profileList) {
+            out.println("<h1>"+"Information about "+ user.getUserName() + "</h1>");
+            out.println(" Name: " + user.getUserName() + "<br>");
+            out.println(" Email: " + user.getUserEmail() + "<br>");
+        }
+    }
     
     public void getOnlyStudent(PrintWriter out) {
         String studentList = ("select * from Users where user_isTeacher = 0");
@@ -322,6 +334,26 @@ public class UserDb extends Database {
             out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
             out.println("<br>" + "<br>");
             }
+    }
+    
+    public int getStudentCount(PrintWriter out) {
+        String modules = ("select * from Users where user_isTeacher = 0");
+        int studentCount = 0;
+        
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(modules);
+                ResultSet rset = prepStatement.executeQuery();
+                ){
+
+            while(rset.next())   {
+                studentCount++;
+            }  
+            return studentCount;
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getStudentCount" + liste);
+        }  
+        return studentCount;
     }
 
 //

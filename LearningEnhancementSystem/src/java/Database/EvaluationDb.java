@@ -99,6 +99,7 @@ public class EvaluationDb extends Database{
         return null;
     }
     
+
     public Evaluation getEvaluationWithScore(String deliveryId) {
         try (
                 Connection conn = getConnection();
@@ -116,7 +117,7 @@ public class EvaluationDb extends Database{
                 eval.setDeliveryid(rset.getString("delivery_id"));
                 
                 Score s1 = new Score();
-                s1.setEvaluation_id("evaluation_id");
+                s1.setEvaluation_id(rs.getString("evaluation_id"));
                 s1.setId(rset.getString("score_id"));
                 s1.setLearn_goal_id(rset.getString("learn_goal_id"));
                 s1.setPoints(rset.getInt("score_points"));

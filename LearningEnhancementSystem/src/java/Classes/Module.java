@@ -17,6 +17,7 @@ public class Module {
     private String desc;
     private String content;
     private boolean published;
+    private boolean interview;
     private ArrayList<LearningGoal> lgoals = new ArrayList<>();
 
     public int getModuleid() {
@@ -57,6 +58,14 @@ public class Module {
 
     public void setPublished(boolean published) {
         this.published = published;
+    }
+    
+    public boolean inInterview() {
+        return interview;
+    }
+
+    public void setinInterview(boolean interview) {
+        this.interview = interview;
     }
 
     public void addLearningGoal(LearningGoal lg) {

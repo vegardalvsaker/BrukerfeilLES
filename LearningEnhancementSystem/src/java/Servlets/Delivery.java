@@ -5,6 +5,8 @@
  */
 package Servlets;
 
+import Database.DeliveryDb;
+import HtmlTemplates.BootstrapTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,61 +14,68 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import Printers.FrontpagePrinter;
-import Database.UserDb;
 import Classes.User;
 
 /**
  *
- * @author Vegard
+ * @author Filip
  */
-@WebServlet(name = "Index", urlPatterns = {"/Index"})
-public class Index extends SuperServlet {
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+@WebServlet(name = "Delivery", urlPatterns = {"/Delivery"})
+public class Delivery extends SuperServlet {
+
+    BootstrapTemplate bst = new BootstrapTemplate();
+    
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        String moduleid = request.getParameter("id");
+        String inInterview = request.getParameter("module_inInterview");
+        
         try (PrintWriter out = response.getWriter()) {
-           
+            super.processRequest(request, response, "Modules", out);
+        
             
-           /* //Sjekker om emailen er i databasen
-            UserDb userdb = new UserDb();
-            userdb.init();
-            String email = request.getParameter("email");
-            if (request.getSession().getAttribute("userLoggedIn") == null) {
-                if (userdb.checkUserExist(email)) {
-                    HttpSession ses = request.getSession();
-                    User user = userdb.getUser(email);
-                    ses.setAttribute("userLoggedIn", user);
-                    //Printing the frontpage after the user details are connected to the session
-                    FrontpagePrinter fp = new FrontpagePrinter();
-                    fp.printFrontpage(out, "LES IS-110");   
-                
-            }   else {
-                    //Sending the client back to the login page if he/she is not logged in
-                    out.println("Sorry, this user does not exist in our database");
-                    request.getRequestDispatcher("index.html").include(request, response);
-                }
-                
-            } else {
-                //Printing the frontpage if the client is already logged in
-                
-            }  */
-            FrontpagePrinter fp = new FrontpagePrinter();
-            setUserLoggedIn(request);
-            fp.printFrontpage(out, "LES IS-110", getNotificationHtml(request)); 
+        bst.containerOpen(out);
+        bst.containerClose(out);
+        bst.bootstrapFooter(out);
+        
+        DeliveryDb deliver = new DeliveryDb();
+        deliver.init();
+        if(request.getMethod().equals("POST")){
+            String link = request.getParameter("link");
+            User user = (User)request.getSession().getAttribute("userLoggedIn");
+            deliver.addDelivery(user.getUserId(),moduleid , link, "1");
+            
+        }
+        
+        deliver.getDeliveryForm(moduleid,out);
+        System.out.println(inInterview);
+        
+        /*if (request.getMethod().equals("POST")) {
+            
+            String deliveryContent = request.getParameter("link");
+            /*int studentId = Integer.parseInt(StudentId);
+            int moduleId = Integer.parseInt(ModuleId);
+             String annoContent = request.getParameter("Content");
+            int worklistId = Integer.parseInt(WorklistId);
+            
+            deliver.addDelivery("1", "1", deliveryContent, "2")
+            //db.Delivery(StudentID, ModuleId, annocontent, WorklistID);*/
+        
+        
+        
         }
     }
-
+    protected void printDeliveryform(PrintWriter out, HttpServletRequest request) {
+        //User user = (User)request.getSession().getAttribute("userLoggedIn");
+        //Strb ning userId = user.getUserId();
+        String moduleid = request.getParameter("id");
+        DeliveryDb deliver = new DeliveryDb();
+        deliver.getDeliveryForm(moduleid, out);
+       
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -105,5 +114,4 @@ public class Index extends SuperServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

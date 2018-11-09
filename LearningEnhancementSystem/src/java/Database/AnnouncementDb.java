@@ -21,7 +21,7 @@ import java.sql.Timestamp;
  */
 public class AnnouncementDb extends Database {
     
-    private static final String ORDER_ANNOUNCEMENT = "select * from Announcement order by ann_timestamp desc";
+    private static final String ORDER_ANNOUNCEMENT = "select * from Announcement A inner join Users U where A.teacher_id = U.user_id order by ann_timestamp desc";
     private static final String ADD_ANNOUNCEMENT = "insert into Announcement values (default, ?, default, ?, ?)";
     private static final String DEL_ANNOUNCEMENT = "delete from Announcement where ann_id = ?";
     
@@ -67,9 +67,11 @@ public class AnnouncementDb extends Database {
                 String annoSubject = rset.getString("ann_subject");
                 String  annoBody = rset.getString("ann_body");
                 Timestamp annotime = rset.getTimestamp("ann_timestamp");
+                String author = rset.getString("user_name");
                      
                 out.println("<h2>"+ annoSubject + "</h2>");
                 out.println("<p>" + annoBody + "</p>");
+                out.println("<p>" + author + "</p>");
                 out.println("<small>" + annotime + "</small>");
                 out.println("<form action=\"Announcement\" method=\"POST\">");
                  out.println("<input type=\"text\" name=\"delete\" value=\"TRUE\"style=\"visibility:hidden;\">");
@@ -85,13 +87,13 @@ public class AnnouncementDb extends Database {
     }
     
     
-    public void addAnnouncement(int teacher_id,String ann_subject, String ann_body)  {
+    public void addAnnouncement(String teacher_id,String ann_subject, String ann_body)  {
     
         try( Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(ADD_ANNOUNCEMENT);
                 ) {
             
-            ps.setInt(1,teacher_id);
+            ps.setString(1,teacher_id);
             ps.setString(2,ann_subject);
             ps.setString(3,ann_body);
             ps.executeUpdate();

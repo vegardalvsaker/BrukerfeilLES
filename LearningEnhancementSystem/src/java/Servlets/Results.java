@@ -1,44 +1,63 @@
 package Servlets;
 
-import Classes.User;
-import HtmlTemplates.BootstrapTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse; 
-import Database.AnnouncementDb;
+import javax.servlet.http.HttpServletResponse;
+import HtmlTemplates.BootstrapTemplate;
+import Database.ModuleDb;
+import Database.DeliveryDb;
+import Classes.User;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import Classes.Delivery;
 /**
  *
- * @author Marius
+ * @author Gorm-Erik
  */
-@WebServlet(name = "Announcement", urlPatterns = {"/Announcement"})
-public class Announcement extends SuperServlet {
-    BootstrapTemplate bst = new BootstrapTemplate();
+@WebServlet(name = "Results", urlPatterns = {"/Results"})
+public class Results extends SuperServlet {
     
+    BootstrapTemplate bst = new BootstrapTemplate();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        User user = (User)request.getSession().getAttribute("userLoggedIn");
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            super.processRequest(request, response, "Announcement", out);
-             AnnouncementDb db = new AnnouncementDb();
-             db.init();
-             
-             if (request.getMethod().equals("POST"))  {
-                if (request.getParameter("delete").equals("TRUE")) {
-                    String aid = request.getParameter("annId");
-                    int annId = Integer.parseInt(aid);
-                    db.deleteAnnouncement(annId);  
-                }
-             }
-             if (user.getUserIsTeacher()){
-             out.println("<a href=\"AddAnnouncement\"a class=\"btn btn-primary\">Add more</button></a>");
-             }
-             db.skrivAnnouncement(out);
+            
+            super.processRequest(request, response, "Results", out);
+            ModuleDb db = new ModuleDb();
+            db.init();
+         
+            bst.containerOpen(out);
+            bst.containerClose(out);
+            results(out, request);
+            bst.bootstrapFooter(out);  
+         
         }
     }
+    private void results(PrintWriter out, HttpServletRequest request)    {
+        
+        DeliveryDb deliverydb = new DeliveryDb();
+        deliverydb.init();
+        out.println("<h1>Dine evaluerte moduler:</h1><br>");
+        setUserLoggedIn(request);
+        HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("userLoggedIn");
+        String userID = user.getUserId();
+        ArrayList<Delivery> deliveryList = deliverydb.getDelivery(out, userID);
+        
+        for (Delivery delivery : deliveryList)  {
+            String moduleName = delivery.getModuleName();
+            int deliveryID = delivery.getDeliveryID();
+            String moduleID = delivery.getModuleID();
+            out.println("<ul>");
+            out.println("<li><a href=\"OneResult?userID=" + userID + "&deliveryID="+ deliveryID + "&moduleID="+ moduleID + "\">" + moduleName + "</a></li>");
+            out.println("</ul>");
+        }  
+    }
+ 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

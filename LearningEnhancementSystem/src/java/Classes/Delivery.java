@@ -1,78 +1,87 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Classes;
+
+import java.sql.Timestamp;
 
 /**
  *
- * @author Vegard
+ * @author Filip
  */
 public class Delivery {
-    private String deliveryid;
-    private String student_id;
-    private String student_name;
-    private String module_id;
+   
+    private String moduleName;
+    private int deliveryID;
+    private String studentID;
+    private String moduleID;
     private String deliveryContent;
-    private String worklist_id;
-    private String delivery_timestamp;
-
-    public String getStudent_name() {
-        return student_name;
+    private int worklistID;
+    private String deliveryTimestamp;
+    private boolean deliveryIsEvaluated;
+    
+    public String getModuleName()   {
+        return moduleName;
     }
-
-    public void setStudent_name(String student_name) {
-        this.student_name = student_name;
+    
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+        
     }
-
-    public String getDeliveryid() {
-        return deliveryid;
+    
+    public void setDeliveryID(int deliveryID)    {
+        this.deliveryID = deliveryID;
     }
-
-    public void setDeliveryid(String deliveryid) {
-        this.deliveryid = deliveryid;
+    
+    public int getDeliveryID()  {
+        return deliveryID;
     }
-
-    public String getStudent_id() {
-        return student_id;
+    
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
     }
-
-    public void setStudent_id(String student_id) {
-        this.student_id = student_id;
+    
+    public String getStudentID()   {
+        return studentID;
     }
-
-    public String getModule_id() {
-        return module_id;
+    
+    public void setModuleID(String moduleID)   {
+        this.moduleID = moduleID;
     }
-
-    public void setModule_id(String module_id) {
-        this.module_id = module_id;
+    
+    public String getModuleID()    {
+        return moduleID;
     }
-
-    public String getDeliveryContent() {
-        return deliveryContent;
-    }
-
-    public void setDeliveryContent(String deliveryContent) {
+    
+    public void setDeliveryContent(String deliveryContent)  {
         this.deliveryContent = deliveryContent;
     }
-
-    public String getWorklist_id() {
-        return worklist_id;
-    }
-
-    public void setWorklist_id(String worklist_id) {
-        this.worklist_id = worklist_id;
-    }
-
-    public String getDelivery_timestamp() {
-        return delivery_timestamp;
-    }
-
-    public void setDelivery_timestamp(String delivery_timestamp) {
-        this.delivery_timestamp = delivery_timestamp;
+    
+    public String getDeliveryContent()  {
+        return deliveryContent;
     }
     
+    public void setWorklistID(int worklistID)   {
+        this.worklistID = worklistID;
+    }
     
+    public int getWorklistID()  {
+        return worklistID;
+    }
+    
+    public void setDeliveryTimestamp(String worklistTimestamp)  {
+        this.deliveryTimestamp = worklistTimestamp;
+    }
+    
+    public String getDeliveryTimestamp()    {
+        return deliveryTimestamp;
+    }
+    
+    public void setIsEvaluated(boolean deliveryIsEvaluated) {
+        this.deliveryIsEvaluated = deliveryIsEvaluated;
+    }
+    
+    public boolean getIsEvaluted()  {
+        return deliveryIsEvaluated;
+    }
 }
+
+

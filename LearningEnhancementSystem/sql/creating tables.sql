@@ -19,6 +19,17 @@ rolename varchar(32) not null default 'Student',
 constraint roles_pk primary key (user_email, rolename)
 );
 
+create table Notification(
+notification_id integer not null auto_increment,
+user_id integer not null,
+notification_content varchar(100),
+notification_seen boolean default false,
+notification_timestamp timestamp default current_timestamp,
+
+constraint notification_pk primary key (notification_id),
+constraint notification_fk foreign key (user_id) references Users (user_id)
+);
+
 create table Announcement(
 ann_id integer not null auto_increment,
 teacher_id integer,
@@ -36,6 +47,7 @@ module_name varchar(30) not null,
 module_desc varchar(100),
 module_content text,
 module_isPublished bool default 0,
+module_inInterview boolean not null,
 
 constraint module_pk primary key (module_id)
 );
@@ -49,8 +61,6 @@ module_id integer not null,
 constraint learningGoal_pk primary key (learn_goal_id),
 constraint learningGoal_fk foreign key (module_id) references Module (module_id)
 );
-
-
 
 create table Comments(
 comment_id integer not null auto_increment,
