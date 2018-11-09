@@ -59,20 +59,39 @@ public class LearningGoalDb extends Database {
         }
     }
     
-    public boolean addLearningGoals(PrintWriter out, String learnGoalText, int learnGoalPoints, String moduleID)  {
+    public boolean addLearningGoals(PrintWriter out, String learnGoalText, String learnGoalPoints, String moduleName)  {
         
-        String addLearnGoal = "insert into LearningGoal values (default, ?, ?, ?";
+        init();
+        
+        String getModuleID = "select module_id from Module where module_name = ?";
+        String addLearnGoal = "insert into LearningGoal values (default, ?, ?, ?)";
+        
+        
         
         try( Connection connection = getConnection();
+                
+             PreparedStatement pStatement = connection.prepareStatement(getModuleID); 
              PreparedStatement prepStatement = connection.prepareStatement(addLearnGoal);
+             
+             
             
                 ) {
             
-                prepStatement.setString(1, learnGoalText);
-                prepStatement.setInt(2, learnGoalPoints);
-                prepStatement.setString(3, moduleID);
+                pStatement.setString(1, moduleName);
                 
+                
+                ResultSet rset = pStatement.executeQuery();
+                
+                if (rset.next())    {
+                String moduleID = rset.getString("module_id");
+                prepStatement.setString(3, moduleID);
+                }
+                
+                prepStatement.setString(1, learnGoalText);
+                prepStatement.setString(2, learnGoalPoints);
+               
                 prepStatement.executeUpdate();
+                
                 return true;
         }
         catch(SQLException ex)  {

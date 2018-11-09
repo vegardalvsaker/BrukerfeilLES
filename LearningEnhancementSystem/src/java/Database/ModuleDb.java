@@ -174,7 +174,7 @@ public class ModuleDb extends Database {
 
     
     
-    public boolean addModule(PrintWriter out, String modulnavn, String beskrivelse, String innhold, boolean leveringsform)  {
+    public boolean addModule(PrintWriter out, String modulnavn, String beskrivelse, String innhold, String leveringsform)  {
         
         init();
         
@@ -191,24 +191,21 @@ public class ModuleDb extends Database {
              prepStatement.setString(3, innhold);
              //prepStatement.setBoolean(5, published);
              
-             if (leveringsform == true) {
+             if (leveringsform.equals("Muntlig")) {
              prepStatement.setBoolean(4, true);
              
                      }
-             else if (leveringsform == false)  {
-                 prepStatement.setBoolean(4, false);
-             }
+             
              else {
-                 return false;
+                 prepStatement.setBoolean(4, false);
              }
              
             prepStatement.executeUpdate();
             
-            return true;
+           
         }
         catch(SQLException e)   {
-            out.println("Ugyldig SQL query");
-            out.println("Feilmelding: " + e);
+            out.println("Feilmelding i ModuleDb.addModule(): " + e);
             
         }
        

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import Database.ModuleDb;
+import Database.LearningGoalDb;
 /**
  *
  * @author Vegard
@@ -37,6 +38,7 @@ public class Modules extends SuperServlet {
         try (PrintWriter out = response.getWriter()){  
             super.processRequest(request, response, "Modules", out);
          ModuleDb db = new ModuleDb();
+         LearningGoalDb learnGoal = new LearningGoalDb();
          db.init();
         
         if (request.getMethod().equals("POST"))  {
@@ -47,12 +49,15 @@ public class Modules extends SuperServlet {
          
                 String innhold = request.getParameter("Innhold");
                 
-                boolean leveringsform = Boolean.parseBoolean(request.getParameter("leveringsform"));
+                String leveringsform = request.getParameter("leveringsform");
                 
-                //boolean video = Boolean.parseBoolean(request.getParameter("Video"));
+                String learnGoalText = request.getParameter("Laringsmal");
+                
+                String learnGoalPoints = request.getParameter("Poeng");
+               
                            
                 db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform);
-                
+                learnGoal.addLearningGoals(out, learnGoalText, learnGoalPoints, modulnavn);
             }
             
             
@@ -70,10 +75,16 @@ public class Modules extends SuperServlet {
     }
         private void addModuleForm(PrintWriter out)  {
             
-            out.println("<div>");
+            
           //  out.println("<a href=\"Modules\">");
            // out.println("</a>");
+            out.println("<div>");
+            
+            
+           
             out.println("<h1>Legg til modul</h1>");
+            
+            
             out.println("<form action=\"Modules\" method=\"POST\">");
             out.println("<h3>Modulnavn</h3><br>");
             out.println("<input type =\"text\" name=\"Modulnavn\"><br>");
@@ -87,16 +98,28 @@ public class Modules extends SuperServlet {
             out.println("<br>");
             out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Video\">Video");
             out.println("<br>");
+            
+         //   out.println("</form>");
+            
+          //  out.println("<form action=\"Modules\" method=\"POST\">");
+            out.println("<h1>Legg til læringsmål</h1>");
+            out.println("<h3>Læringsmål</h3><br>");
+            out.println("<input type=\"text\" name=\"Laringsmal\">");
+            out.println("<input type=\"text\" name=\"Laringsmal\">");
+            out.println("<input type=\"text\" name=\"Laringsmal\">");
+            out.println("<input type=\"text\" name=\"Laringsmal\">");
+            out.println("<input type=\"text\" name=\"Laringsmal\">");
+            out.println("<h3>Poeng</h3><br>");
+            out.println("<input type=\"text\" name=\"Poeng\">");
+            out.println("<input type=\"text\" name=\"Poeng\">");
+            out.println("<input type=\"text\" name=\"Poeng\">");
+            out.println("<input type=\"text\" name=\"Poeng\">");
+            out.println("<input type=\"text\" name=\"Poeng\">");
+           // out.println("<input type=\"submit\" value=\"Legg til læringsmål\"><br>");
             out.println("<input type=\"submit\" value=\"Legg til modul\"><br>");
             out.println("</form>");
-            out.println("</div>");
             
-            out.println("<h1>Legg til læringsmål</h1><br>");
-            out.println("<form action=\"Modules\" method=\"POST\">");
-            out.println("<button onclick=\"newLearnGoal()\">Nytt læringsmål</button>");
-            out.println("");
-            out.println("<input type=\"text\" name=\"Læringsmål\"<br>");
-            out.println("</form>");
+            out.println("</div>");
  
         }
         
