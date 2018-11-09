@@ -12,11 +12,28 @@ public class Delivery {
     private String moduleName;
     private int deliveryID;
     private String studentID;
+    private String studentName;
     private String moduleID;
     private String deliveryContent;
     private int worklistID;
     private String deliveryTimestamp;
     private boolean deliveryIsEvaluated;
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public boolean isDeliveryIsEvaluated() {
+        return deliveryIsEvaluated;
+    }
+
+    public void setDeliveryIsEvaluated(boolean deliveryIsEvaluated) {
+        this.deliveryIsEvaluated = deliveryIsEvaluated;
+    }
     
     public String getModuleName()   {
         return moduleName;

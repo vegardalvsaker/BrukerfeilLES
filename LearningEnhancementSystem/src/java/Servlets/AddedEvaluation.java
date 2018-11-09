@@ -73,7 +73,7 @@ public class AddedEvaluation extends SuperServlet {
      * Metode som legger inn kommentaren og poengene til evalueringen i databasen.
      */
     private boolean insertEvaluationAndScore(HttpServletRequest request) {
-        String deliveryid = delivery.getDeliveryid();
+        String deliveryid = Integer.toString(delivery.getDeliveryID());
         User teacher = (User)request.getSession().getAttribute("userLoggedIn");
         if(!eDb.addEvaluation(teacher.getUserId(), deliveryid)) {
             return false;
@@ -92,7 +92,7 @@ public class AddedEvaluation extends SuperServlet {
             if (points < 0 || points > lg.getPoints()) {
                 return false;
             }
-            sDb.giveScore(eDb.getEvaluationId(delivery.getDeliveryid()), lgId, givenPoints.get(i));
+            sDb.giveScore(eDb.getEvaluationId(Integer.toString(delivery.getDeliveryID())), lgId, givenPoints.get(i));
             i++;
         }
         return true;
@@ -126,7 +126,7 @@ public class AddedEvaluation extends SuperServlet {
         Delivery delivery = (Delivery) request.getSession().getAttribute("delivery");
         String comment = request.getParameter("comment");
         ArrayList<Score> scores = new ArrayList<>();
-        Evaluation evaluation = eDb.getEvaluationWithScore(delivery.getDeliveryid());
+        Evaluation evaluation = eDb.getEvaluationWithScore(Integer.toString(delivery.getDeliveryID()));
         scores = evaluation.getScorelist();
         Module module = (Module) request.getSession().getAttribute("module");
 

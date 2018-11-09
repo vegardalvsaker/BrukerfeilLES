@@ -40,19 +40,21 @@ public class DeliveryDb extends Database{
          
                 Delivery delivery = new Delivery();
                 
-                delivery.setDeliveryid(rs.getString("delivery_id"));
-                delivery.setStudent_id(rs.getString("student_id"));
-                delivery.setStudent_name(rs.getString("user_name"));
-                delivery.setModule_id(rs.getString("module_id"));
+                delivery.setDeliveryID(rs.getInt("delivery_id"));
+                delivery.setStudentID(rs.getString("student_id"));
+                delivery.setStudentName(rs.getString("user_name"));
+                delivery.setModuleID(rs.getString("module_id"));
                 delivery.setDeliveryContent(rs.getString("delivery_content"));
-                delivery.setWorklist_id(rs.getString("worklist_id"));
-                delivery.setDelivery_timestamp(rs.getString("delivery_timestamp"));
+                delivery.setWorklistID(rs.getInt("worklist_id"));
+                delivery.setDeliveryTimestamp(rs.getString("delivery_timestamp"));
                 
                 return delivery;
             }
         } catch (SQLException ex) {
             System.out.println("Method: getDeliveryWithUser(), error: " + ex);
+            return null;
         }
+    }
    
         public void getNrOfDeliveries(String module_id,PrintWriter out){
            try (

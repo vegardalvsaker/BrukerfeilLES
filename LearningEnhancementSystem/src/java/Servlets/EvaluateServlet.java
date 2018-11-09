@@ -16,7 +16,12 @@ import javax.servlet.http.HttpSession;
 import Database.UserDb;
 import Database.ModuleDb;
 import Database.EvaluationDb;
-import Classes.*;
+import Classes.Delivery;
+import Classes.Module;
+import Classes.User;
+import Classes.LearningGoal;
+import Classes.Evaluation;
+import Classes.Score;
 import java.util.ArrayList;
 import HtmlTemplates.BootstrapTemplate;
 import Database.DeliveryDb;
@@ -67,8 +72,8 @@ public class EvaluateServlet extends SuperServlet {
                 request.getSession().setAttribute("module", module);
                 EvaluationDb eDb = new EvaluationDb();
                 //Sjekker om det finnes en evaluering for denne studenten allerede, og oppretter en ny evaluering hvis ikke. (Parametrene i metoden under er hardkodet frem til worklist blir ferdig
-                if (!eDb.evaluationExists(delivery.getDeliveryid())              /*eDb.addEvaluation(teacherId, delivery.getDeliveryid())*/) {
-                    out.println("<h1> Evaluation for student " + delivery.getStudent_name() + " for " + module.getName() + "</h1>");
+                if (!eDb.evaluationExists(Integer.toString(delivery.getDeliveryID()))              /*eDb.addEvaluation(teacherId, delivery.getDeliveryid())*/) {
+                    out.println("<h1> Evaluation for student " + delivery.getStudentName() + " for " + module.getName() + "</h1>");
 
                     //Henter de læringsmålene som lærereren skal evaluere etter    
                     ArrayList<LearningGoal> lgoals = module.getLearningGoals();
@@ -128,13 +133,13 @@ public class EvaluateServlet extends SuperServlet {
         }
         ModuleDb mdb = new ModuleDb();
         mdb.init();
-        module = mdb.getModuleWithLearningGoals(delivery.getModule_id());
+        module = mdb.getModuleWithLearningGoals(delivery.getModuleID());
         System.out.println(module.getName());
         
         request.getSession().setAttribute("delivery", delivery);
         
         //Lagrer den aktuelle studenten som skal bli evaluert i session
-        request.getSession().setAttribute("student", delivery.getStudent_name());
+        request.getSession().setAttribute("student", delivery.getStudentName());
         setUserLoggedIn(request);
         User teacher = (User)request.getSession().getAttribute("userLoggedIn");
         teacherId = teacher.getUserId();  
