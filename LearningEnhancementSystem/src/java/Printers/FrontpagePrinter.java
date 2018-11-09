@@ -76,10 +76,10 @@ public class FrontpagePrinter {
         out.println("<div class=\"row\">");
         
             for (Module modul : modulList) {
-                int number = modul.getModuleid();
+                String number = Integer.toString(modul.getModuleid());
                 String name = modul.getName();
                 String desc = modul.getDesc();
-                bs.bootstrapCard(out,number, name, desc);
+                bs.bootstrapCard(out, number, name, desc);
             }
             
         out.println("</div>");

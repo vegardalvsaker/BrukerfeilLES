@@ -18,7 +18,6 @@ public class Delivery {
     private String deliveryTimestamp;
     private boolean deliveryIsEvaluated;
     
-
     public String getModuleName()   {
         return moduleName;
     }

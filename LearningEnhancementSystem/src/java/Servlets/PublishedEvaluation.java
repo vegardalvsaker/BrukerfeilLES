@@ -10,10 +10,12 @@ import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Database.EvaluationDb;
-
+import Classes.Evaluation;
+import java.util.Enumeration;
 /**
  *
  * @author Vegard
@@ -32,14 +34,29 @@ public class PublishedEvaluation extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("on servlet 'PublishedEvaluation'");
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            request.getParameter("evaluation_id");
-            EvaluationDb eDb = new EvaluationDb();
-            eDb.publish(true, request.getParameter("evaluation_id"));
-            out.println("<h1>Evalueringen er offtentliggjort!</h1>");
-            out.println("<a href=\"Index\">Gå hjem</a>");
-            
+            Evaluation evaluation = (Evaluation) request.getSession().getAttribute("Evaluation");
+            if (evaluation == null) {
+                out.println("<h1 style=\"text-aligned: center;\">Her skal du vel strengt tatt ikke være?</h1>");
+                out.println("<a href=\"Index\">Gå hjem igjen</a>");
+            } else {
+                EvaluationDb eDb = new EvaluationDb();
+                eDb.publish(true, evaluation.getEvaluationid());
+
+                //evaluation = null;
+                HttpSession session = request.getSession();
+                session.removeAttribute("Evaluation");
+                //debug for å sjekke hvilke objekter som er i session.
+                Enumeration enumm = session.getAttributeNames();
+                while (enumm.hasMoreElements()) {
+                    System.out.println((String) enumm.nextElement());
+                }
+
+                out.println("<h1>Evalueringen er offtentliggjort!</h1>");
+                out.println("<a href=\"Index\">Gå hjem</a>");
+            }
         }
     }
 

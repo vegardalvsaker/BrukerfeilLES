@@ -119,7 +119,7 @@ public class BootstrapTemplate {
      * @param modulName
      * @param modulDesc 
      */
-    public void bootstrapCard(PrintWriter out,int modulNo, String modulName, String modulDesc) {
+    public void bootstrapCard(PrintWriter out,String modulNo, String modulName, String modulDesc) {
         out.println("<div class=\"col-4\">\n" +
 "      <div class=\"card\">\n" +
 "        <div class=\"card-body\">\n" +
@@ -168,6 +168,33 @@ public class BootstrapTemplate {
      */
     public void containerClose(PrintWriter out) {
         out.println("</div>");
+    }
+    
+    public void tableOpen(PrintWriter out) {
+        out.println(
+"  <table class=\"table table-hover\">\n" +
+"    <thead>\n" +
+"      <tr class=\"table-active\">\n" +
+"        <th scope=\"col\">#</th>\n" +
+"        <th scope=\"col\">Learn goal</th>\n" +
+"        <th scope=\"col\">Given points</th>\n" +
+"        <th scope=\"col\">Maximum points</th>\n" +
+"      </tr>\n" +
+"    </thead>\n" +
+"    <tbody>\n");
+
+    }
+    public void tableRow(PrintWriter out, int i, String learnGoal, String givenPoints, int maxPoints) {
+        out.println("<tr>\n" +
+"        <th scope=\"row\">"+ i +"</th>\n" +
+"        <td>"+ learnGoal +"</td>\n" +
+"        <td>"+ givenPoints +"</td>\n" +
+"        <td>"+ maxPoints +"</td>\n" +
+"      </tr>");
+    }
+    public void tableClose(PrintWriter out){
+        out.println("</tbody> \n" +
+"                   </table> \n");
     }
 }
 

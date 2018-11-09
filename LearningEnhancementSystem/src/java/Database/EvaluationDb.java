@@ -13,23 +13,25 @@ import Classes.Score;
  * @author Vegard
  */
 public class EvaluationDb extends Database{
-    private static final String ADD_DELIVERY = "insert into Evaluation values (default, ?, ?, default, '')";
+    private static final String ADD_EVALUATION = "insert into Evaluation values (default, ?, ?, '', false)";
     private static final String SELECT_ONE = "select evaluation_id from Evaluation where delivery_id = ?";
     private static final String UPDATE_EVALUATION_COMMENT = "update Evaluation set evaluation_comment = ? where delivery_id = ?";
-    private static final String SELECT_EVALUATION_WITH_SCORE = "select * from Evaluation e inner join Score s on e.evaluation_id = s.evaluation_id where e.evaluation_id = ?";
+    private static final String SELECT_EVALUATION_WITH_SCORE = "select * from Evaluation e inner join Score s on e.evaluation_id = s.evaluation_id where e.delivery_id = ?";
     private static final String UPDATE_ISPUBLISHED = "update Evaluation set evaluation_isPublished = ? where evaluation_id = ?";
     private static final String DELETE_EVALUATION = "delete from Evaluation where evaluation_id = ?";
+    private static final String UPDATE_COMMENT = "update Evaluation set evaluation_comment = ? where evaluation_id = ?";
+   
     public EvaluationDb(){
         init();
     }
-
+    
     public boolean addEvaluation(String teacher_id, String delivery_id){
         if (evaluationExists(delivery_id)) {
             return false;
         } else {
             try (
                     Connection conn = getConnection();
-                    PreparedStatement ps = conn.prepareStatement(ADD_DELIVERY);
+                    PreparedStatement ps = conn.prepareStatement(ADD_EVALUATION);
                     ) {
 
                 ps.setString(1, teacher_id);
@@ -92,39 +94,37 @@ public class EvaluationDb extends Database{
             return rs.getString("evaluation_id");
             
     } catch (SQLException ex) {
-        System.out.println("Some error with the database" + ex);
+        System.out.println("Method: getEvaluationId(), error" + ex);
     }
         return null;
     }
     
-  
-    
-    
-    public Evaluation getEvaluationWithScore(String evaluationid) {
+
+    public Evaluation getEvaluationWithScore(String deliveryId) {
         try (
                 Connection conn = getConnection();
                 PreparedStatement ps = conn.prepareStatement(SELECT_EVALUATION_WITH_SCORE);
                 ) {
                 
-            ps.setString(1, evaluationid);
+            ps.setString(1, deliveryId);
             try (ResultSet rset = ps.executeQuery()) {
-                rset.first();
+                rset.next();
                 
                 Evaluation eval = new Evaluation();
-                eval.setEvaluationid(evaluationid);
+                eval.setEvaluationid(rset.getString("evaluation_id"));
                 eval.setComment(rset.getString("evaluation_comment"));
                 eval.setIsPublished(rset.getBoolean("evaluation_isPublished"));
                 eval.setDeliveryid(rset.getString("delivery_id"));
                 
                 Score s1 = new Score();
-                s1.setEvaluation_id(evaluationid);
+                s1.setEvaluation_id(rs.getString("evaluation_id"));
                 s1.setId(rset.getString("score_id"));
                 s1.setLearn_goal_id(rset.getString("learn_goal_id"));
                 s1.setPoints(rset.getInt("score_points"));
                 eval.addScoreToList(s1);
                 while (rset.next()) {
                     Score s2 = new Score();
-                    s2.setEvaluation_id(evaluationid);
+                    s2.setEvaluation_id("evaluation_id");
                     s2.setId(rset.getString("score_id"));
                     s2.setLearn_goal_id(rset.getString("learn_goal_id"));
                     s2.setPoints(rset.getInt("score_points"));
@@ -134,7 +134,7 @@ public class EvaluationDb extends Database{
             }
         }
         catch (SQLException ex) {
-            System.out.println(ex);
+            System.out.println("method: getEvaluationWithScore" + ex);
         }
         
         return null;
