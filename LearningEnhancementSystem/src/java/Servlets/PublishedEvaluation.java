@@ -51,11 +51,19 @@ public class PublishedEvaluation extends HttpServlet {
                 //debug for å sjekke hvilke objekter som er i session.
                 Enumeration enumm = session.getAttributeNames();
                 while (enumm.hasMoreElements()) {
-                    System.out.println((String) enumm.nextElement());
+                    String namn = (String)enumm.nextElement();
+                    session.removeAttribute(namn);
+                    System.out.println(namn);
                 }
-
-                out.println("<h1>Evalueringen er offtentliggjort!</h1>");
-                out.println("<a href=\"Index\">Gå hjem</a>");
+                Enumeration enumm2 = session.getAttributeNames();
+                while (enumm2.hasMoreElements()) {
+                    System.out.println("Etter fjerning:");
+                    System.out.println((String) enumm2.nextElement());
+                }
+                //out.println("<h1>Evalueringen er offtentliggjort!</h1>");
+                //out.println("<a href=\"Index\">Gå hjem</a>");
+                out.println("<script>alert(\"Evaluering publisert!\");</script>");
+                request.getRequestDispatcher("Index").include(request, response);
             }
         }
     }
