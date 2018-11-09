@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Database.EvaluationDb;
 import Database.ScoreDb;
+import Classes.User;
 import Classes.Module;
 import Classes.LearningGoal;
 import java.util.ArrayList;
@@ -57,7 +58,10 @@ public class AddedEvaluation extends SuperServlet {
                 return;
             }
             assignVariableValues(request);
-            insertEvaluationAndScore(request);
+            if (!insertEvaluationAndScore(request)) {
+                out.println("<h1>Her har det skjedd en feil! Kontakt databaseadmin</h1>");
+                return;
+            }
             Module module = (Module) request.getSession().getAttribute("module");
             bst.bootstrapHeader(out, "Evaluation for " + module.getName());
             
@@ -68,13 +72,17 @@ public class AddedEvaluation extends SuperServlet {
     /**
      * Metode som legger inn kommentaren og poengene til evalueringen i databasen.
      */
-    private void insertEvaluationAndScore(HttpServletRequest request) {
+    private boolean insertEvaluationAndScore(HttpServletRequest request) {
         String deliveryid = delivery.getDeliveryid();
+        User teacher = (User)request.getSession().getAttribute("userLoggedIn");
+        if(!eDb.addEvaluation(teacher.getUserId(), deliveryid)) {
+            return false;
+        }
         eDb.finishEvaluation(deliveryid, comment);
         ArrayList<String> givenPoints = new ArrayList<>();
         givenPoints = getListOfGivenPoints(request);
         if (givenPoints.size() == 0) {
-            return;
+            return false;
         }
         Module module = (Module) request.getSession().getAttribute("module");
         int i = 0;
@@ -82,11 +90,12 @@ public class AddedEvaluation extends SuperServlet {
             String lgId = lg.getLearn_goal_id();
             int points = Integer.parseInt(givenPoints.get(i));
             if (points < 0 || points > lg.getPoints()) {
-                return;
+                return false;
             }
             sDb.giveScore(eDb.getEvaluationId(delivery.getDeliveryid()), lgId, givenPoints.get(i));
             i++;
         }
+        return true;
     }
     /**
      * Metode som returnerer ei liste med de poengene som ble gitt i evalueringen.

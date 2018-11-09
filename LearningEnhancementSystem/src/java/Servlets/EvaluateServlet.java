@@ -67,7 +67,7 @@ public class EvaluateServlet extends SuperServlet {
                 request.getSession().setAttribute("module", module);
                 EvaluationDb eDb = new EvaluationDb();
                 //Sjekker om det finnes en evaluering for denne studenten allerede, og oppretter en ny evaluering hvis ikke. (Parametrene i metoden under er hardkodet frem til worklist blir ferdig
-                if (eDb.addEvaluation(teacherId, delivery.getDeliveryid())) {
+                if (!eDb.evaluationExists(delivery.getDeliveryid())              /*eDb.addEvaluation(teacherId, delivery.getDeliveryid())*/) {
                     out.println("<h1> Evaluation for student " + delivery.getStudent_name() + " for " + module.getName() + "</h1>");
 
                     //Henter de læringsmålene som lærereren skal evaluere etter    
@@ -138,7 +138,6 @@ public class EvaluateServlet extends SuperServlet {
         setUserLoggedIn(request);
         User teacher = (User)request.getSession().getAttribute("userLoggedIn");
         teacherId = teacher.getUserId();  
-        //teacherId = "100";
         return true;
     }
     /*
