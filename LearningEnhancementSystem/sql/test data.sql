@@ -30,8 +30,11 @@ insert into Announcement values
 insert into Module values
 (default, 'Modul 1', 'Module 1 description', 'Module 1 content is very long', 1),
 (default, 'Modul 2', 'Module 2 description', 'Module 2 content is very long', 1),
-(default, 'Modul 3', 'Module 3 description', 'Module 3 content is very long', 0),
-(default, 'Modul 4', 'Module 4 description', 'Module 4 content is very long', 0);
+(default, 'Modul 3', 'Module 3 description', 'Module 3 content is very long', 1),
+(default, 'Modul 4', 'Module 4 description', 'Module 4 content is very long', 1),
+(default, 'Modul 5', 'Module 5 description', 'Module 5 content is very long', 1),
+(default, 'Modul 6', 'Module 6 description', 'Module 6 content is very long', 0),
+(default, 'Modul 7', 'Module 7 description', 'Module 7 content is very long', 0);
 
 insert into LearningGoal values
 ##(learn_goal_id, learn_goal_text, learn_goal_points, module_id)
