@@ -1,4 +1,4 @@
-use learningenhancementsystem;
+use LearningEnhancementSystem2;
 ## drop schema learningenhancementsystem;
 
 insert into Users values 
@@ -63,9 +63,10 @@ insert into Worklist values
 
 insert into Delivery values
 (default, 1, 1, 'Vegards Delivery content for module 1', 1, default, 1),
-(default, 6, 1, 'Ingves Delivery content for module 1', 1, default, 0),   ##!Evaluated
-(default, 7, 2, 'Espens Delivery content for module 2', 2, default, 1),
-(default, 8, 3, 'Gorms Delivery content for module 3', 2, default, 0);    ##!Evaluated
+(default, 6, 1, 'Ingves Delivery content for module 1', 1, 	default, 0),   ##!Evaluated
+(default, 7, 2, 'Espens Delivery content for module 2', 2, 	default, 1),
+(default, 8, 3, 'Gorms Delivery content for module 3', 2, 	default, 0);    ##!Evaluated
+
 
 insert into Evaluation values
 ## evaluation_id, teacher_id integer, delivery_id, evaluation_comment, evaluation_isPublished,
@@ -83,9 +84,7 @@ insert into Score values
 
 
 
-
-
-
+drop schema learningenhancementsystem2;
 
 
 

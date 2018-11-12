@@ -51,9 +51,10 @@ public class Worklist extends SuperServlet {
         DeliveryDb dDb = new DeliveryDb();
         ArrayList<Delivery> deliveries = dDb.getUnevaluatedDeliveriesWithinWorklist(worklistId);
         
-        if (deliveries == null) {
-            lblbalbalba
+        if (deliveries.isEmpty()) {
+            out.println(" <font size=\"8\"> No deliveres waiting for evaluation! </font> ");
         }
+        
         printTable(out);
         for (Delivery del : deliveries) {
             out.println("<tr>");
@@ -64,46 +65,16 @@ public class Worklist extends SuperServlet {
             out.println("<td>" + del.getDelivery_timestamp());
             out.println("<a href=\"EvaluateServlet?deliveryId=" + del.getDelivery_id() +"\" class=\"btn btn-primary\">Evaluate!</a>");
             out.println("</tr>");
-
+            
         }
         out.println("</tbody>");
         out.println("</table>");
         
-        
         bst.containerClose(out);
         bst.bootstrapFooter(out);
         
-        
-        
-        
-        
-        
-        
-        
-        /*
-        if(user.getUserEmail().equals("Even@uia.no")) {
-            db.init();
-            bst.containerOpen(out);
-                db.getWorklistNotEvalTeacher1(out);
-                db.getWorklistEvaluated(out);
-            bst.containerClose(out);
-            bst.bootstrapFooter(out);
-        
-    }else if(user.getUserEmail().equals("hallgeiren@uia.no")) {
-            db.init();
-            bst.containerOpen(out);
-                db.getWorklistNotEvalTeacher2(out);
-                db.getWorklistEvaluated(out);
-            bst.containerClose(out);
-            bst.bootstrapFooter(out);
-            } else if (checkIfTeacherLoggedIn(request)) {
-                }else {
-                out.println("You do not have access to this page!");
-                request.getRequestDispatcher("Index").include(request, response);
-            }*/
         }
         
-       
     }
     
      private void printTable(PrintWriter out) {
@@ -117,21 +88,6 @@ public class Worklist extends SuperServlet {
         out.println("</thead>");
         out.println("<tbody>");
         }
-//WorklistDb db = new WorklistDb();
-            //db.init();
-            //bst.bootstrapHeader(out, "Worklist");
-            //bst.bootstrapNavbar(out, "Worklist");
-            
-            //bst.containerOpen(out);
-            
-            //db.getWorklistNotEvalTeacher1(out);
-            
-            //db.getWorklistEvaluated(out);
-            
-            //bst.containerClose(out);
-            //bst.bootstrapFooter(out);
-        
-
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
