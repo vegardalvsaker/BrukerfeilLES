@@ -41,8 +41,8 @@ public class ModuleDb extends Database {
         
         try (
             Connection conn = getConnection();
-            Statement stmt = getStatement(conn);
-            ResultSet modulSet = stmt.executeQuery(SLCT_ALL_MODULES);
+            PreparedStatement ps = conn.prepareStatement(SLCT_ALL_MODULES);
+            ResultSet modulSet = ps.executeQuery();
           ){
             while(modulSet.next()) {
                 Module modul = new Module();

@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import Database.ModuleDb;
+import java.util.List;
+import Classes.Module;
 /**
  *
  * @author Vegard
@@ -27,8 +29,8 @@ public class Modules extends SuperServlet {
      * @throws IOException if an I/O error occurs
      */
     //Objekt for å generere UI
-    BootstrapTemplate bst = new BootstrapTemplate();
-    
+    private final BootstrapTemplate bst = new BootstrapTemplate();
+    private ModuleDb db = new ModuleDb();
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -36,7 +38,7 @@ public class Modules extends SuperServlet {
         
         try (PrintWriter out = response.getWriter()){  
             super.processRequest(request, response, "Modules", out);
-         ModuleDb db = new ModuleDb();
+         
          db.init();
         
         if (request.getMethod().equals("POST"))  {
@@ -58,16 +60,50 @@ public class Modules extends SuperServlet {
             
             bst.containerOpen(out);
             
-            db.skrivModuler(out);
+            printModules(request, out);
             
-            bst.containerClose(out);
+            
             
             addModuleForm(out);
-            
+            bst.containerClose(out);
             bst.bootstrapFooter(out);
             
         }
     }
+    
+    private void printModules(HttpServletRequest request, PrintWriter out) {
+        List<Module> modules = db.getModuler();
+        
+        
+        out.println("<table class=\"table table-hovere\">"
+                + "<thead>"
+                + "<tr class=\"table-active\">"
+                + "<th scope=\"col\">Name</th>"
+                + "<th scope=\"col\">Short description</th>");
+        
+        if (request.isUserInRole("Teacher")) {
+            out.println("<th scope=\"col\">Delete</th>");
+        }
+                out.println("</tr>"
+                + "</thead>"
+                + "<tbody>");
+                
+        for (Module module : modules) {
+            String moduleId = Integer.toString(module.getModuleid());
+            out.println("<tr>"
+                    + "<td><a href=\"OneModule?id="+ moduleId +"\">" + module.getName() +"</td>"
+                    + "<td>" + module.getDesc() +"</td></a>");
+            
+           if (request.isUserInRole("Teacher")) {
+               out.println("<td><a class=\"btn btn-danger\" href=\"RemoveModule?moduleId="+ moduleId + "\">Delete</a></td>");
+           }
+           
+           out.println("<tr>");
+        }
+        out.println("</tbody>"
+                + "</table>");
+    }        
+            
         private void addModuleForm(PrintWriter out)  {
             
             out.println("<div>");
