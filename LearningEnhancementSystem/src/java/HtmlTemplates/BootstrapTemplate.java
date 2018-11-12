@@ -94,8 +94,8 @@ public class BootstrapTemplate {
 "            <a class=\"dropdown-item\" href=\"PeopleStudents\">Students</a>\n" +
 "            <a class=\"dropdown-item\" href=\"PeopleTeachers\">Teachers</a>\n" +
 "            <a class=\"dropdown-item\" href=\"People\">Everyone</a>\n" +
-"            <div class=\"dropdown-divider\"></div>\n" +
-"            <a class=\"dropdown-item \" href=\"#\">Test</a>\n" +
+//"            <div class=\"dropdown-divider\"></div>\n" +
+//"            <a class=\"dropdown-item \" href=\"#\">Test</a>\n" +
 "          </div>\n" +
 "        </li>\n" +
 "      </ul>\n" +
@@ -145,11 +145,10 @@ public class BootstrapTemplate {
      * A bootstrap Jumbotron which displays announcements. placeholder at this moment {18.09}
      * @param out 
      */
-    public void jumbotron(PrintWriter out,String annoSubject,String annoBody,String author) {
-        
-        out.println("<h2>"+ annoSubject + "</h2>");
-        out.println("<p>" + annoBody + "</p>");
-        out.println("<small>" + author + "</small>");
+    public void jumbotron(PrintWriter out) {
+        out.println("<div class=\"jumbotron\">");
+        out.println("<div class=\"container\">");
+        out.println("<h1 class=\"display-4\">Announcements:</h1>");
         out.println("<hr class=\"my-4\">");
     }
     
@@ -161,7 +160,7 @@ public class BootstrapTemplate {
             out.println("<h4 class=\"display-4\">Kommentarer</h4>");
             out.println("</button>");
             out.println("<hr class=\"my-4\">");
-            out.println("<div class=\"collapse\" id=\"collapse\">");
+            out.println("<div class=\"collapse show\" id=\"collapse\">");
             out.println("<div class=\"card-body\">");
     }
     

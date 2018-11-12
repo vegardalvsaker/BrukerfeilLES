@@ -1,5 +1,6 @@
 package Servlets;
 
+import Classes.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -18,6 +19,7 @@ public class People extends SuperServlet {
     BootstrapTemplate bst = new BootstrapTemplate();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        User user = (User)request.getSession().getAttribute("userLoggedIn");
         response.setContentType("text/html;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) { 
@@ -26,9 +28,10 @@ public class People extends SuperServlet {
             bst.containerOpen(out);
            
             bst.containerClose(out);
-            
+            if(user.getUserIsTeacher()){
             addStudentForm(out, response);
             removeStudentForm(out, response);
+            }
             listStudentsForm(out);
             
             bst.bootstrapFooter(out);

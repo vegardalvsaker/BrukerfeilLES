@@ -71,8 +71,13 @@ public class Modules extends SuperServlet {
                 //String moduleContent = modul.getModuleContent();
                 //Boolean moduleIsPublished = modul.getIsPublished();
                 //Boolean moduleInInterview = modul.getInInterview();
-                out.println("<a href=\"OneModule?id="+ moduleId+"\">"+ moduleName + ", " + moduleDesc +"</a>");
+                out.println("<div class=\"row\">");
+                bst.bootstrapCard(out,moduleId, moduleName, moduleDesc);
+                //out.println("<a href=\"OneModule?id="+ moduleId+"\">"+ moduleName + ", " + moduleDesc +"</a><br>");
+                if(user.getUserIsTeacher()){
                 deleteModule(out,moduleId);
+                }
+                out.println("</div>");
             }
             bst.containerClose(out);
             

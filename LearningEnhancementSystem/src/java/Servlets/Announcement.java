@@ -40,10 +40,7 @@ public class Announcement extends SuperServlet {
              if (user.getUserIsTeacher()){
              addAnnouncement(out);
              }
-             out.println("<div class=\"jumbotron\">");
-             out.println("<div class=\"container\">");
-             out.println("<h1 class=\"display-4\">Announcements:</h1>");  
-             out.println("<hr class=\"my-4\">");
+             bst.jumbotron(out);
              for (AnnouncementC announcement : announcementList){
                 String annId = announcement.getAnnId();
                 String annSubject = announcement.getAnnSubject();
@@ -69,7 +66,7 @@ public class Announcement extends SuperServlet {
         out.println("</form>");
     }
     private void addAnnouncement(PrintWriter out) {
-        out.println("<a href=\"AddAnnouncement\"a class=\"btn btn-primary\">Add more</button></a>");
+        out.println("<a href=\"AddAnnouncement\"a class=\"btn btn-secondary btn-lg btn-block\">Add more</button></a>");
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

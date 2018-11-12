@@ -37,8 +37,8 @@ public class AnnouncementDb extends Database {
             while(announcementSet.next()) {
                 AnnouncementC announcemen = new AnnouncementC();
                 announcemen.setAnnId(announcementSet.getString("ann_id"));
-                announcemen.setAnnBody(announcementSet.getString("ann_subject"));
-                announcemen.setAnnSubject(announcementSet.getString("ann_body"));
+                announcemen.setAnnSubject(announcementSet.getString("ann_subject"));
+                announcemen.setAnnBody(announcementSet.getString("ann_body"));
                 announcemen.setAnnUserName(announcementSet.getString("user_name"));
                 announcemen.setAnnTime(announcementSet.getTimestamp("ann_timestamp"));
                 announcements.add(announcemen);
