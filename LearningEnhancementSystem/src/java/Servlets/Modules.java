@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import Database.ModuleDb;
 import Database.LearningGoalDb;
+import java.util.HashMap;
 /**
  *
  * @author Vegard
@@ -41,6 +42,8 @@ public class Modules extends SuperServlet {
          LearningGoalDb learnGoal = new LearningGoalDb();
          db.init();
         
+         HashMap<String, String> hashmap = new HashMap<>();
+         
         if (request.getMethod().equals("POST"))  {
                 
                 String modulnavn = request.getParameter("Modulnavn");
@@ -53,7 +56,9 @@ public class Modules extends SuperServlet {
                 
                 String learnGoalText = request.getParameter("Laringsmal");
                 
+                
                 String learnGoalPoints = request.getParameter("Poeng");
+                
                
                            
                 db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform);
@@ -76,14 +81,12 @@ public class Modules extends SuperServlet {
         private void addModuleForm(PrintWriter out)  {
             
             
-          //  out.println("<a href=\"Modules\">");
-           // out.println("</a>");
+         
+            out.println("<html>");
+       
             out.println("<div>");
-            
-            
-           
+ 
             out.println("<h1>Legg til modul</h1>");
-            
             
             out.println("<form action=\"Modules\" method=\"POST\">");
             out.println("<h3>Modulnavn</h3><br>");
@@ -93,34 +96,64 @@ public class Modules extends SuperServlet {
             out.println("<h3>Innhold</h3><br>");
             out.println("<input type=\"text\" name=\"Innhold\"><br>");      
             out.println("<br>");
-            out.println("<h3>Velg leveringsform</h3>");
+            out.println("<h3>Velg leveringsform</h3><br>");
             out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Muntlig\">Muntlig");
             out.println("<br>");
             out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Video\">Video");
             out.println("<br>");
             
-         //   out.println("</form>");
+        
             
-          //  out.println("<form action=\"Modules\" method=\"POST\">");
+          
             out.println("<h1>Legg til læringsmål</h1>");
-            out.println("<h3>Læringsmål</h3><br>");
-            out.println("<input type=\"text\" name=\"Laringsmal\">");
-            out.println("<input type=\"text\" name=\"Laringsmal\">");
-            out.println("<input type=\"text\" name=\"Laringsmal\">");
-            out.println("<input type=\"text\" name=\"Laringsmal\">");
-            out.println("<input type=\"text\" name=\"Laringsmal\">");
-            out.println("<h3>Poeng</h3><br>");
-            out.println("<input type=\"text\" name=\"Poeng\">");
-            out.println("<input type=\"text\" name=\"Poeng\">");
-            out.println("<input type=\"text\" name=\"Poeng\">");
-            out.println("<input type=\"text\" name=\"Poeng\">");
-            out.println("<input type=\"text\" name=\"Poeng\">");
-           // out.println("<input type=\"submit\" value=\"Legg til læringsmål\"><br>");
-            out.println("<input type=\"submit\" value=\"Legg til modul\"><br>");
+            
+          //  out.println("<input type=\"text\" name=\"Laringsmal\">");
+            
+            out.println("<script language=\"javascript\">");
+            out.println("var i = 0;");
+            out.println("function add() {");
+            
+       
+	    out.println("var div = document.createElement(\"div\");");
+            
+            
+            out.println("div.innerHTML = '<input type=\"text\" name=\"Laringsmal' + i + '\"></input> <input type=\"text\" name=\"Poeng\"></input><br>';");
+            out.println("i++");
+            out.println("var id = document.getElementById(\"inputID\");");
+            
+            
+            out.println("id.appendChild(div);");
+            
+            
+            out.println("}");
+            out.println("</script>");
+    
+            
+            out.println("<style>");
+            out.println("h3 {display:inline;}");
+            out.println("</style>");
+            
+            out.println("<h3>Læringsmål</h3>");
+            
+            out.println("<h3>Poeng</h3>");
+            
+            out.println("<span id=\"inputID\">&nbsp;</span><br>");
+            out.println("<input type=\"button\" value=\"Nytt læringsmål\" onclick=\"add()\"/>");
+            
+            
+            out.println("<input type=\"submit\" value=\"Publiser modul\"><br>");
             out.println("</form>");
             
             out.println("</div>");
- 
+            out.println("</html>");
+            
+            
+            //  out.println("<h3>Poeng</h3><br>"); document.forms[0].element.value
+    //        out.println("<input type=\"text\" name=\"Poeng\">");
+            
+           // out.println("<input type=\"submit\" value=\"Legg til læringsmål\"><br>");
+            
+            
         }
         
     

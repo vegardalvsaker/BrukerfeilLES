@@ -72,9 +72,6 @@ public class LearningGoalDb extends Database {
                 
              PreparedStatement pStatement = connection.prepareStatement(getModuleID); 
              PreparedStatement prepStatement = connection.prepareStatement(addLearnGoal);
-             
-             
-            
                 ) {
             
                 pStatement.setString(1, moduleName);
