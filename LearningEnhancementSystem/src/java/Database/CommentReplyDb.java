@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class CommentReplyDb extends Database{
     private static final String ADD_REPLY = "insert into CommentReply values (default, ?, ?, default,?)";
-    private static final String ALL_REPLYS = "select r.comment_id, r.reply_text, u.user_name from CommentReply r inner join Users u on r.user_id = u.user_id order by r.reply_timestamp;";
+    private static final String ALL_REPLYS = "select r.reply_id, r.comment_id, r.reply_text, u.user_name from CommentReply r inner join Users u on r.user_id = u.user_id order by r.reply_timestamp;";
     private static final String PRINT_REPLY = "select r.reply_id, r.reply_text, u.user_name from CommentReply r inner join Users u on r.user_id = u.user_id where r.comment_id = ? order by r.reply_timestamp;";
     private static final String DEL_SREPLY = "delete from CommentReply where reply_id = ?";
     private static final String DEL_AREPLY = "delete from CommentReply where comment_id = ?";
@@ -30,6 +30,7 @@ public class CommentReplyDb extends Database{
             ){ 
               while(replySet.next()){
                   CommentReply rep = new CommentReply();
+                  rep.setReplyId(replySet.getString("reply_id"));
                   rep.setCommentId(replySet.getString("comment_id"));
                   rep.setReplyText(replySet.getString("reply_text"));
                   rep.setUserName(replySet.getString("user_name"));

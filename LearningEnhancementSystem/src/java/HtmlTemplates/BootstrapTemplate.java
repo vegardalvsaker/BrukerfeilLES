@@ -151,7 +151,22 @@ public class BootstrapTemplate {
         out.println("<p>" + annoBody + "</p>");
         out.println("<hr class=\"my-4\">");
     }
+    public void collapseTop(PrintWriter out) {
+            out.println("<p>");
+            out.println("<div class=\"jumbotron\">");
+            out.println("<div class=\"container\">");
+            out.println("<button class=\"btn btn-outline-secondary\" data-toggle=\"collapse\" data-target=\"#collapse\" aria-expanded=\"true\" aria-controls=\"collapse\">");
+            out.println("<h4 class=\"display-4\">Kommentarer</h4>");
+            out.println("</button>");
+            out.println("<hr class=\"my-4\">");
+            out.println("<div class=\"collapse show\" id=\"collapse\">");
+            out.println("<div class=\"card-body\">");
+    }
     
+    public void collapseBottom(PrintWriter out) {
+            out.println("</div>");
+            out.println("</div>");
+    }
     
     
     /**
