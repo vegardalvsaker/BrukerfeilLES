@@ -17,7 +17,7 @@ import java.sql.SQLException;
  */
 public class InboxDb extends Database {
     
-    private static final String SELECT_ALL_MESSAGES = "select * from Message where user_id = ?";
+    private static final String SELECT_ALL_MESSAGES = "select * from Message where msg_sender = ? or msg_receiver = ?";
     
     public InboxDb() {
         init();
@@ -30,6 +30,7 @@ public class InboxDb extends Database {
                 PreparedStatement ps = conn.prepareStatement(SELECT_ALL_MESSAGES);)
                  {
             ps.setString(1, userId);
+            ps.setString(2, userId);
             try (ResultSet rs = ps.executeQuery();) {
                 while (rs.next()) {
                     Message message = new Message();
