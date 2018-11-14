@@ -21,8 +21,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
-
-import java.util.Map;
 import java.util.List;
 
 /**
@@ -35,7 +33,6 @@ public class OneModule extends SuperServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         User user = (User)request.getSession().getAttribute("userLoggedIn");
-        Map<String, String[]> paramap = request.getParameterMap();
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("id");
         try (PrintWriter out = response.getWriter()) {
@@ -56,26 +53,23 @@ public class OneModule extends SuperServlet {
             ddb.getNrOfDeliveries(id,out);
 
              if (request.getMethod().equals("POST"))  {
-                if (paramap.containsKey("delete")) {
-                    if (paramap.get("delete")[0].equals("TRUE")) {
+                if (request.getParameter("delete")!=(null)){
                     String commId = request.getParameter("comment_id");
                     crdb.deleteAll(commId);
                     cdb.deleteComment(commId);
-                    
-                    }
-                } if (paramap.containsKey("deleteR")) {
+                }
+                if (request.getParameter("deleteR")!=(null)){
                     String repid = request.getParameter("reply_id");
                     crdb.deleteSingle(repid);
                 }
-                if (paramap.containsKey("comment")) {
+                if (request.getParameter("addC")!=(null)) {
                     String comText = request.getParameter("comment");
                     if (comText.equals("")){
                         out.println("Enter text before posting");
                     } else 
                     cdb.addComment(id, user.getUserId(), comText);
-
                 }
-                if (paramap.containsKey("reply") && paramap.containsKey("comment_id")){
+                if (request.getParameter("addR")!=(null)){
                     String commId = request.getParameter("comment_id");
                     String repText = request.getParameter("reply");
                     if (repText.equals("")){
@@ -119,7 +113,7 @@ public class OneModule extends SuperServlet {
                         addReply(out,commentModuleId,commentId);
                         out.println("<hr class=\"my-4\">");
             }
-            addComment(out,request);
+            addComment(out,id);
             bst.collapseBottom(out);
             bst.containerClose(out);
             bst.bootstrapFooter(out); 
@@ -133,51 +127,50 @@ public class OneModule extends SuperServlet {
                     + "</a>");                    
     }
     
+    private void deliver(PrintWriter out, HttpServletRequest request){
+            String id = request.getParameter("id");
+            out.println("<a href=\"Delivery?id="+ id +" \"a class=\"btn btn-info\">Deliver!</button></a>");
+    }
+    
+    private void addComment(PrintWriter out, String moduleId){
+            out.println("<div>");
+            out.println("<form action=\"OneModule?id="+ moduleId +"\" method=\"POST\">");
+            out.println("<input type=\"hidden\" name=\"addC\" value=\"TRUE\">");
+            out.println("<h3>Legg til kommentar</h3><br>");
+            out.println("<textarea rows=\"4\" cols=\"30\" name=\"comment\"></textarea>");
+            //out.println("<input type =\"text\" name=\"comment\">"); 
+            out.println("<input type=\"submit\" value=\"Legg til\"><br>");        
+            out.println("</form>");
+            out.println("</div>");
+    }
+    
+    private void deleteComment(PrintWriter out, String moduleId, String commentId) {
+            out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
+            out.println("<input type=\"hidden\" name=\"delete\" value=\"TRUE\">");
+            out.println("<input type=\"hidden\" name=\"comment_id\" value=\""+ commentId +"\"/>");
+            out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete comment\">");
+            out.println("</form>");
+    }
+    
     private void addReply(PrintWriter out, String moduleId,String commentId){
             out.println("<div>");
             out.println("<form action=\"OneModule?id="+ moduleId +"\" method=\"POST\">");
-            out.println("<input type=\"hidden\" name=\"delete\" value=\"FALSE\"");
-            out.println("<p>Svar:</p>");
-            out.println("<input type =\"text\" name=\"reply\">"); 
-            out.println("<input type=\"text\" name=\"comment_id\" value=\""+ commentId +"\"style=\"visibility:hidden;\"/><br>");
-            out.println("<input type=\"submit\" value=\"Legg til\">");        
+            out.println("<input type=\"hidden\" name=\"addR\" value=\"TRUE\">");
+            out.println("<p style=\"margin-left:2.5em;\"> Svar:</p>");
+            out.println("<input style=\"margin-left:2.5em;\" type =\"text\" name=\"reply\">"); 
+            out.println("<input style=\"margin-left:2.5em;\" type=\"hidden\" name=\"comment_id\" value=\""+ commentId +"\"/><br>");
+            out.println("<input style=\"margin-left:2.5em;\" type=\"submit\" value=\"Legg til\">");        
             out.println("</form>");
             out.println("</div>");
     }
 
 private void deleteReply(PrintWriter out, String moduleId, String replyid )  {
             out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
-            out.println("<input type=\"text\" name=\"deleteR\" value=\"TRUE\"style=\"visibility:hidden;\">");
-            out.println("<input type=\"text\" name=\"reply_id\" value=\""+ replyid +"\"style=\"visibility:hidden;\"/>");
-            out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete reply\">");
+            out.println("<input style=\"margin-left:2.5em;\" type=\"hidden\" name=\"deleteR\" value=\"TRUE\">");
+            out.println("<input style=\"margin-left:2.5em;\" type=\"hidden\" name=\"reply_id\" value=\""+ replyid +"\"/>");
+            out.println("<input style=\"margin-left:2.5em;\" type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete reply\">");
             out.println("</form>");
-}  
-
-private void deleteComment(PrintWriter out, String moduleId, String commentId) {
-            out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
-            out.println("<input type=\"text\" name=\"delete\" value=\"TRUE\"style=\"visibility:hidden;\">");
-            out.println("<input type=\"text\" name=\"comment_id\" value=\""+ commentId +"\"style=\"visibility:hidden;\"/>");
-            out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete comment\">");
-            out.println("</form>");
-}
-    
-private void addComment(PrintWriter out, HttpServletRequest request){
-            String id = request.getParameter("id");
-            out.println("<div>");
-            out.println("<form action=\"OneModule?id="+ id+"\" method=\"POST\">");
-            out.println("<input type=\"hidden\" name=\"delete\" value=\"FALSE\"");
-            out.println("<h3>Legg til kommentar</h3><br>");
-            out.println("<input type =\"text\" name=\"comment\"><br>");
-            out.println("<input type=\"submit\" value=\"Legg til\"><br>");
-            out.println("</form>");
-            out.println("</div>");
-    }
-
-private void deliver(PrintWriter out, HttpServletRequest request){
-            String id = request.getParameter("id");
-            out.println("<a href=\"Delivery?id="+ id +" \"a class=\"btn btn-info\">Deliver!</button></a>");
-    }
-
+    }  
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
