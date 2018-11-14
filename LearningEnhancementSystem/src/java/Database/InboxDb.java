@@ -19,6 +19,7 @@ public class InboxDb extends Database {
     
     private static final String SELECT_ALL_MESSAGES = "select * from Message where msg_sender = ? or msg_receiver = ?";
     private static final String UDATE_MESSAGE_READ = "update Message set msg_read = true where msg_id = ?";
+    private static final String INSERT_MESSAGE = "insert into Message values (default, ?, ?, ?, ?, default, default)";
     
     public InboxDb() {
         init();
@@ -50,6 +51,25 @@ public class InboxDb extends Database {
                 System.out.println("Method: getUsersMessages(), Error: " + ex);
                 return null;
                 }  
+    }
+    
+    public void sendMessage(String[] messageInfo) {
+        UserDb uDb = new UserDb();
+        uDb.init();
+        String recipientId = uDb.getUserId(messageInfo[1]);
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(INSERT_MESSAGE);
+                ) {
+            ps.setString(1, messageInfo[0]);
+            ps.setString(2, recipientId);
+            ps.setString(3, messageInfo[2]);
+            ps.setString(4, messageInfo[3]);
+            ps.executeUpdate();
+                                                
+        } catch (SQLException ex) {
+            System.out.println("Method: sendMessage(), Error: " + ex);
+        }
     }
     
     public void updateMessageIsRead(String msgId) {

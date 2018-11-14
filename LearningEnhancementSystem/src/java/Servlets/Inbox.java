@@ -39,12 +39,39 @@ public class Inbox extends SuperServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
            printJavaScript(out);
-           request.getParameterMap();
-           
            super.processRequest(request, response, "", out);
-           User user = (User)request.getSession().getAttribute("userLoggedIn");
-           ArrayList<Message> messages = iDb.getUsersMessages(user.getUserId());
+           if (request.getMethod().equals("POST")) {
+               sendMessage(out, request);
+           }
            
+           listMessages(out, request);
+           
+           if (request.getParameterMap().containsKey("newMsg")) {
+               printSendMessageForm(out, request);
+           } else {
+               printMessage(out, request);
+               out.println("</div>");
+           }               
+           bst.bootstrapFooter(out);
+        }
+    }
+    
+    private void sendMessage(PrintWriter out, HttpServletRequest request) {
+        if (request.getParameterMap().containsKey("sendMsg")) {
+            String[] messageInfo = new String[4];
+            User user = (User)request.getSession().getAttribute("userLoggedIn");
+            messageInfo[0] = user.getUserId();
+            messageInfo[1] = request.getParameter("recipient");
+            messageInfo[2] = request.getParameter("subject");
+            messageInfo[3] = request.getParameter("newMessage");
+
+            iDb.sendMessage(messageInfo);
+        }
+    }
+    
+    private void listMessages(PrintWriter out, HttpServletRequest request) {
+        User user = (User)request.getSession().getAttribute("userLoggedIn");
+           ArrayList<Message> messages = iDb.getUsersMessages(user.getUserId());
            out.println("<div class=\"container-fluid\">\n" +
 "            <div class=\"row\">\n" +
 "              <div class=\"col-3 offset-md-1\">\n");
@@ -59,41 +86,44 @@ public class Inbox extends SuperServlet {
 "                  </thead>\n" +
 "                  <tbody>");
            HashMap<String, Message> mesMap = new HashMap();
-           for (Message message : messages) {
+            
                if (request.getParameterMap().containsKey("sent")) {
-                   if(message.getSender().equals(user.getUserId())) {
-                   mesMap.put(message.getMsgId(), message);
-                   String readOrNot = message.isRead() ? "" : "table-active";
-                   out.println("<tr class=\""+readOrNot+"\">\n" +
-"                      <td>"+message.getSender()+"</td>\n" +
-"                      <td>"+ message.getSubject() +"</td>\n" +
-"                      <td><a class=\"btn btn-warning\" href=\"Inbox?msgId="+ message.getMsgId() +"\">Open</a></td>" +
-"                    </tr>");
+                   for (Message message : messages) {
+                       if(message.getSender().equals(user.getUserId())) {
+                            mesMap.put(message.getMsgId(), message);
+                            String readOrNot = message.isRead() ? "" : "table-active";
+                            out.println("<tr class=\""+readOrNot+"\">\n" +
+         "                      <td>"+message.getSender()+"</td>\n" +
+         "                      <td>"+ message.getSubject() +"</td>\n" +
+         "                      <td><a class=\"btn btn-warning\" href=\"Inbox?msgId="+ message.getMsgId() +"\">Open</a></td>" +
+         "                    </tr>");
                     }
+                   }
+                   
                } else {
-                   if(message.getReceiver().equals(user.getUserId())) {
-                   mesMap.put(message.getMsgId(), message);
-                   String readOrNot = message.isRead() ? "" : "table-active";
-                   out.println("<tr class=\""+readOrNot+"\">\n" +
-"                      <td>"+message.getSender()+"</td>\n" +
-"                      <td>"+ message.getSubject() +"</td>\n" +
-"                      <td><a class=\"btn btn-warning\" href=\"Inbox?msgId="+ message.getMsgId() +"\">Open</a></td>" +
-"                    </tr>");
+                   for (Message message : messages) {
+                       if(message.getReceiver().equals(user.getUserId())) {
+                            mesMap.put(message.getMsgId(), message);
+                            String readOrNot = message.isRead() ? "" : "table-active";
+                            out.println("<tr class=\""+readOrNot+"\">\n" +
+         "                      <td>"+message.getSender()+"</td>\n" +
+         "                      <td>"+ message.getSubject() +"</td>\n" +
+         "                      <td><a class=\"btn btn-warning\" href=\"Inbox?msgId="+ message.getMsgId() +"\">Open</a></td>" +
+         "                    </tr>");
                     }
+                   }
                }
-           }
+           out.println("<a href=\"Inbox?newMsg\"class=\"btn btn-danger\">New</a>");
            out.println("</tbody>\n" +
 "                </table>\n" +
 "              </div>");
+           
            request.setAttribute("mesMap", mesMap);
-           printMessage(out, request);
-           bst.bootstrapFooter(out);
-        }
     }
     
     private void printMessage(PrintWriter out, HttpServletRequest request) {
         
-        out.println("<div id=\"inbox\" class=\"col-6 m-3\">\n" +
+        out.println("<div id=\"inbox\" class=\"col-3 offset-md-1\">\n" +
 "              <div  id=\"message\">");
            if (request.getParameterMap().containsKey("msgId")) {
                
@@ -109,7 +139,8 @@ public class Inbox extends SuperServlet {
                out.println("<p>"+ message.getText() +"");
 
            }
-           out.println("</div>");
+           out.println("</div>"
+                   + "</div>");
     }
     
     private void printOptionsButtons(PrintWriter out, HttpServletRequest request) {
@@ -119,6 +150,20 @@ public class Inbox extends SuperServlet {
                     out.println("<a class=\"m-2 btn btn-secondary btn-small active\" href=\"Inbox\">Show received</a><a class=\"m-2 btn btn-secondary btn-small\" href=\"Inbox?sent\">Show sent</a>");
 
         }
+    }
+    
+    private void printSendMessageForm(PrintWriter out, HttpServletRequest request) {
+        //sendMessageCSS(out);
+        out.println("<div id=\"sendMessage\" class=\"col-6 m-3\">");
+        out.println("<form action=\"Inbox?sendMsg\" method=\"POST\" id=\"sendMessage\">"
+                + "<div class=\"form-group row\">"
+                + "<label for=\"from\">From:</label><input class=\"ml-0\" id=\"from\" type=\"text\" placeholder=\""+ request.getRemoteUser() +"\" readonly></input></div>"
+                + "<div class=\"form-group row\"><label for=\"recipient\">To:</label><input class=\"ml-0\" id=\"recipient\" type=\"text\" name=\"recipient\"></input></div>"
+                + "<div class=\"form-group row\"><label for=\"subject\">Subject:</label><input class=\"ml-0\" id=\"subject\" type=\"text\" name=\"subject\"></input></div>"
+                + "<div class=\"form-group row\">Message:<textarea class=\"form-control\" name=\"newMessage\" id=\"newMessage\" rows=\"10\" form=\"sendMessage\"></textarea></div>"
+                + "<input class=\"btn btn-primary\" type=\"submit\" value=\"Send!\"></input>");
+        out.println("</form>"
+                + "</div>");
     }
     
     private void messageCSS(PrintWriter out) {
@@ -132,6 +177,13 @@ public class Inbox extends SuperServlet {
                 + "</style>");
     }
     
+    private void sendMessageCSS(PrintWriter out) {
+        out.println("<style>"
+                + "label {"
+                + "     width: 80px;"
+                + "}"
+                + "</style");
+    }
     private void printJavaScript(PrintWriter out) {
         out.println("<script>\n" +
 "        function showMessage(text, subject) {\n" +

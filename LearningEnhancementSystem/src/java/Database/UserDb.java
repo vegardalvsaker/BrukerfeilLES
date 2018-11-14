@@ -13,8 +13,9 @@ import java.util.ArrayList;
  * @author Vegard & Gorm & Fosse
  */
 public class UserDb extends Database {
-    static final String USER_EXIST = "select  count(*) from Users where user_email = ?";
-    static final String SLCT_USER = "select * from Users where user_email = ?";
+    private static final String USER_EXIST = "select  count(*) from Users where user_email = ?";
+    private static final String SLCT_USER = "select * from Users where user_email = ?";
+    private static final String SELECT_USERID = "select user_id from Users where user_email = ?";
     
 
   // Fosse
@@ -52,6 +53,26 @@ public class UserDb extends Database {
         } 
          
         return false;
+    }
+    
+    public String getUserId(String email) {
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(SELECT_USERID);
+                ) {
+                    ps.setString(1, email);
+                    try (ResultSet rs = ps.executeQuery();) {
+                        if(rs.next()) {
+                        return rs.getString("user_id");
+                    }
+                    }
+                    
+                } 
+                    catch (SQLException ex) {
+                        System.out.println("Method: getUserId(), Error: "+ ex);
+                        return null;
+                        }
+        return null;
     }
     
     public User getUser(String email) {
