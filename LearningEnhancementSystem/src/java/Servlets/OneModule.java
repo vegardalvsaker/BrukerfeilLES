@@ -79,6 +79,11 @@ public class OneModule extends SuperServlet {
             db.printLearningGoals(id, out);
             
             List<Classes.Delivery> deliveryList = ddb.getDeliveryWithUserIdAndModuleId(id, user.getUserId());
+            if (deliveryList == null) {
+                out.println("<h1> No deliviers</h1>");
+            } else {
+                
+            
             for (Classes.Delivery delivery : deliveryList){
                 if (delivery.getDeliveryID()!=(null)){
                     String moduleId = delivery.getModuleID();
@@ -89,6 +94,7 @@ public class OneModule extends SuperServlet {
                 }
                 deliver(out,request);
                 }
+            }
             
             
             cdb.printComments(mId,out);
