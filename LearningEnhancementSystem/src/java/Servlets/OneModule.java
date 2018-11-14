@@ -79,7 +79,7 @@ public class OneModule extends SuperServlet {
             db.printLearningGoals(id, out);
             
             List<Classes.Delivery> deliveryList = ddb.getDeliveryWithUserIdAndModuleId(id, user.getUserId());
-            if (deliveryList == null) {
+            if (deliveryList.size() != 0) {
                 Editdelivery(out,request);
             } else {
                 
