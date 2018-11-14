@@ -138,7 +138,6 @@ public class OneModule extends SuperServlet {
             out.println("<input type=\"hidden\" name=\"addC\" value=\"TRUE\">");
             out.println("<h3>Legg til kommentar</h3><br>");
             out.println("<textarea rows=\"4\" cols=\"30\" name=\"comment\"></textarea>");
-            //out.println("<input type =\"text\" name=\"comment\">"); 
             out.println("<input type=\"submit\" value=\"Legg til\"><br>");        
             out.println("</form>");
             out.println("</div>");
@@ -157,7 +156,7 @@ public class OneModule extends SuperServlet {
             out.println("<form action=\"OneModule?id="+ moduleId +"\" method=\"POST\">");
             out.println("<input type=\"hidden\" name=\"addR\" value=\"TRUE\">");
             out.println("<p style=\"margin-left:2.5em;\"> Svar:</p>");
-            out.println("<input style=\"margin-left:2.5em;\" type =\"text\" name=\"reply\">"); 
+            out.println("<textarea style=\"margin-left:2.5em;\" rows=\"2\" cols=\"30\" name=\"reply\"></textarea>"); 
             out.println("<input style=\"margin-left:2.5em;\" type=\"hidden\" name=\"comment_id\" value=\""+ commentId +"\"/><br>");
             out.println("<input style=\"margin-left:2.5em;\" type=\"submit\" value=\"Legg til\">");        
             out.println("</form>");
