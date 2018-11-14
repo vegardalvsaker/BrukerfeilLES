@@ -18,6 +18,7 @@ import java.sql.SQLException;
 public class InboxDb extends Database {
     
     private static final String SELECT_ALL_MESSAGES = "select * from Message where msg_sender = ? or msg_receiver = ?";
+    private static final String UDATE_MESSAGE_READ = "update Message set msg_read = true where msg_id = ?";
     
     public InboxDb() {
         init();
@@ -49,5 +50,16 @@ public class InboxDb extends Database {
                 System.out.println("Method: getUsersMessages(), Error: " + ex);
                 return null;
                 }  
+    }
+    
+    public void updateMessageIsRead(String msgId) {
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(UDATE_MESSAGE_READ);) {
+            ps.setString(1, msgId);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Method: updateMessageIsRead(), error: " + ex);
+        }
     }
 }

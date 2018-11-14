@@ -16,13 +16,14 @@ import Database.InboxDb;
 import java.util.ArrayList;
 import Classes.Message;
 import java.util.HashMap;
+import HtmlTemplates.BootstrapTemplate;
 /**
  *
  * @author Vegard
  */
 @WebServlet(name = "Inbox", urlPatterns = {"/Inbox"})
 public class Inbox extends SuperServlet {
-
+    private BootstrapTemplate bst = new BootstrapTemplate();
     private InboxDb iDb = new InboxDb();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,14 +39,18 @@ public class Inbox extends SuperServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
            printJavaScript(out);
+           request.getParameterMap();
+           
            super.processRequest(request, response, "", out);
            User user = (User)request.getSession().getAttribute("userLoggedIn");
            ArrayList<Message> messages = iDb.getUsersMessages(user.getUserId());
            
            out.println("<div class=\"container-fluid\">\n" +
 "            <div class=\"row\">\n" +
-"              <div class=\"col-4\">\n" +
-"                <table class=\"table table-active\">\n" +
+"              <div class=\"col-3 offset-md-1\">\n");
+            printOptionsButtons(out, request);    
+            
+            out.println("<table class=\"table table-default\">\n" +
 "                  <thead>\n" +
 "                    <tr>\n" +
 "                      <th scope=\"col\">From</th>\n" +
@@ -55,20 +60,76 @@ public class Inbox extends SuperServlet {
 "                  <tbody>");
            HashMap<String, Message> mesMap = new HashMap();
            for (Message message : messages) {
-               if(message.getReceiver().equals(user.getUserId())) {
+               if (request.getParameterMap().containsKey("sent")) {
+                   if(message.getSender().equals(user.getUserId())) {
                    mesMap.put(message.getMsgId(), message);
-                   out.println("<tr onClick=\"showMessage("+ message.getText() +", "+ message.getSubject() +")\">\n" +
+                   String readOrNot = message.isRead() ? "" : "table-active";
+                   out.println("<tr class=\""+readOrNot+"\">\n" +
 "                      <td>"+message.getSender()+"</td>\n" +
 "                      <td>"+ message.getSubject() +"</td>\n" +
+"                      <td><a class=\"btn btn-warning\" href=\"Inbox?msgId="+ message.getMsgId() +"\">Open</a></td>" +
 "                    </tr>");
+                    }
+               } else {
+                   if(message.getReceiver().equals(user.getUserId())) {
+                   mesMap.put(message.getMsgId(), message);
+                   String readOrNot = message.isRead() ? "" : "table-active";
+                   out.println("<tr class=\""+readOrNot+"\">\n" +
+"                      <td>"+message.getSender()+"</td>\n" +
+"                      <td>"+ message.getSubject() +"</td>\n" +
+"                      <td><a class=\"btn btn-warning\" href=\"Inbox?msgId="+ message.getMsgId() +"\">Open</a></td>" +
+"                    </tr>");
+                    }
                }
            }
            out.println("</tbody>\n" +
 "                </table>\n" +
 "              </div>");
-           out.println("<div id=\"inbox\" class=\"col-6\">\n" +
-"              <div  id=\"noMessage\" class=\"text-center\"></div>");
+           request.setAttribute("mesMap", mesMap);
+           printMessage(out, request);
+           bst.bootstrapFooter(out);
         }
+    }
+    
+    private void printMessage(PrintWriter out, HttpServletRequest request) {
+        
+        out.println("<div id=\"inbox\" class=\"col-6 m-3\">\n" +
+"              <div  id=\"message\">");
+           if (request.getParameterMap().containsKey("msgId")) {
+               
+               messageCSS(out);
+               String msgId = request.getParameter("msgId");
+               iDb.updateMessageIsRead(msgId);
+               
+               HashMap<String, Message> mesMap = (HashMap<String, Message>)request.getAttribute("mesMap");
+               Message message = mesMap.get(msgId);
+               
+               out.println("<h2>"+ message.getSubject() +"</h2>");
+               out.println("<h5>"+ message.getSender() +"</h5><hr>");
+               out.println("<p>"+ message.getText() +"");
+
+           }
+           out.println("</div>");
+    }
+    
+    private void printOptionsButtons(PrintWriter out, HttpServletRequest request) {
+        if(request.getParameterMap().containsKey("sent")) {
+                    out.println("<a class=\"m-2 btn btn-secondary btn-small \" href=\"Inbox\">Show received</a><a class=\"m-2 btn btn-secondary btn-small active\" href=\"Inbox?sent\">Show sent</a>");
+        } else {
+                    out.println("<a class=\"m-2 btn btn-secondary btn-small active\" href=\"Inbox\">Show received</a><a class=\"m-2 btn btn-secondary btn-small\" href=\"Inbox?sent\">Show sent</a>");
+
+        }
+    }
+    
+    private void messageCSS(PrintWriter out) {
+        out.println("<style>"
+                + "#inbox {"
+                + "     height: 500px;"
+                + "     width: auto;"
+                + "     border-width: 5px;"
+                + "     border-style: solid;"
+                + "}"
+                + "</style>");
     }
     
     private void printJavaScript(PrintWriter out) {
