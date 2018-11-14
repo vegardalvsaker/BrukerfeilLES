@@ -3,7 +3,6 @@ package Database;
 
 import java.sql.*;
 import Classes.Delivery;
-import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.sql.*;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -11,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -23,6 +23,34 @@ public class DeliveryDb extends Database{
     private static final String ADD_DELIVERY = "insert into Delivery values (default, ?, ?, ?, ?, default, default)";
     private static final String GET_DELIVERY_FORM ="select * from Module where module_id = ?";
     private static final String SLCT_ALL_DELIVERIES = "select * from Delivery where module_id = ?";
+    private static final String CHECK_DELIVERY = "select delivery_id, module_id, user_id, user_name from Delivery D inner join Users U on D.student_id = U.user_id where module_id = ? and user_id = ?";
+    
+    public List<Delivery> getDeliveryWithUserIdAndModuleId(String moduleId, String studentId) {
+        ArrayList<Delivery> delivery =new ArrayList<>();
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(CHECK_DELIVERY);)
+               {
+             ps.setString(1, moduleId);
+            ps.setString(2, studentId);   
+            try (ResultSet deliverySet = ps.executeQuery();) {
+            while(deliverySet.next()) {
+                Delivery deliveries = new Delivery();
+                deliveries.setDeliveryID(deliverySet.getString("deliver_id"));
+                deliveries.setModuleID(deliverySet.getString("module_id"));
+                deliveries.setStudentID(deliverySet.getString("student_id"));
+                delivery.add(deliveries);
+            }
+            return delivery;
+        }
+               }
+        catch (SQLException ex) {
+            System.out.println("Query error:" + ex);
+        }
+        return null;
+    }
+    
+    
     
     public DeliveryDb() {
         init();
@@ -41,7 +69,7 @@ public class DeliveryDb extends Database{
          
                 Delivery delivery = new Delivery();
                 
-                delivery.setDeliveryID(rs.getInt("delivery_id"));
+                delivery.setDeliveryID(rs.getString("delivery_id"));
                 delivery.setStudentID(rs.getString("student_id"));
                 delivery.setStudentName(rs.getString("user_name"));
                 delivery.setModuleID(rs.getString("module_id"));
@@ -138,7 +166,7 @@ public class DeliveryDb extends Database{
             while(rset.next())   {
                 Delivery del = new Delivery();
                 del.setModuleName(rset.getString("module_name"));
-                del.setDeliveryID(rset.getInt("delivery_id"));
+                del.setDeliveryID(rset.getString("delivery_id"));
                 del.setStudentID(rset.getString("user_id"));
                 del.setModuleID(rset.getString("module_id"));
                 del.setDeliveryContent(rset.getString("delivery_content"));
@@ -180,8 +208,8 @@ public class DeliveryDb extends Database{
         }
     }
     
-    public boolean editDelivery (String moduleId, String content){
-        String moduleId = request.getParameter("id");
+    public boolean editDelivery (String deliveryId, String content){
+        
         String editDeliveryContent = "update Delivery set delivery_content = ?, where delivery_id = ?";
         
         try(
@@ -189,8 +217,8 @@ public class DeliveryDb extends Database{
             PreparedStatement prepStatement = connection.prepareStatement(editDeliveryContent);
         
         ) {
-            prepStatement.setString(1, id);
             prepStatement.setString(1, content);
+            prepStatement.setString(2, deliveryId);
         
             prepStatement.executeUpdate();
             
@@ -199,7 +227,7 @@ public class DeliveryDb extends Database{
           }
         
         catch(SQLException ex)  {
-            out.println("Error");
+            System.out.println("Error");
         }
         return false;
     }

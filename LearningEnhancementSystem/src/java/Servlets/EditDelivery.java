@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -20,9 +22,10 @@ import javax.servlet.annotation.WebServlet;
 public class EditDelivery extends SuperServlet {
     BootstrapTemplate bootstrap = new BootstrapTemplate();
     
-    protect void processRequest (httpServletRequest request, HttpServletRespons respons)
+      protected void processRequest (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        respons-setContentType();
+        //response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         
         try (PrintWriter out = response.getWriter()) {
             
@@ -30,11 +33,11 @@ public class EditDelivery extends SuperServlet {
             DeliveryDb db = new DeliveryDb();
             db.init();
             
-            if (request.getMethod().equls("Edit")) {
+             if (request.getMethod().equals("Edit")) {
                 
                 String deliveryContent = request.getParameter ("Link");
-                
-                db.editModule(out, request, deliveryContent);
+                //editModule tar to parametre. (String moduleId, String content)
+                db.editDelivery( deliveryId, deliveryContent);
             }
         } 
                

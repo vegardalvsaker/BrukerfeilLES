@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import Classes.User;
+import java.util.List;
 
 /**
  *
@@ -76,7 +77,20 @@ public class OneModule extends SuperServlet {
 
 
             db.printLearningGoals(id, out);
-            deliver(out,request);
+            
+            List<Classes.Delivery> deliveryList = ddb.getDeliveryWithUserIdAndModuleId(id, user.getUserId());
+            for (Classes.Delivery delivery : deliveryList){
+                if (delivery.getDeliveryID()!=(null)){
+                    String moduleId = delivery.getModuleID();
+                String userId = delivery.getStudentID();
+                
+                out.println("<h3>" + moduleId + "</h3>");
+                out.println("<h3>" + userId + "</h3>");
+                }
+                deliver(out,request);
+                }
+            
+            
             cdb.printComments(mId,out);
             addComment(out,request);
             bst.containerClose(out);
