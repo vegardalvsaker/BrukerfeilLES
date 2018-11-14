@@ -26,7 +26,7 @@ public class EditDelivery extends SuperServlet {
             throws ServletException, IOException {
         //response.setContentType("text/html;charset=UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        
+        String deliveryId = request.getParameter("id");
         try (PrintWriter out = response.getWriter()) {
             
             super.processRequest (request, response, "Delivery", out);

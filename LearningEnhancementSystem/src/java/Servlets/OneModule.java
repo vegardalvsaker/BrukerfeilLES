@@ -80,20 +80,10 @@ public class OneModule extends SuperServlet {
             
             List<Classes.Delivery> deliveryList = ddb.getDeliveryWithUserIdAndModuleId(id, user.getUserId());
             if (deliveryList == null) {
-                out.println("<h1> No deliviers</h1>");
+                Editdelivery(out,request);
             } else {
                 
-            
-            for (Classes.Delivery delivery : deliveryList){
-                if (delivery.getDeliveryID()!=(null)){
-                    String moduleId = delivery.getModuleID();
-                String userId = delivery.getStudentID();
-                
-                out.println("<h3>" + moduleId + "</h3>");
-                out.println("<h3>" + userId + "</h3>");
-                }
                 deliver(out,request);
-                }
             }
             
                 
@@ -139,6 +129,11 @@ private void addComment(PrintWriter out, HttpServletRequest request){
 private void deliver(PrintWriter out, HttpServletRequest request){
             String id = request.getParameter("id");
             out.println("<a href=\"Delivery?id="+ id +" \"a class=\"btn btn-info\">Deliver!</button></a>");
+    }
+
+    private void Editdelivery(PrintWriter out, HttpServletRequest request){
+            String id = request.getParameter("id");
+            out.println("<a href=\"EditDelivery?id="+ id +" \"a class=\"btn btn-info\">EditDelivery!</button></a>");
     }
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
