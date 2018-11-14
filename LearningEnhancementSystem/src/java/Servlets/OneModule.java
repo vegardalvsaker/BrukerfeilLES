@@ -7,11 +7,11 @@ package Servlets;
 
 import Classes.Comment;
 import Classes.CommentReply;
+import Classes.User;
+
 import Database.LearningGoalDb;
 import Database.CommentDb;
-
 import Database.CommentReplyDb;
-
 import Database.DeliveryDb;
 
 import java.io.IOException;
@@ -23,8 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 
 import java.util.Map;
-
-import Classes.User;
 import java.util.List;
 
 /**
@@ -55,18 +53,13 @@ public class OneModule extends SuperServlet {
             ddb.init();
             bst.containerOpen(out);
 
-            int mId = Integer.parseInt(id);
-
             ddb.getNrOfDeliveries(id,out);
-            
-            
 
              if (request.getMethod().equals("POST"))  {
                 if (paramap.containsKey("delete")) {
                     if (paramap.get("delete")[0].equals("TRUE")) {
-                    String comid = request.getParameter("comment_id");
-                    int commId = Integer.parseInt(comid);
-                    crdb.deleteAll(comid);
+                    String commId = request.getParameter("comment_id");
+                    crdb.deleteAll(commId);
                     cdb.deleteComment(commId);
                     
                     }
@@ -79,31 +72,25 @@ public class OneModule extends SuperServlet {
                     if (comText.equals("")){
                         out.println("Enter text before posting");
                     } else 
-                    cdb.addComment(mId, user.getUserId(), comText);
+                    cdb.addComment(id, user.getUserId(), comText);
 
                 }
                 if (paramap.containsKey("reply") && paramap.containsKey("comment_id")){
-                    int comId = Integer.parseInt(request.getParameter("comment_id"));
+                    String commId = request.getParameter("comment_id");
                     String repText = request.getParameter("reply");
                     if (repText.equals("")){
                         out.println("Enter text before posting");
                     } else 
-                    crdb.addReply(comId, user.getUserId(), repText);
+                    crdb.addReply(commId, user.getUserId(), repText);
                 }
             }
 
-            
-
-           
             editModuleButtonForm(out,request);
-
 
             db.printLearningGoals(id, out);
             deliver(out,request);
             
-            List<Comment> commentList = cdb.getComments();
-            List<CommentReply> replyList = crdb.getCommentReplys();
-
+            List<Comment> commentList = cdb.getComments(id);
             bst.collapseTop(out);
             for (Comment comment : commentList){
                 String commentId = comment.getCommentId();
@@ -111,19 +98,17 @@ public class OneModule extends SuperServlet {
                 String commentUserName = comment.getUserName();
                 String commentUserId = comment.getUserId();
                 String commentModuleId = comment.getModuleId();
-                if (commentModuleId.equals(id)){
                     out.println("<p>" + commentText + "</p>");
                     out.println("<p>" + commentUserName + "</p>");
                     if (user.getUserIsTeacher()||(user.getUserId().equals(commentUserId))){
                     deleteComment(out,commentModuleId,commentId);
                     }
+                    List<CommentReply> replyList = crdb.getCommentReplys(commentId);
                     for (CommentReply reply : replyList){
                         String replyId = reply.getReplyId();
                         String replyText = reply.getReplyText();
                         String replyUserName = reply.getUserName();
                         String replyUserId = reply.getUserId();
-                        String replyCommentId = reply.getCommentId();
-                        if (commentId.equals(replyCommentId)){
                             out.println("<hr class=\"my-4\">");
                             out.println("<p style=\"margin-left:2.5em;\">" + replyText + "</p>");
                             out.println("<p style=\"margin-left:2.5em;\">" + replyUserName + "</p>");
@@ -131,10 +116,8 @@ public class OneModule extends SuperServlet {
                             deleteReply(out,commentModuleId,replyId);
                             }
                         }
-                    }
-                    addReply(out,commentModuleId,commentId);
-                    out.println("<hr class=\"my-4\">");
-                }
+                        addReply(out,commentModuleId,commentId);
+                        out.println("<hr class=\"my-4\">");
             }
             addComment(out,request);
             bst.collapseBottom(out);
