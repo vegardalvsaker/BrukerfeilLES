@@ -23,7 +23,7 @@ public class DeliveryDb extends Database{
     private static final String ADD_DELIVERY = "insert into Delivery values (default, ?, ?, ?, ?, default, default)";
     private static final String GET_DELIVERY_FORM ="select * from Module where module_id = ?";
     private static final String SLCT_ALL_DELIVERIES = "select * from Delivery where module_id = ?";
-    private static final String CHECK_DELIVERY = "select delivery_id, module_id, D.student_id, user_id, user_name from Delivery D inner join Users U on D.student_id = U.user_id where module_id = ? and user_id = ?";
+    private static final String CHECK_DELIVERY = "select delivery_id, delivery_content, module_id, D.student_id, user_id, user_name from Delivery D inner join Users U on D.student_id = U.user_id where module_id = ? and user_id = ?";
     
     public List<Delivery> getDeliveryWithUserIdAndModuleId(String moduleId, String studentId) {
         ArrayList<Delivery> delivery =new ArrayList<>();
@@ -37,6 +37,7 @@ public class DeliveryDb extends Database{
             while(deliverySet.next()) {
                 Delivery deliveries = new Delivery();
                 deliveries.setDeliveryID(deliverySet.getString("delivery_id"));
+                deliveries.setDeliveryContent(deliverySet.getString("delivery_content"));
                 deliveries.setModuleID(deliverySet.getString("module_id"));
                 deliveries.setStudentID(deliverySet.getString("student_id"));
                 delivery.add(deliveries);

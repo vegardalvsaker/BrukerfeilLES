@@ -80,7 +80,10 @@ public class OneModule extends SuperServlet {
             
             List<Classes.Delivery> deliveryList = ddb.getDeliveryWithUserIdAndModuleId(id, user.getUserId());
             if (deliveryList.size() != 0) {
-                Editdelivery(out,request);
+                for (Classes.Delivery delivery : deliveryList){
+                     String deliveryId = delivery.getDeliveryID();
+                Editdelivery(out,deliveryId, id);
+                }
             } else {
                 
                 deliver(out,request);
@@ -131,9 +134,15 @@ private void deliver(PrintWriter out, HttpServletRequest request){
             out.println("<a href=\"Delivery?id="+ id +" \"a class=\"btn btn-info\">Deliver!</button></a>");
     }
 
-    private void Editdelivery(PrintWriter out, HttpServletRequest request){
-            String id = request.getParameter("id");
-            out.println("<a href=\"EditDelivery?id="+ id +" \"a class=\"btn btn-info\">EditDelivery!</button></a>");
+    private void Editdelivery(PrintWriter out, String deliveryId, String moduleId){
+            out.println("<form action=\"EditDelivery?id="+ deliveryId+"\" method=\"POST\">");
+            out.println("<input type=\"hidden\" name=\"moduleId\" value="+ moduleId +"\">");
+            out.println("<input type=\"hidden\" name=\"deliveryId\" value="+ deliveryId +"\">");
+            out.println("<input type =\"text\" name=\"comment\"><br>");           
+            out.println("<br>");
+            out.println("<input type=\"submit\" value=\"Edit delivery\"><br>");        
+            out.println("<br>");
+            out.println("</form>");
     }
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
