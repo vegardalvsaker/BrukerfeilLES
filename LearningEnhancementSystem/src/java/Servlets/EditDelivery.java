@@ -57,8 +57,9 @@ public class EditDelivery extends SuperServlet {
                     out.println("<h3>Her er deliverycontent</h3><br>");
                     
                     out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
-                    out.println("<input type=\"text\" name=\"moduleId\" value=\""+ moduleId +"\">");
-                    out.println("<input type=\"text\" name=\"deliveryId\" value=\""+ deliveryId +"\">");
+                    out.println("<input type=\"hidden\" name=\"edit\" value=\"TRUE\">");
+                    out.println("<input type=\"hidden\" name=\"moduleId\" value=\""+ moduleId +"\">");
+                    out.println("<input type=\"hidden\" name=\"deliveryId\" value=\""+ deliveryId +"\">");
                     //out.println("<textarea style=\"margin-left:2.5em;\" rows=\"2\" cols=\"30\" name=\"deliveryContent\"> "+deliveryContent+"</textarea>");
                     out.println("<textarea style=\"margin-left:2.5em;\" rows=\"2\" cols=\"30\" name=\"deliveryContent\">"+deliveryContent+"</textarea>");
                     //out.println("</textarea>");
