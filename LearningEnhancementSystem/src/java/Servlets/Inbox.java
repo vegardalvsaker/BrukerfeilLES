@@ -16,7 +16,9 @@ import Database.InboxDb;
 import java.util.ArrayList;
 import Classes.Message;
 import java.util.HashMap;
+import java.util.Map;
 import HtmlTemplates.BootstrapTemplate;
+import java.nio.charset.StandardCharsets;
 /**
  *
  * @author Vegard
@@ -62,7 +64,7 @@ public class Inbox extends SuperServlet {
             User user = (User)request.getSession().getAttribute("userLoggedIn");
             messageInfo[0] = user.getUserId();
             messageInfo[1] = request.getParameter("recipient");
-            messageInfo[2] = request.getParameter("subject");
+            messageInfo[2] = request.getParameter("subject");      
             messageInfo[3] = request.getParameter("newMessage");
 
             iDb.sendMessage(messageInfo);
@@ -71,6 +73,11 @@ public class Inbox extends SuperServlet {
     
     private void listMessages(PrintWriter out, HttpServletRequest request) {
         User user = (User)request.getSession().getAttribute("userLoggedIn");
+        if (request.getParameterMap().containsKey("msgId")) {
+            String msgId = request.getParameter("msgId");
+            iDb.updateMessageIsRead(msgId);
+        }
+        
            ArrayList<Message> messages = iDb.getUsersMessages(user.getUserId());
            out.println("<div class=\"container-fluid\">\n" +
 "            <div class=\"row\">\n" +
@@ -95,7 +102,7 @@ public class Inbox extends SuperServlet {
                             out.println("<tr class=\""+readOrNot+"\">\n" +
          "                      <td>"+message.getSender()+"</td>\n" +
          "                      <td>"+ message.getSubject() +"</td>\n" +
-         "                      <td><a class=\"btn btn-warning\" href=\"Inbox?msgId="+ message.getMsgId() +"\">Open</a></td>" +
+         "                      <td><a class=\"btn btn-warning\" href=\"Inbox?sent&msgId="+ message.getMsgId() +"\">Open</a></td>" +
          "                    </tr>");
                     }
                    }
@@ -128,9 +135,8 @@ public class Inbox extends SuperServlet {
            if (request.getParameterMap().containsKey("msgId")) {
                
                messageCSS(out);
-               String msgId = request.getParameter("msgId");
-               iDb.updateMessageIsRead(msgId);
                
+               String msgId = request.getParameter("msgId");
                HashMap<String, Message> mesMap = (HashMap<String, Message>)request.getAttribute("mesMap");
                Message message = mesMap.get(msgId);
                
@@ -160,7 +166,7 @@ public class Inbox extends SuperServlet {
                 + "<label for=\"from\">From:</label><input class=\"ml-0\" id=\"from\" type=\"text\" placeholder=\""+ request.getRemoteUser() +"\" readonly></input></div>"
                 + "<div class=\"form-group row\"><label for=\"recipient\">To:</label><input class=\"ml-0\" id=\"recipient\" type=\"text\" name=\"recipient\"></input></div>"
                 + "<div class=\"form-group row\"><label for=\"subject\">Subject:</label><input class=\"ml-0\" id=\"subject\" type=\"text\" name=\"subject\"></input></div>"
-                + "<div class=\"form-group row\">Message:<textarea class=\"form-control\" name=\"newMessage\" id=\"newMessage\" rows=\"10\" form=\"sendMessage\"></textarea></div>"
+                + "<div class=\"form-group row\">Message:<textarea class=\"form-control\" name=\"newMessage\" id=\"newMessage\" rows=\"10\"></textarea></div>"
                 + "<input class=\"btn btn-primary\" type=\"submit\" value=\"Send!\"></input>");
         out.println("</form>"
                 + "</div>");
