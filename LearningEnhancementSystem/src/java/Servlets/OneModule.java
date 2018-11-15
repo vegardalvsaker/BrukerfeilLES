@@ -57,12 +57,17 @@ public class OneModule extends SuperServlet {
             
 
              if (request.getMethod().equals("POST"))  {
-                if (request.getParameter("delete").equals("TRUE")) {
+                if (request.getParameter("delete")!=(null)) {
                     String comid = request.getParameter("comment_id");
                     int commId = Integer.parseInt(comid);
                     cdb.deleteComment(commId);
                     
-                } else {
+                } 
+                if (request.getParameter("deliveryId")!=(null)) {
+                    String deliveryId = request.getParameter("deliverId");
+                    String deliveryContent = request.getParameter("deliveryContent");
+                    ddb.editDelivery(deliveryContent, deliveryId);
+                }else {
                     String comText = request.getParameter("comment");
                     if (comText.equals("")){
                         out.println("Enter text before posting");
@@ -136,8 +141,8 @@ private void deliver(PrintWriter out, HttpServletRequest request){
 
     private void Editdelivery(PrintWriter out, String deliveryId, String moduleId){
             out.println("<form action=\"EditDelivery?id="+ deliveryId+"\" method=\"POST\">");
-            out.println("<input type=\"hidden\" name=\"moduleId\" value="+ moduleId +"\">");
-            out.println("<input type=\"hidden\" name=\"deliveryId\" value="+ deliveryId +"\">");
+            out.println("<input type=\"text\" name=\"moduleId\" value=\""+ moduleId +"\">");
+            out.println("<input type=\"text\" name=\"deliveryId\" value=\""+ deliveryId +"\">");
             out.println("<input type =\"text\" name=\"comment\"><br>");           
             out.println("<br>");
             out.println("<input type=\"submit\" value=\"Edit delivery\"><br>");        

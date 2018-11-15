@@ -46,17 +46,34 @@ public class EditDelivery extends SuperServlet {
             db.init();
             
             if (request.getMethod().equals("POST")) {
+               // if (request.getParameter("moduleId")!=(null)) {
                 String moduleId = request.getParameter("moduleId");
                 //String deliveryId = request.getParameter("deliveryId");
                 List<Classes.Delivery> deliveryList = db.getDeliveryWithUserIdAndModuleId(moduleId, user.getUserId());
                 for (Classes.Delivery delivery : deliveryList){
+                    String deliveryId = delivery.getDeliveryID();
                     String deliveryContent = delivery.getDeliveryContent();
+                    
                     out.println("<h3>Her er deliverycontent</h3><br>");
-                    out.println("<textarea style=\"margin-left:2.5em;\" rows=\"2\" cols=\"30\" name=\"reply\"> "+deliveryContent+"</textarea>"); 
+                    
+                    out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
+                    out.println("<input type=\"text\" name=\"moduleId\" value=\""+ moduleId +"\">");
+                    out.println("<input type=\"text\" name=\"deliveryId\" value=\""+ deliveryId +"\">");
+                    //out.println("<textarea style=\"margin-left:2.5em;\" rows=\"2\" cols=\"30\" name=\"deliveryContent\"> "+deliveryContent+"</textarea>");
+                    out.println("<textarea style=\"margin-left:2.5em;\" rows=\"2\" cols=\"30\" name=\"deliveryContent\">"+deliveryContent+"</textarea>");
+                    //out.println("</textarea>");
+                    out.println("<input type=\"submit\" value=\"Edit delivery\"><br>");        
+                    out.println("<br>");
+                    out.println("</form>");
+               // }
                 }
+                
+                
             }
 
         } 
+        
+        
                
     }
       // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

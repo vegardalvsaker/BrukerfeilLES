@@ -24,6 +24,8 @@ public class DeliveryDb extends Database{
     private static final String GET_DELIVERY_FORM ="select * from Module where module_id = ?";
     private static final String SLCT_ALL_DELIVERIES = "select * from Delivery where module_id = ?";
     private static final String CHECK_DELIVERY = "select delivery_id, delivery_content, module_id, D.student_id, user_id, user_name from Delivery D inner join Users U on D.student_id = U.user_id where module_id = ? and user_id = ?";
+    private static final String EDIT_DELIVERY = "select delivery_id, delivery content from Delivery";
+    private static final String UPDATE_DELIVERY ="update Delivery set delivery_content = ? where delivery_id = ?";
     
     public List<Delivery> getDeliveryWithUserIdAndModuleId(String moduleId, String studentId) {
         ArrayList<Delivery> delivery =new ArrayList<>();
@@ -56,6 +58,22 @@ public class DeliveryDb extends Database{
     public DeliveryDb() {
         init();
     }
+    public void editDelivery(String deliveryContent, String deliveryId) {
+   try( Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(UPDATE_DELIVERY);
+                ) {
+            
+            ps.setString(1, deliveryContent);
+            ps.setString(2,deliveryId);
+            ps.executeUpdate();
+            
+        }
+        catch(SQLException ex)   {
+            System.out.println(ex);
+        }
+
+     }
+    
     
     public Delivery getDeliveryWithUser(String deliveryId) {
         try (
@@ -208,7 +226,7 @@ public class DeliveryDb extends Database{
             System.out.println(ex);
         }
     }
-    
+    /*
     public boolean editDelivery (String deliveryId, String content){
         
         String editDeliveryContent = "update Delivery set delivery_content = ?, where delivery_id = ?";
@@ -231,7 +249,7 @@ public class DeliveryDb extends Database{
             System.out.println("Error");
         }
         return false;
-    }
+    }*/
     
     //VVVV FOSSE VVVVV
 
