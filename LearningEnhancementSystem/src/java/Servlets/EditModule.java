@@ -1,5 +1,6 @@
 package Servlets;
 
+import Classes.LearningGoal;
 import Classes.Module;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Database.ModuleDb;
 import HtmlTemplates.BootstrapTemplate;
+import java.util.Map;
+import Database.LearningGoalDb;
 /**
  *
  * @author Gorm-Erik
@@ -29,6 +32,7 @@ public class EditModule extends SuperServlet {
             
             super.processRequest(request, response, "Modules", out);
             ModuleDb db = new ModuleDb();
+            LearningGoalDb learnGoalDb = new LearningGoalDb();
             db.init();
             
              
@@ -37,14 +41,23 @@ public class EditModule extends SuperServlet {
                 String modulName = request.getParameter("Modulnavn");
                 String modulDesc = request.getParameter("Beskrivelse");
                 String modulContent = request.getParameter("Innhold");
+                String leveringsform = request.getParameter("leveringsform");
                 
-                db.editModule(out, request, modulName, modulDesc, modulContent);
+                Map map = request.getParameterMap();
+                
+                for (int i = 0; i < (map.size()- 4)/2; i++)    {
+                    
+                    String learnGoalText = request.getParameter("Laringsmal" + i);
+                    String learnGoalPoints = request.getParameter("Points" + i);
+                    
+                    
+                }
+                
+                db.editModule(out, request, modulName, modulDesc, modulContent, leveringsform);
                 
             }
             
-            
-            
-            
+
             bootstrap.containerOpen(out);
             
             bootstrap.containerClose(out);
@@ -61,13 +74,18 @@ public class EditModule extends SuperServlet {
         
             String module_id = request.getParameter("id");
             ModuleDb db = new ModuleDb();
+            
             db.init();
             
             Module module = db.getModuleWithLearningGoals(module_id);
+            LearningGoalDb lgdb = new LearningGoalDb();
+            LearningGoal learnGoal = new LearningGoal();
             
             String modulName = module.getName();
             String modulDesc = module.getDesc();
             String modulContent = module.getContent();
+            String learngoalText = learnGoal.getText();
+            String learnGoalPoints = learnGoal.getPoints();
             
             out.println("<h1>Rediger modul</h1>");
             out.println("<form action=\"EditModule?id="+module_id+"\" method=\"POST\">");
@@ -77,9 +95,16 @@ public class EditModule extends SuperServlet {
             out.println("<input type=\"text\" name=\"Beskrivelse\" value=\""+ modulDesc +"\"><br>");
             out.println("<h3>Innhold</h3><br>");
             out.println("<input type=\"text\" name=\"Innhold\" value=\""+ modulContent + "\"><br>");
-            out.println("<br>");
+            out.println("<h3>Læringsmål og poeng</h3><br>");
+            
+            lgdb.learnGoalPrinter(out, request);
+            
+            
+            
             out.println("<input type=\"submit\" value=\"Rediger modul\"><br>");     
-            out.println("</form>");
+            
+            
+            
             
             
     }

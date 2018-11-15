@@ -57,7 +57,7 @@ public class OneModule extends SuperServlet {
             ddb.getNrOfDeliveries(id,out);
             
 
-             if (request.getMethod().equals("POST"))  {
+            if (request.getMethod().equals("POST"))  {
                 if (paramap.containsKey("delete")) {
                     if (paramap.get("delete")[0].equals("TRUE")) {
                     String comid = request.getParameter("comment_id");
@@ -108,15 +108,11 @@ public class OneModule extends SuperServlet {
     
     private void editModuleButtonForm(PrintWriter out, HttpServletRequest request)    {
         String id = request.getParameter("id");
+        
             out.println("<a href=\"EditModule?id="+ id +"\">"
                     + "<button>Rediger modul</button>"
                     + "</a>");
-            
-         /*    out.println("<form action=\"EditModule?id=" + id + "\">");
-             out.println("<button>Rediger modul</button>");
-             out.println("</form>");*/
-             
-                     
+                       
                              
     }
 

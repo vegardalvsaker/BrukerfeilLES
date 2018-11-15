@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import Database.ModuleDb;
 import Database.LearningGoalDb;
-import java.util.HashMap;
+import Classes.LearningGoal;
+import java.util.Map;
+
 /**
  *
  * @author Vegard
@@ -42,7 +44,8 @@ public class Modules extends SuperServlet {
          LearningGoalDb learnGoal = new LearningGoalDb();
          db.init();
         
-         HashMap<String, String> hashmap = new HashMap<>();
+         LearningGoal lg = new LearningGoal();
+         
          
         if (request.getMethod().equals("POST"))  {
                 
@@ -54,15 +57,25 @@ public class Modules extends SuperServlet {
                 
                 String leveringsform = request.getParameter("leveringsform");
                 
-                String learnGoalText = request.getParameter("Laringsmal");
-                
-                
-                String learnGoalPoints = request.getParameter("Poeng");
-                
+         //       String learnGoalText = request.getParameter("Laringsmal");
                
-                           
+         //       String learnGoalPoints = request.getParameter("Poeng");
+         
                 db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform);
-                learnGoal.addLearningGoals(out, learnGoalText, learnGoalPoints, modulnavn);
+                
+                Map map = request.getParameterMap();
+                
+                for (int i = 0; i < (map.size() - 4)/2; i++)   {
+                    
+                    String learnGoalText = request.getParameter("Laringsmal" + i);
+                    String learnGoalPoints = request.getParameter("Poeng" + i);
+                    
+                    learnGoal.addLearningGoals(out, learnGoalText, learnGoalPoints, modulnavn);
+                }
+              
+                
+                
+                
             }
             
             
@@ -102,12 +115,9 @@ public class Modules extends SuperServlet {
             out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Video\">Video");
             out.println("<br>");
             
-        
-            
-          
+
             out.println("<h1>Legg til læringsmål</h1>");
             
-          //  out.println("<input type=\"text\" name=\"Laringsmal\">");
             
             out.println("<script language=\"javascript\">");
             out.println("var i = 0;");
@@ -116,19 +126,15 @@ public class Modules extends SuperServlet {
        
 	    out.println("var div = document.createElement(\"div\");");
             
-            
-            out.println("div.innerHTML = '<input type=\"text\" name=\"Laringsmal' + i + '\"></input> <input type=\"text\" name=\"Poeng\"></input><br>';");
+            out.println("div.innerHTML = '<input type=\"text\" name=\"Laringsmal' + i + '\"></input> <input type=\"text\" name=\"Poeng' + i + '\"></input><br>';");
             out.println("i++");
             out.println("var id = document.getElementById(\"inputID\");");
             
-            
             out.println("id.appendChild(div);");
-            
             
             out.println("}");
             out.println("</script>");
     
-            
             out.println("<style>");
             out.println("h3 {display:inline;}");
             out.println("</style>");

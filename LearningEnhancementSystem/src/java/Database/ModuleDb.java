@@ -77,7 +77,7 @@ public class ModuleDb extends Database {
                     LearningGoal lg = new LearningGoal();
                     lg.setLearn_goal_id(rs.getString("learn_goal_id"));
                     lg.setText(rs.getString("learn_goal_text"));
-                    lg.setPoints(rs.getInt("learn_goal_points"));
+                    lg.setPoints(rs.getString("learn_goal_points"));
                     
                     module.addLearningGoal(lg);
                     
@@ -85,10 +85,12 @@ public class ModuleDb extends Database {
                         LearningGoal lg2 = new LearningGoal();
                         lg2.setLearn_goal_id(rs.getString("learn_goal_id"));
                         lg2.setText(rs.getString("learn_goal_text"));
-                        lg2.setPoints(rs.getInt("learn_goal_points"));
+                        lg2.setPoints(rs.getString("learn_goal_points"));
                         
                         module.addLearningGoal(lg2);
+                        
                     }
+                    
                     return module;
                 }
         }
@@ -213,11 +215,11 @@ public class ModuleDb extends Database {
      }
     
 
-    public boolean editModule(PrintWriter out, HttpServletRequest request, String modulName, String modulDesc, String modulContent)  {
+    public boolean editModule(PrintWriter out, HttpServletRequest request, String modulName, String modulDesc, String modulContent, String leveringsform)  {
         
    
        String moduleID = request.getParameter("id");
-       String editModuleName = "update Module set module_name = ?, module_desc = ?, module_content = ? where module_id = ?";
+       String editModuleName = "update Module set module_name = ?, module_desc = ?, module_content = ?, module_inInterview = ? where module_id = ?";
    
       try(
              Connection connection = getConnection();
@@ -228,7 +230,9 @@ public class ModuleDb extends Database {
               prepStatement.setString(1, modulName);
               prepStatement.setString(2, modulDesc);
               prepStatement.setString(3, modulContent);
-              prepStatement.setString(4, moduleID);
+              prepStatement.setString(4, leveringsform);
+              prepStatement.setString(5, moduleID);
+              
         
               
               prepStatement.executeUpdate();

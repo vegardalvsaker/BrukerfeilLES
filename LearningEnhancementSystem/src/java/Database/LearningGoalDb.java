@@ -48,7 +48,7 @@ public class LearningGoalDb extends Database {
             while (goalSet.next()) {
                 out.println("<li>");
                 out.println(goalSet.getString("learn_goal_text"));
-                out.println("Points:" + goalSet.getString("learn_goal_points"));
+                out.println("Points: " + goalSet.getString("learn_goal_points"));
                 out.println("</li>");
             }
             out.println("</ul>");
@@ -59,22 +59,52 @@ public class LearningGoalDb extends Database {
         }
     }
     
+    public String getModuleID(PrintWriter out, String moduleName)  {
+        
+        String getModuleID = "select module_id from Module where module_name = ?";
+        try(
+                Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(getModuleID);
+                ){
+            
+                prepStatement.setString(1, moduleName);
+                ResultSet rset = prepStatement.executeQuery();
+                
+                while(rset.next())  {
+                    
+                    String moduleID = rset.getString("module_id");
+                    return moduleID;
+                    
+                }
+            
+        }
+        catch(SQLException exc) {
+            out.println("Error in getModuleID(): " + exc);
+        }
+        
+        return null;
+       
+        
+    }
+    
+
+
     public boolean addLearningGoals(PrintWriter out, String learnGoalText, String learnGoalPoints, String moduleName)  {
         
         init();
         
-        String getModuleID = "select module_id from Module where module_name = ?";
+        //String getModuleID = "select module_id from Module where module_name = ?";
         String addLearnGoal = "insert into LearningGoal values (default, ?, ?, ?)";
         
         
         
         try( Connection connection = getConnection();
                 
-             PreparedStatement pStatement = connection.prepareStatement(getModuleID); 
+        //     PreparedStatement pStatement = connection.prepareStatement(getModuleID); 
              PreparedStatement prepStatement = connection.prepareStatement(addLearnGoal);
                 ) {
             
-                pStatement.setString(1, moduleName);
+         /*       pStatement.setString(1, moduleName);
                 
                 
                 ResultSet rset = pStatement.executeQuery();
@@ -82,10 +112,13 @@ public class LearningGoalDb extends Database {
                 if (rset.next())    {
                 String moduleID = rset.getString("module_id");
                 prepStatement.setString(3, moduleID);
-                }
+                }*/
                 
+                String moduleID = getModuleID(out, moduleName);
+         
                 prepStatement.setString(1, learnGoalText);
                 prepStatement.setString(2, learnGoalPoints);
+                prepStatement.setString(3, moduleID);
                
                 prepStatement.executeUpdate();
                 
@@ -114,7 +147,7 @@ public class LearningGoalDb extends Database {
                     
                     lgoal.setLearn_goal_id(rset.getString("learn_goal_id"));
                     lgoal.setText(rset.getString("learn_goal_text"));
-                    lgoal.setPoints(rset.getInt("learn_goal_points"));
+                    lgoal.setPoints(rset.getString("learn_goal_points"));
                     lgoal.setModuleID(rset.getString("module_id"));
                     
                     lgList.add(lgoal);
@@ -130,20 +163,39 @@ public class LearningGoalDb extends Database {
             
     }
     
-    public boolean editLearnGoals(PrintWriter out, HttpServletRequest request, String learnGoalText, int learnGoalPoints, String learnGoalID)    {
+    public boolean editLearnGoals(PrintWriter out, HttpServletRequest request, String learnGoalText, String learnGoalPoints, String moduleName)    {
         
+        
+        String getID = "select * from Module m inner join LearningGoal l on m.module_id = l.module_id where module_id = ? group by l.learn_goal_id;";
         String editLearnGoals = "update LearningGoal set learn_goal_text = ?, learn_goal_points = ? where learn_goal_id = ? ";
+        
+        
         
          try( Connection connection = getConnection();
              PreparedStatement prepStatement = connection.prepareStatement(editLearnGoals);
+             PreparedStatement pStatement = connection.prepareStatement(getID);
+             ResultSet rset = prepStatement.executeQuery();
              
             )   {
              
-             prepStatement.setString(1, learnGoalText);
-             prepStatement.setInt(2, learnGoalPoints);
-             prepStatement.setString(3, learnGoalID);
+            
+             String moduleID = getModuleID(out, moduleName);
              
-             prepStatement.executeQuery();
+             pStatement.setString(1, moduleID);
+             
+             while(rset.next()) {
+                 
+                 String learnGoalID = rset.getString("learn_goal_id");
+                 prepStatement.setString(3, learnGoalID);
+             }
+             
+             
+             prepStatement.setString(1, learnGoalText);
+             prepStatement.setString(2, learnGoalPoints);
+             
+             
+             prepStatement.executeUpdate();
+             
              return true;
          }
           catch(SQLException ex) {
@@ -153,5 +205,34 @@ public class LearningGoalDb extends Database {
          return false;
     }
     
+    public void learnGoalPrinter(PrintWriter out, HttpServletRequest request)   {
+        
+        String learnGoals = "select * from LearningGoal";
+        
+        try(
+            Connection connection = getConnection();
+            PreparedStatement prepStatement = connection.prepareStatement(learnGoals);
+            ResultSet rset = prepStatement.executeQuery();
+                ){
+            
+            
+            String learnGoalText = "";
+            String learnGoalPoints = "";
+            int i = 0;
+            while (rset.next()) {
+                i++;
+                out.println("<input type=\"text\" name=\"Points\" + i value=" + learnGoalText + ">");
+                out.println("<input type=\"text\" name=\"Points\" + i value=" + learnGoalPoints +">");
+            }
+            
+           
+            
+        }
+        
+        catch(SQLException e)   {
+            out.println("Error in lgPrinter(): " + e);
+        }
+        
+    }
     
 }
