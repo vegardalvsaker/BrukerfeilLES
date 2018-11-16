@@ -12,7 +12,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
-import com.keypoint.PngEncoder;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -21,10 +20,13 @@ import java.io.IOException;
 /**
  *
  * @author ferra
+ * @Override
+
  */
 @WebServlet(name = "ClassProgress", urlPatterns = {"/ProgressXYgraphServlet"})
 public class ProgressXYgraphServlet extends SuperServlet  {
         BootstrapTemplate bst = new BootstrapTemplate();
+        @Override
           protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -32,7 +34,7 @@ public class ProgressXYgraphServlet extends SuperServlet  {
         bst.containerOpen(out);
         User user = (User)request.getSession().getAttribute("userLoggedIn");
         
-        BufferedImage chartImage = (BufferedImage)session.getAttribute("chartImage");        
+        BufferedImage chartImage = (BufferedImage)request.getAttribute("chartImage");        
 
         response.setContentType("image.png");
         PngEncoder encoder = new PngEncoder(chartImage, false, 0, 9);
