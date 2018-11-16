@@ -50,7 +50,7 @@ public class Results extends SuperServlet {
         
         for (Delivery delivery : deliveryList)  {
             String moduleName = delivery.getModuleName();
-            int deliveryID = delivery.getDeliveryID();
+            String deliveryID = delivery.getDeliveryID();
             String moduleID = delivery.getModuleID();
             out.println("<ul>");
             out.println("<li><a href=\"OneResult?userID=" + userID + "&deliveryID="+ deliveryID + "&moduleID="+ moduleID + "\">" + moduleName + "</a></li>");

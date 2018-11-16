@@ -26,6 +26,7 @@ public class DeliveryDb extends Database{
     private static final String CHECK_DELIVERY = "select delivery_id, delivery_content, module_id, D.student_id, user_id, user_name from Delivery D inner join Users U on D.student_id = U.user_id where module_id = ? and user_id = ?";
     private static final String EDIT_DELIVERY = "select delivery_id, delivery content from Delivery";
     private static final String UPDATE_DELIVERY ="update Delivery set delivery_content = ? where delivery_id = ?";
+    private static final String SELECT_ALL_DELIVERIES = "select * from Delivery where worklist_id = ? and delivery_isEvaluated = 0";
     
      public ArrayList<Delivery> getUnevaluatedDeliveriesWithinWorklist(String worklistId) {
         ArrayList<Delivery> deliveries = new ArrayList<>();
@@ -123,7 +124,7 @@ public class DeliveryDb extends Database{
                 delivery.setStudentName(rs.getString("user_name"));
                 delivery.setModuleID(rs.getString("module_id"));
                 delivery.setDeliveryContent(rs.getString("delivery_content"));
-                delivery.setWorklistID(rs.getInt("worklist_id"));
+                delivery.setWorklistID(rs.getString("worklist_id"));
                 delivery.setDeliveryTimestamp(rs.getString("delivery_timestamp"));
                 
                 return delivery;
@@ -219,7 +220,7 @@ public class DeliveryDb extends Database{
                 del.setStudentID(rset.getString("user_id"));
                 del.setModuleID(rset.getString("module_id"));
                 del.setDeliveryContent(rset.getString("delivery_content"));
-                del.setWorklistID(rset.getInt("worklist_id"));
+                del.setWorklistID(rset.getString("worklist_id"));
                 del.setDeliveryTimestamp(rset.getString("delivery_timestamp"));
                 del.setIsEvaluated(rset.getBoolean("delivery_isEvaluated"));
 
@@ -281,7 +282,6 @@ public class DeliveryDb extends Database{
         }
         return false;
     }*/
-=======
     
 
     

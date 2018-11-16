@@ -83,6 +83,7 @@ public class OneModule extends SuperServlet {
                     crdb.addReply(commId, user.getUserId(), repText);
                 }
             }
+             }
 
             editModuleButtonForm(out,request);
 
@@ -135,7 +136,8 @@ public class OneModule extends SuperServlet {
             bst.containerClose(out);
             bst.bootstrapFooter(out); 
         }
-    }
+        }
+    
     
     private void editModuleButtonForm(PrintWriter out, HttpServletRequest request)    {
         String id = request.getParameter("id");

@@ -29,6 +29,10 @@ public class Delivery {
     this.deliveryTimestamp = delivery_timestamp;
     this.deliveryIsEvaluated = delivery_isEvaluated;
     }
+    
+    public Delivery () {
+        
+    }
    
     public String getStudentName() {
         return studentName;
