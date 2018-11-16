@@ -46,8 +46,12 @@ public class Modules extends SuperServlet {
                 String beskrivelse = request.getParameter("Beskrivelse");
          
                 String innhold = request.getParameter("Innhold");
+                
+                boolean leveringsform = Boolean.parseBoolean(request.getParameter("leveringsform"));
+                
+                //boolean video = Boolean.parseBoolean(request.getParameter("Video"));
                            
-                db.addModule(out, modulnavn, beskrivelse, innhold);
+                db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform);
                 
             }
             
@@ -76,17 +80,27 @@ public class Modules extends SuperServlet {
             out.println("<h3>Beskrivelse</h3><br>");
             out.println("<input type=\"text\" name=\"Beskrivelse\"><br>");
             out.println("<h3>Innhold</h3><br>");
-            out.println("<input type=\"text\" name=\"Innhold\"><br>");
+            out.println("<input type=\"text\" name=\"Innhold\"><br>");      
             out.println("<br>");
-            out.println("<input type=\"submit\" value=\"Legg til modul\"><br>");        
+            out.println("<h3>Velg leveringsform</h3>");
+            out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Muntlig\">Muntlig");
             out.println("<br>");
+            out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Video\">Video");
+            out.println("<br>");
+            out.println("<input type=\"submit\" value=\"Legg til modul\"><br>");
             out.println("</form>");
             out.println("</div>");
-           
+            
+            out.println("<h1>Legg til læringsmål</h1><br>");
+            out.println("<form action=\"Modules\" method=\"POST\">");
+            out.println("<button onclick=\"newLearnGoal()\">Nytt læringsmål</button>");
+            out.println("");
+            out.println("<input type=\"text\" name=\"Læringsmål\"<br>");
+            out.println("</form>");
  
         }
         
-        
+    
         
             // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

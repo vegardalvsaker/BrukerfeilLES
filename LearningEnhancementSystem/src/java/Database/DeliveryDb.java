@@ -74,6 +74,7 @@ public class DeliveryDb extends Database{
 
      }
     
+
     
     public Delivery getDeliveryWithUser(String deliveryId) {
         try (
@@ -226,6 +227,7 @@ public class DeliveryDb extends Database{
             System.out.println(ex);
         }
     }
+
     /*
     public boolean editDelivery (String deliveryId, String content){
         
@@ -250,6 +252,9 @@ public class DeliveryDb extends Database{
         }
         return false;
     }*/
+=======
+    
+
     
     //VVVV FOSSE VVVVV
 
@@ -273,8 +278,8 @@ public class DeliveryDb extends Database{
         }  
         return allEvaluatedDeliveriesCount;
     }     
-    
-    
+
+  
     public int getEvaluatedDeliveries(PrintWriter out, String id) {
         String oneDelivery = ("select * from Delivery where student_id = ? AND delivery_isEvaluated = 1;");
         int evaluatedDeliveriesCount = 0;

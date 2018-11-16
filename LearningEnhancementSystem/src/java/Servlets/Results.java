@@ -40,6 +40,7 @@ public class Results extends SuperServlet {
     private void results(PrintWriter out, HttpServletRequest request)    {
         
         DeliveryDb deliverydb = new DeliveryDb();
+        deliverydb.init();
         out.println("<h1>Dine evaluerte moduler:</h1><br>");
         setUserLoggedIn(request);
         HttpSession session = request.getSession();

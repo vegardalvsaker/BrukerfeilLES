@@ -37,7 +37,7 @@ public class RedirectAfterAdd extends HttpServlet {
             db.init();
                 if (request.getMethod().equals("POST")) {
                     if (request.getParameter("add").equals("TRUE")){
-                         db.addModules(request);
+                        // db.addModule(out,);
                          redirectHeader(out);
                          out.println("<h1>Added a module!</h1>");
                          out.println("<h3>Redirecting back after 3 seconds</h3>");

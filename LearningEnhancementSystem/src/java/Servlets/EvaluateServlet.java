@@ -12,11 +12,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import Database.UserDb;
 import Database.ModuleDb;
 import Database.EvaluationDb;
-import Classes.*;
+import Classes.Delivery;
+import Classes.Module;
+import Classes.User;
+import Classes.LearningGoal;
+import Classes.Evaluation;
+import Classes.Score;
 import java.util.ArrayList;
+import HtmlTemplates.BootstrapTemplate;
+import Database.DeliveryDb;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -24,9 +33,10 @@ import java.util.ArrayList;
  */
 @WebServlet(name = "EvaluateServlet", urlPatterns = {"/EvaluateServlet"})
 public class EvaluateServlet extends SuperServlet {
-    private User user;
     private Delivery delivery;
     private Module module;
+    private String teacherId;
+    private BootstrapTemplate bst = new BootstrapTemplate();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,62 +50,175 @@ public class EvaluateServlet extends SuperServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            if (!checkIfLoggedIn(request)) {
-                out.println("Please log in first :)");
-                request.getRequestDispatcher("index.html").include(request, response);
+            super.processRequest(request, response, "Worklist", out);
+            if (request.getParameterMap().containsKey("editEvaluation")) {
+                editEvaluation(request, out);
+                return;
+            }
+            if (!request.getParameterMap().containsKey("deliveryId")) {
+                out.println("<h1>Ingen delivery valgt</h1>");
+                out.println("<a href=\"Worklist\"> Gå tilbake til Worklist</a>");
+                out.println("<a href=\"Index\"> Gå hjem</a>");
                 return;
             }
             
-            if (checkIfTeacherLoggedIn(request)) {
-                //setup(request.getParameter("student_id"), request.getParameter("module_id"));
-                //hardkodet, metoden over vil bli brukt når worklist er ferdig
-                setup("1000", "1");
+            System.out.println("on servlet 'EvaluateEvaluation'");
+            
+            if (setup(request)) {
+                //User interface greier
+                bst.bootstrapHeader(out, "Evaluation for " + module.getName());
+                
+                bst.containerOpen(out);
                 request.getSession().setAttribute("module", module);
-                out.println("<a href=\"EvaluateServlet?start=TRUE\">Start</a>");
-                if (request.getParameter("start").equals("TRUE")) {
-                    EvaluationDb eDb = new EvaluationDb();
-                    if (eDb.addEvaluation("100", "2")) {
-                        out.println("<h1> Evaluation for student " + user.getUserName() + " for " + module.getName());
-                    out.println("<ul>");
+                EvaluationDb eDb = new EvaluationDb();
+                //Sjekker om det finnes en evaluering for denne studenten allerede, og oppretter en ny evaluering hvis ikke. (Parametrene i metoden under er hardkodet frem til worklist blir ferdig
+                if (!eDb.evaluationExists(Integer.toString(delivery.getDeliveryID()))              /*eDb.addEvaluation(teacherId, delivery.getDeliveryid())*/) {
+                    out.println("<h1> Evaluation for student " + delivery.getStudentName() + " for " + module.getName() + "</h1>");
+
+                    //Henter de læringsmålene som lærereren skal evaluere etter    
                     ArrayList<LearningGoal> lgoals = module.getLearningGoals();
-                    out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation?deliveryid=2&studentid=1000&module_id=1&numberOfLearnGoals="+ lgoals.size() +"\" method=\"POST\">");
+                    if (lgoals.size() == 0) {
+                        cancelEvaluation(out, request);
+                        return;
+                    }            
+                    //Printer begynnelsen på tabellen som lærereren skal evaluere i
+                    bst.tableOpen(out);
+
+          //          String youtubeUrl = getYoutubeViewHash(delivery.getDeliveryContent());
+                    //Print for å vise en embeded YouTube-video.
+     //               printEmbeddedYouTubeVideo(out, youtubeUrl);
+
+                    //Form med link til servleten hvor faktisk alle poengene i evalueringen blir plottet inn i databasen. URL-parametrene er hardkodet for nå
+                    out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation\" method=\"POST\">");
+
+
+                    //Printer radene i evalueringstabellen
+                    css(out);
                     int i = 1;
                     for (LearningGoal lg : lgoals) {
-                        out.println("<li> Learning goal: " + lg.getText() + " | <input type=\"text\" name=\"learngoal" + i + "\"/>/"+ lg.getPoints() +"</li>");
+                        int maxPoints = lg.getPoints();
+                        bst.tableRow(out, i, lg.getText(), "<input type=\"number\" minlength=\"1\" required=\"true\" max=\""+ maxPoints+"\" name=\"learngoal" + i + "\"/>", maxPoints);
                         i++;
                     }
-                    out.println("<textarea form=\"evaluationForm\" name=\"comment\"></textarea>");
-                    out.println("<input type=\"submit\" value=\"Evaluate!\"/>");
-                    out.println("</form>");
-                    out.println("</ul>");
+
+                    //UI greier
+                    bst.tableClose(out);
+
+                    printEndForm(out, "");
+
+
                     } else {
                         out.println("Det er allerede en evaluering opprettet for denne studenten på denne modulen");
                     }
-                }  
-            } else {
-                out.println("You do not have access to this page!");
-                request.getRequestDispatcher("Index").include(request, response);
-            }
-            
+                } else {
+                    out.println("<h1>Deliveryen du har valgt finnes ikke</h1>");
+                    out.println("<a href=\"Worklist\">Gå til worklist</a><br>");
+                    out.println("<a href=\"Index\">Gå hjem</a><br>");
+                }
+               bst.containerClose(out);
+               bst.bootstrapFooter(out);
         }
     }
 
     /**
-     * Henter den studenten som skal evalueres og hvilken modul. Disse blir lagt i globale variabler.
-     * @param student_id
-     * @param module_id 
+     * 
+     * @param request
+     * @return true if the setup goes well, and false if the delivery does not exist. 
      */
-    public void setup (String student_id, String module_id) {
-        UserDb uDb = new UserDb();
-        uDb.init();
-        user = uDb.getUser(student_id);
-                       
+    public boolean setup (HttpServletRequest request) {
+        DeliveryDb dDb = new DeliveryDb();
+        delivery = dDb.getDeliveryWithUser(request.getParameter("deliveryId"));
+        if (delivery == null) {
+            return false;
+        }
         ModuleDb mdb = new ModuleDb();
         mdb.init();
-        module = mdb.getModuleWithLearningGoals(module_id);
+        module = mdb.getModuleWithLearningGoals(delivery.getModuleID());
+        System.out.println(module.getName());
         
-       
+        request.getSession().setAttribute("delivery", delivery);
+        
+        //Lagrer den aktuelle studenten som skal bli evaluert i session
+        request.getSession().setAttribute("student", delivery.getStudentName());
+        setUserLoggedIn(request);
+        User teacher = (User)request.getSession().getAttribute("userLoggedIn");
+        teacherId = teacher.getUserId();  
+        return true;
     }
+    /*
+    Metode for når læreren vil gå tilbake for å endre på evalueringen.
+    */
+    private void editEvaluation(HttpServletRequest request, PrintWriter out) {
+        HttpSession session = request.getSession();
+        Evaluation eval = (Evaluation)session.getAttribute("Evaluation");
+        ArrayList<Score> scores = eval.getScorelist();
+        Module mod = (Module)session.getAttribute("module");
+        
+        css(out);
+        bst.containerOpen(out);
+        bst.tableOpen(out);
+        //Form med link til servleten hvor faktisk alle poengene i evalueringen blir plottet inn i databasen. URL-parametrene er hardkodet for nå
+        out.println("<form id=\"evaluationForm\" action=\"AddedEvaluation\" method=\"POST\">");
+        int i = 1;
+        for (LearningGoal lg : mod.getLearningGoals()) {
+            bst.tableRow(out, i, lg.getText(), "<input type=\"number\" minlength=\"1\" required=\"true\" max=\""+ lg.getPoints()+"\" name=\"learngoal" + i + "\" value=\""+ Integer.toString(scores.get(i-1).getPoints()) +"\"/>", lg.getPoints());
+            i++;
+        }
+        bst.tableClose(out);
+        out.println("<input type=\"hidden\" name=\"edited\"></input>");
+        printEndForm(out, eval.getComment());
+        bst.containerClose(out);
+    }
+    
+    private String getYoutubeViewHash(String url) {
+        String[] segments = url.split("=");
+        System.out.println(segments);
+        return segments[1];
+    }
+    
+    private void printEmbeddedYouTubeVideo(PrintWriter out, String url) {
+        //Print for å vise en embeded YouTube-video.
+                out.println("<div class=\"row\">\n" +
+                "      <div class=\"col-md-4 offset-md-3 mb-3\">\n" +
+                "    <iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"+ url +"?rel=0\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>\n" +
+                "  </div>");
+    }
+    
+    private void printEndForm(PrintWriter out, String comment) {
+        out.println("  <div class=\"form-group row\">\n" +
+"        <div class=\"col-md-4 offset-md-4 mb-3\">\n" +
+"          <label for=\"tekst\">Comment for the student</label>");
+                out.println("<textarea minlength=\"1\" class=\"form-control\" form=\"evaluationForm\" name=\"comment\">"+ comment +"</textarea>");
+                out.println("<button type=\"submit\" class=\"btn btn-primary\">Evaluate!</button>");
+                out.println("</div>\n" +
+"      </div>");
+                out.println("</form>");
+    }
+    
+    private void cancelEvaluation(PrintWriter out, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.removeAttribute("module");
+        session.removeAttribute("student");
+        session.removeAttribute("delivery");
+        out.println("<h1>Modulen som deliveryen angår, har ingen læringsmål.<br> <a href=\"OneModule?id="+ module.getModuleid() + "\">Legg til noen læringsmål</a> før du evaluerer videre</h1>");
+        bst.containerClose(out);
+        bst.bootstrapFooter(out);
+    }
+    
+    private void css(PrintWriter out) {
+        out.println("<style> input:invalid {"
+                + "background-color: #ff5b5b; }"
+                + "input:valid {"
+                + "background-color: #a4f293; }"
+                + "</style>");
+    }
+    
+    protected void redirectHeader(PrintWriter out) {
+        out.println("<head>\n" +
+"        <meta http-equiv=\"refresh\" content=\"3;url=Index\" />\n" +
+"    </head");
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -134,5 +257,4 @@ public class EvaluateServlet extends SuperServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
