@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 public class Delivery {
    
     private String moduleName;
-    private int deliveryID;
+    private String deliveryID;
     private String studentID;
     private String studentName;
     private String moduleID;
@@ -23,6 +23,7 @@ public class Delivery {
         return studentName;
     }
 
+
     public void setStudentName(String studentName) {
         this.studentName = studentName;
     }
@@ -34,6 +35,7 @@ public class Delivery {
     public void setDeliveryIsEvaluated(boolean deliveryIsEvaluated) {
         this.deliveryIsEvaluated = deliveryIsEvaluated;
     }
+
     
     public String getModuleName()   {
         return moduleName;
@@ -44,11 +46,11 @@ public class Delivery {
         
     }
     
-    public void setDeliveryID(int deliveryID)    {
+    public void setDeliveryID(String deliveryID)    {
         this.deliveryID = deliveryID;
     }
     
-    public int getDeliveryID()  {
+    public String getDeliveryID()  {
         return deliveryID;
     }
     

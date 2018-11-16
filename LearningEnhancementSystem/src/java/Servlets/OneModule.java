@@ -53,6 +53,11 @@ public class OneModule extends SuperServlet {
             ddb.getNrOfDeliveries(id,out);
 
              if (request.getMethod().equals("POST"))  {
+                if (request.getParameter("edit")!=(null)) {
+                    String deliveryId = request.getParameter("deliveryId");
+                    String deliveryContent = request.getParameter("deliveryContent");
+                    ddb.editDelivery(deliveryContent, deliveryId);
+                }else {
                 if (request.getParameter("delete")!=(null)){
                     String commId = request.getParameter("comment_id");
                     crdb.deleteAll(commId);
@@ -82,7 +87,19 @@ public class OneModule extends SuperServlet {
             editModuleButtonForm(out,request);
 
             db.printLearningGoals(id, out);
-            deliver(out,request);
+            
+            List<Classes.Delivery> deliveryList = ddb.getDeliveryWithUserIdAndModuleId(id, user.getUserId());
+            if (deliveryList.size() != 0) {
+                for (Classes.Delivery delivery : deliveryList){
+                     String deliveryId = delivery.getDeliveryID();
+                Editdelivery(out,deliveryId, id);
+                }
+            } else {
+                
+                deliver(out,request);
+            }
+            
+                
             
             List<Comment> commentList = cdb.getComments(id);
             bst.collapseTop(out);
@@ -162,7 +179,16 @@ public class OneModule extends SuperServlet {
             out.println("</form>");
             out.println("</div>");
     }
-
+    private void Editdelivery(PrintWriter out, String deliveryId, String moduleId){
+            out.println("<form action=\"EditDelivery?id="+ deliveryId+"\" method=\"POST\">");
+            out.println("<input type=\"hidden\" name=\"moduleId\" value=\""+ moduleId +"\">");
+            out.println("<input type=\"hidden\" name=\"deliveryId\" value=\""+ deliveryId +"\">");
+            out.println("<input type =\"hidden\" name=\"comment\"><br>");           
+            out.println("<br>");
+            out.println("<input type=\"submit\" value=\"Edit delivery\"><br>");        
+            out.println("<br>");
+            out.println("</form>");
+    }
 private void deleteReply(PrintWriter out, String moduleId, String replyid )  {
             out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
             out.println("<input style=\"margin-left:2.5em;\" type=\"hidden\" name=\"deleteR\" value=\"TRUE\">");
@@ -170,6 +196,7 @@ private void deleteReply(PrintWriter out, String moduleId, String replyid )  {
             out.println("<input style=\"margin-left:2.5em;\" type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete reply\">");
             out.println("</form>");
     }  
+
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
