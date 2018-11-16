@@ -15,10 +15,21 @@ public class Delivery {
     private String studentName;
     private String moduleID;
     private String deliveryContent;
-    private int worklistID;
+    private String worklistID;
     private String deliveryTimestamp;
     private boolean deliveryIsEvaluated;
 
+    public Delivery (String delivery_id, String student_id, String module_id, String delivery_content, String worklist_id, String delivery_timestamp, boolean delivery_isEvaluated) {
+    
+    this.deliveryID = delivery_id;
+    this.studentID = student_id;
+    this.moduleID = module_id;
+    this.deliveryContent = delivery_content;
+    this.worklistID = worklist_id;
+    this.deliveryTimestamp = delivery_timestamp;
+    this.deliveryIsEvaluated = delivery_isEvaluated;
+    }
+   
     public String getStudentName() {
         return studentName;
     }
@@ -78,11 +89,11 @@ public class Delivery {
         return deliveryContent;
     }
     
-    public void setWorklistID(int worklistID)   {
+    public void setWorklistID(String worklistID)   {
         this.worklistID = worklistID;
     }
     
-    public int getWorklistID()  {
+    public String getWorklistID()  {
         return worklistID;
     }
     
