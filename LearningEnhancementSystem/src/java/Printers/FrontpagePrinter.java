@@ -50,19 +50,17 @@ public class FrontpagePrinter {
         bs.bootstrapNavbar(out, "Home", notifications);
         
         bs.containerOpen(out);
-        out.println("<div class=\"jumbotron\">");
-        out.println("<div class=\"container\">");
-        out.println("<h1 class=\"display-4\">Announcements:</h1>");
-        out.println("<hr class=\"my-4\">");
+        bs.jumbotron(out);
         int i= 0;
             for (Announcement announcement : announcementList){
                 if (i < 2){
-                String atitle = announcement.getSubject();
-                String adesc = announcement.getBody();
-                int id = announcement.getId();
-                String ID = String.valueOf(id);
-                       
-                bs.jumbotron(out,adesc,atitle,ID);
+                String annSubject = announcement.getAnnSubject();
+                String annBody = announcement.getAnnBody();
+                String annUser = announcement.getAnnUserName();
+                out.println("<h2>"+ annSubject + "</h2>");
+                out.println("<p>" + annBody + "</p>");
+                out.println("<small>" + annUser + "</small>");
+                out.println("<hr class=\"my-4\">");
                 i++;
                 }
             }
