@@ -66,6 +66,7 @@ public class ModuleDb extends Database {
                 PreparedStatement ps = conn.prepareStatement(SLCT_MODULES_WITH_GOALS);
             ){
                 ps.setString(1, module_id);
+                
                 try (ResultSet rs = ps.executeQuery();) {
     
                     Module module = new Module();
@@ -74,6 +75,8 @@ public class ModuleDb extends Database {
                     module.setName(rs.getString("module_name"));
                     module.setDesc(rs.getString("module_desc"));
                     module.setContent(rs.getString("module_content"));
+                    module.setinInterview(rs.getBoolean("module_inInterview"));
+                    
                     LearningGoal lg = new LearningGoal();
                     lg.setLearn_goal_id(rs.getString("learn_goal_id"));
                     lg.setText(rs.getString("learn_goal_text"));
@@ -215,7 +218,7 @@ public class ModuleDb extends Database {
      }
     
 
-    public boolean editModule(PrintWriter out, HttpServletRequest request, String modulName, String modulDesc, String modulContent, String leveringsform)  {
+    public boolean editModule(PrintWriter out, HttpServletRequest request, String modulName, String modulDesc, String modulContent, boolean leveringsform)  {
         
    
        String moduleID = request.getParameter("id");
@@ -230,11 +233,10 @@ public class ModuleDb extends Database {
               prepStatement.setString(1, modulName);
               prepStatement.setString(2, modulDesc);
               prepStatement.setString(3, modulContent);
-              prepStatement.setString(4, leveringsform);
+              prepStatement.setBoolean(4, leveringsform);
               prepStatement.setString(5, moduleID);
               
         
-              
               prepStatement.executeUpdate();
               
               
@@ -242,7 +244,7 @@ public class ModuleDb extends Database {
       }
 
       catch(SQLException ex)    {
-          out.println("Excption in editModule" + ex);
+          out.println("Excption in editModule: " + ex);
       }
        return false;
        

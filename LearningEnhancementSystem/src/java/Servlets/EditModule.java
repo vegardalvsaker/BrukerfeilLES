@@ -13,6 +13,7 @@ import Database.ModuleDb;
 import HtmlTemplates.BootstrapTemplate;
 import java.util.Map;
 import Database.LearningGoalDb;
+import java.util.ArrayList;
 /**
  *
  * @author Gorm-Erik
@@ -45,15 +46,22 @@ public class EditModule extends SuperServlet {
                 
                 Map map = request.getParameterMap();
                 
+                boolean lf = leveringsform.equals("true") ? true : false;
+                
+                db.editModule(out, request, modulName, modulDesc, modulContent, lf);
+                
                 for (int i = 0; i < (map.size()- 4)/2; i++)    {
                     
                     String learnGoalText = request.getParameter("Laringsmal" + i);
                     String learnGoalPoints = request.getParameter("Points" + i);
                     
-                    
+                    learnGoalDb.editLearnGoals(out, request, learnGoalText, learnGoalPoints, modulName);
+                
                 }
                 
-                db.editModule(out, request, modulName, modulDesc, modulContent, leveringsform);
+                
+                
+                
                 
             }
             
@@ -74,18 +82,18 @@ public class EditModule extends SuperServlet {
         
             String module_id = request.getParameter("id");
             ModuleDb db = new ModuleDb();
-            
             db.init();
             
             Module module = db.getModuleWithLearningGoals(module_id);
-            LearningGoalDb lgdb = new LearningGoalDb();
-            LearningGoal learnGoal = new LearningGoal();
             
+            LearningGoalDb lgdb = new LearningGoalDb();
+          
             String modulName = module.getName();
             String modulDesc = module.getDesc();
             String modulContent = module.getContent();
-            String learngoalText = learnGoal.getText();
-            String learnGoalPoints = learnGoal.getPoints();
+            boolean leveringsform = module.getInInterview();
+            
+            ArrayList<LearningGoal> learnGoalList = module.getLearningGoals();
             
             out.println("<h1>Rediger modul</h1>");
             out.println("<form action=\"EditModule?id="+module_id+"\" method=\"POST\">");
@@ -95,10 +103,33 @@ public class EditModule extends SuperServlet {
             out.println("<input type=\"text\" name=\"Beskrivelse\" value=\""+ modulDesc +"\"><br>");
             out.println("<h3>Innhold</h3><br>");
             out.println("<input type=\"text\" name=\"Innhold\" value=\""+ modulContent + "\"><br>");
+            out.println("<h3>Leveringsform</h3><br>");
+            
+            if (leveringsform == true)  {
+                
+            out.println("<input type=\"radio\" name=\"leveringsform\" value=\""+ leveringsform + "\">Video<br>");
+            out.println("<input type=\"radio\" name=\"leveringsform\" checked value=\""+ leveringsform + "\">Muntlig<br>");
+                
+            }
+            else if (leveringsform == false)    {
+                
+            out.println("<input type=\"radio\" name=\"leveringsform\" checked value=\""+ leveringsform + "\">Video<br>");
+            out.println("<input type=\"radio\" name=\"leveringsform\" checked value=\""+ leveringsform + "\">Muntlig<br>");
+            
+            }
+            
+            
             out.println("<h3>Læringsmål og poeng</h3><br>");
             
-            lgdb.learnGoalPrinter(out, request);
-            
+            int i = 0;
+            for (LearningGoal learnGoal: learnGoalList) {
+               i++;
+                String learnGoalText = learnGoal.getText();
+                String learnGoalPoints = learnGoal.getPoints();
+                
+                out.println("<input type=\"text\" name=\"Laringsmal"+i+"\" value=\"" + learnGoalText + "\">");
+                out.println("<input type=\"text\" name=\"Poeng" + i+"\" value=\"" + learnGoalPoints + "\"><br>");
+            }
             
             
             out.println("<input type=\"submit\" value=\"Rediger modul\"><br>");     

@@ -37,6 +37,7 @@ public class OneModule extends SuperServlet {
         Map<String, String[]> paramap = request.getParameterMap();
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("id");
+        
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Modules", out);
             
@@ -92,12 +93,15 @@ public class OneModule extends SuperServlet {
 
            
             editModuleButtonForm(out,request);
-
-
+            
+           
+           
             db.printLearningGoals(id, out);
+                
+           
             deliver(out,request);
             cdb.printComments(mId,out);
-
+                
             cdb.addCommentForm(out,mId);
           
             addComment(out,request);
