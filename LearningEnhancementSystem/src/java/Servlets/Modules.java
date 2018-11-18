@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
@@ -56,10 +55,6 @@ public class Modules extends SuperServlet {
                 String innhold = request.getParameter("Innhold");
                 
                 String leveringsform = request.getParameter("leveringsform");
-                
-         //       String learnGoalText = request.getParameter("Laringsmal");
-               
-         //       String learnGoalPoints = request.getParameter("Poeng");
          
                 db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform);
                 
@@ -73,9 +68,6 @@ public class Modules extends SuperServlet {
                     learnGoal.addLearningGoals(out, learnGoalText, learnGoalPoints, modulnavn);
                 }
               
-                
-                
-                
             }
             
             
@@ -154,10 +146,7 @@ public class Modules extends SuperServlet {
             out.println("</html>");
             
             
-            //  out.println("<h3>Poeng</h3><br>"); document.forms[0].element.value
-    //        out.println("<input type=\"text\" name=\"Poeng\">");
-            
-           // out.println("<input type=\"submit\" value=\"Legg til læringsmål\"><br>");
+  
             
             
         }

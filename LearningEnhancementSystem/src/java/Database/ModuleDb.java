@@ -29,6 +29,8 @@ public class ModuleDb extends Database {
     private static final String SLCT_ALL_MODULES = "select * from Module";
     private static final String SLCT_MODULES_WITH_GOALS = "select * from Module m inner join LearningGoal l on m.module_id = l.module_id where m.module_id = ?";
     private static final String SLCT_LEARNGOAL = "select * from LearningGoal where module_id = ?";
+    private static final String addModule = "insert into Module values (default, ?, ?, ?, true, ?)";
+    private static final String editModule = "update Module set module_name = ?, module_desc = ?, module_content = ?, module_inInterview = ? where module_id = ?";
     /**
      * This method retrieves all of the modules in the database, create an object of each record and is then
      * added to a list of modules
@@ -160,14 +162,14 @@ public class ModuleDb extends Database {
         
         String id = req.getParameter("id");
    
-        String sql = "delete from Module where module_id = " + id;
+        String deleteModule = "delete from Module where module_id = " + id;
         
         try( Connection connection = getConnection();
-             PreparedStatement prepStatement = connection.prepareStatement(sql);
+             PreparedStatement prepStatement = connection.prepareStatement(deleteModule);
              
                 ) {
             
-                prepStatement.executeUpdate(sql);
+                prepStatement.executeUpdate();
                 
         }
         
@@ -183,10 +185,8 @@ public class ModuleDb extends Database {
         
         init();
         
-        String sql = "insert into Module values (default, ?, ?, ?, true, ?)";
-        
         try( Connection connection = getConnection();
-             PreparedStatement prepStatement = connection.prepareStatement(sql);
+             PreparedStatement prepStatement = connection.prepareStatement(addModule);
              
                 ) {
 
@@ -221,14 +221,13 @@ public class ModuleDb extends Database {
     public boolean editModule(PrintWriter out, HttpServletRequest request, String modulName, String modulDesc, String modulContent, boolean leveringsform)  {
         
    
-       String moduleID = request.getParameter("id");
-       String editModuleName = "update Module set module_name = ?, module_desc = ?, module_content = ?, module_inInterview = ? where module_id = ?";
-   
       try(
              Connection connection = getConnection();
-             PreparedStatement prepStatement = connection.prepareStatement(editModuleName);
+             PreparedStatement prepStatement = connection.prepareStatement(editModule);
      
               ) {
+               
+              String moduleID = request.getParameter("id");
                
               prepStatement.setString(1, modulName);
               prepStatement.setString(2, modulDesc);
