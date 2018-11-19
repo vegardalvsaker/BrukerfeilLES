@@ -30,6 +30,8 @@ public class ModuleDb extends Database {
     private static final String SELECT_ONE_MODULE = "select * from Module where module_id = ?";
     private static final String SLCT_MODULES_WITH_GOALS = "select * from Module m inner join LearningGoal l on m.module_id = l.module_id where m.module_id = ?";
     private static final String SLCT_LEARNGOAL = "select * from LearningGoal where module_id = ?";
+    private static final String addModule = "insert into Module values (default, ?, ?, ?, true, ?)";
+    private static final String editModule = "update Module set module_name = ?, module_desc = ?, module_content = ?, module_inInterview = ? where module_id = ?";
     /**
      * This method retrieves all of the modules in the database, create an object of each record and is then
      * added to a list of modules
@@ -67,6 +69,7 @@ public class ModuleDb extends Database {
                 PreparedStatement ps = conn.prepareStatement(SLCT_MODULES_WITH_GOALS);
             ){
                 ps.setString(1, module_id);
+                
                 try (ResultSet rs = ps.executeQuery();) {
     
                     Module module = new Module();
@@ -75,10 +78,12 @@ public class ModuleDb extends Database {
                     module.setName(rs.getString("module_name"));
                     module.setDesc(rs.getString("module_desc"));
                     module.setContent(rs.getString("module_content"));
+                    module.setinInterview(rs.getBoolean("module_inInterview"));
+                    
                     LearningGoal lg = new LearningGoal();
                     lg.setLearn_goal_id(rs.getString("learn_goal_id"));
                     lg.setText(rs.getString("learn_goal_text"));
-                    lg.setPoints(rs.getInt("learn_goal_points"));
+                    lg.setPoints(rs.getString("learn_goal_points"));
                     
                     module.addLearningGoal(lg);
                     
@@ -86,10 +91,12 @@ public class ModuleDb extends Database {
                         LearningGoal lg2 = new LearningGoal();
                         lg2.setLearn_goal_id(rs.getString("learn_goal_id"));
                         lg2.setText(rs.getString("learn_goal_text"));
-                        lg2.setPoints(rs.getInt("learn_goal_points"));
+                        lg2.setPoints(rs.getString("learn_goal_points"));
                         
                         module.addLearningGoal(lg2);
+                        
                     }
+                    
                     return module;
                 }
         }
@@ -181,14 +188,14 @@ public class ModuleDb extends Database {
         
         String id = req.getParameter("id");
    
-        String sql = "delete from Module where module_id = " + id;
+        String deleteModule = "delete from Module where module_id = " + id;
         
         try( Connection connection = getConnection();
-             PreparedStatement prepStatement = connection.prepareStatement(sql);
+             PreparedStatement prepStatement = connection.prepareStatement(deleteModule);
              
                 ) {
             
-                prepStatement.executeUpdate(sql);
+                prepStatement.executeUpdate();
                 
         }
         
@@ -200,14 +207,12 @@ public class ModuleDb extends Database {
 
     
     
-    public boolean addModule(PrintWriter out, String modulnavn, String beskrivelse, String innhold, boolean leveringsform)  {
+    public boolean addModule(PrintWriter out, String modulnavn, String beskrivelse, String innhold, String leveringsform)  {
         
         init();
         
-        String sql = "insert into Module values (default, ?, ?, ?, true, ?)";
-        
         try( Connection connection = getConnection();
-             PreparedStatement prepStatement = connection.prepareStatement(sql);
+             PreparedStatement prepStatement = connection.prepareStatement(addModule);
              
                 ) {
 
@@ -217,24 +222,21 @@ public class ModuleDb extends Database {
              prepStatement.setString(3, innhold);
              //prepStatement.setBoolean(5, published);
              
-             if (leveringsform == true) {
+             if (leveringsform.equals("Muntlig")) {
              prepStatement.setBoolean(4, true);
              
                      }
-             else if (leveringsform == false)  {
-                 prepStatement.setBoolean(4, false);
-             }
+             
              else {
-                 return false;
+                 prepStatement.setBoolean(4, false);
              }
              
             prepStatement.executeUpdate();
             
-            return true;
+           
         }
         catch(SQLException e)   {
-            out.println("Ugyldig SQL query");
-            out.println("Feilmelding: " + e);
+            out.println("Feilmelding i ModuleDb.addModule(): " + e);
             
         }
        
@@ -242,24 +244,24 @@ public class ModuleDb extends Database {
      }
     
 
-    public boolean editModule(PrintWriter out, HttpServletRequest request, String modulName, String modulDesc, String modulContent)  {
+    public boolean editModule(PrintWriter out, HttpServletRequest request, String modulName, String modulDesc, String modulContent, boolean leveringsform)  {
         
-   
-       String moduleID = request.getParameter("id");
-       String editModuleName = "update Module set module_name = ?, module_desc = ?, module_content = ? where module_id = ?";
    
       try(
              Connection connection = getConnection();
-             PreparedStatement prepStatement = connection.prepareStatement(editModuleName);
+             PreparedStatement prepStatement = connection.prepareStatement(editModule);
      
               ) {
+               
+              String moduleID = request.getParameter("id");
                
               prepStatement.setString(1, modulName);
               prepStatement.setString(2, modulDesc);
               prepStatement.setString(3, modulContent);
-              prepStatement.setString(4, moduleID);
-        
+              prepStatement.setBoolean(4, leveringsform);
+              prepStatement.setString(5, moduleID);
               
+        
               prepStatement.executeUpdate();
               
               
@@ -267,7 +269,7 @@ public class ModuleDb extends Database {
       }
 
       catch(SQLException ex)    {
-          out.println("Excption in editModule" + ex);
+          out.println("Excption in editModule: " + ex);
       }
        return false;
        

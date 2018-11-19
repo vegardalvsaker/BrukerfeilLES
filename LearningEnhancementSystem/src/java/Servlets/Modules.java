@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import Database.ModuleDb;
+import Database.LearningGoalDb;
+import Classes.LearningGoal;
+import java.util.Map;
+
 /**
  *
  * @author Vegard
@@ -37,8 +40,12 @@ public class Modules extends SuperServlet {
         try (PrintWriter out = response.getWriter()){  
             super.processRequest(request, response, "Modules", out);
          ModuleDb db = new ModuleDb();
+         LearningGoalDb learnGoal = new LearningGoalDb();
          db.init();
         
+         LearningGoal lg = new LearningGoal();
+         
+         
         if (request.getMethod().equals("POST"))  {
                 
                 String modulnavn = request.getParameter("Modulnavn");
@@ -47,12 +54,20 @@ public class Modules extends SuperServlet {
          
                 String innhold = request.getParameter("Innhold");
                 
-                boolean leveringsform = Boolean.parseBoolean(request.getParameter("leveringsform"));
-                
-                //boolean video = Boolean.parseBoolean(request.getParameter("Video"));
-                           
+                String leveringsform = request.getParameter("leveringsform");
+         
                 db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform);
                 
+                Map map = request.getParameterMap();
+                
+                for (int i = 0; i < (map.size() - 4)/2; i++)   {
+                    
+                    String learnGoalText = request.getParameter("Laringsmal" + i);
+                    String learnGoalPoints = request.getParameter("Poeng" + i);
+                    
+                    learnGoal.addLearningGoals(out, learnGoalText, learnGoalPoints, modulnavn);
+                }
+              
             }
             
             
@@ -70,10 +85,14 @@ public class Modules extends SuperServlet {
     }
         private void addModuleForm(PrintWriter out)  {
             
+            
+         
+            out.println("<html>");
+       
             out.println("<div>");
-          //  out.println("<a href=\"Modules\">");
-           // out.println("</a>");
+ 
             out.println("<h1>Legg til modul</h1>");
+            
             out.println("<form action=\"Modules\" method=\"POST\">");
             out.println("<h3>Modulnavn</h3><br>");
             out.println("<input type =\"text\" name=\"Modulnavn\"><br>");
@@ -82,22 +101,54 @@ public class Modules extends SuperServlet {
             out.println("<h3>Innhold</h3><br>");
             out.println("<input type=\"text\" name=\"Innhold\"><br>");      
             out.println("<br>");
-            out.println("<h3>Velg leveringsform</h3>");
+            out.println("<h3>Velg leveringsform</h3><br>");
             out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Muntlig\">Muntlig");
             out.println("<br>");
             out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Video\">Video");
             out.println("<br>");
-            out.println("<input type=\"submit\" value=\"Legg til modul\"><br>");
-            out.println("</form>");
-            out.println("</div>");
             
-            out.println("<h1>Legg til læringsmål</h1><br>");
-            out.println("<form action=\"Modules\" method=\"POST\">");
-            out.println("<button onclick=\"newLearnGoal()\">Nytt læringsmål</button>");
-            out.println("");
-            out.println("<input type=\"text\" name=\"Læringsmål\"<br>");
+
+            out.println("<h1>Legg til læringsmål</h1>");
+            
+            
+            out.println("<script language=\"javascript\">");
+            out.println("var i = 0;");
+            out.println("function add() {");
+            
+       
+	    out.println("var div = document.createElement(\"div\");");
+            
+            out.println("div.innerHTML = '<input type=\"text\" name=\"Laringsmal' + i + '\"></input> <input type=\"text\" name=\"Poeng' + i + '\"></input><br>';");
+            out.println("i++");
+            out.println("var id = document.getElementById(\"inputID\");");
+            
+            out.println("id.appendChild(div);");
+            
+            out.println("}");
+            out.println("</script>");
+    
+            out.println("<style>");
+            out.println("h3 {display:inline;}");
+            out.println("</style>");
+            
+            out.println("<h3>Læringsmål</h3>");
+            
+            out.println("<h3>Poeng</h3>");
+            
+            out.println("<span id=\"inputID\">&nbsp;</span><br>");
+            out.println("<input type=\"button\" value=\"Nytt læringsmål\" onclick=\"add()\"/>");
+            
+            
+            out.println("<input type=\"submit\" value=\"Publiser modul\"><br>");
             out.println("</form>");
- 
+            
+            out.println("</div>");
+            out.println("</html>");
+            
+            
+  
+            
+            
         }
         
     

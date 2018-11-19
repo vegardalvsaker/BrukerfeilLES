@@ -35,6 +35,7 @@ public class OneModule extends SuperServlet {
         User user = (User)request.getSession().getAttribute("userLoggedIn");
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("id");
+        
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Modules", out);
             
@@ -52,6 +53,9 @@ public class OneModule extends SuperServlet {
 
             ddb.getNrOfDeliveries(id,out);
 
+
+        
+
              if (request.getMethod().equals("POST"))  {
                 if (request.getParameter("edit")!=(null)) {
                     String deliveryId = request.getParameter("deliveryId");
@@ -60,6 +64,7 @@ public class OneModule extends SuperServlet {
                 }else {
                 if (request.getParameter("delete")!=(null)){
                     String commId = request.getParameter("comment_id");
+
                     crdb.deleteAll(commId);
                     cdb.deleteComment(commId);
                 }
@@ -86,6 +91,8 @@ public class OneModule extends SuperServlet {
              }
 
             editModuleButtonForm(out,request);
+
+
 
             db.printLearningGoals(id, out);
             
@@ -133,6 +140,7 @@ public class OneModule extends SuperServlet {
             }
             addComment(out,id);
             bst.collapseBottom(out);
+
             bst.containerClose(out);
             bst.bootstrapFooter(out); 
         }
@@ -141,9 +149,13 @@ public class OneModule extends SuperServlet {
     
     private void editModuleButtonForm(PrintWriter out, HttpServletRequest request)    {
         String id = request.getParameter("id");
+        
             out.println("<a href=\"EditModule?id="+ id +"\">"
                     + "<button>Rediger modul</button>"
+  
+
                     + "</a>");                    
+
     }
     
     private void deliver(PrintWriter out, HttpServletRequest request){

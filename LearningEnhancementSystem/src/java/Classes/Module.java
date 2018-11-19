@@ -60,14 +60,15 @@ public class Module {
         this.published = published;
     }
     
-    public boolean inInterview() {
+    public boolean getInInterview() {
         return interview;
     }
 
     public void setinInterview(boolean interview) {
         this.interview = interview;
     }
-
+    
+   
     public void addLearningGoal(LearningGoal lg) {
         lgoals.add(lg);
     }

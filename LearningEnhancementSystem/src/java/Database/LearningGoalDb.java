@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import Classes.LearningGoal;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
@@ -25,54 +24,116 @@ public class LearningGoalDb extends Database {
      * @param id
      * @param out 
      */
+        
+    
+    private static final String getModuleID = "select module_id from Module where module_name = ?"; 
+    private static final String addLearnGoal = "insert into LearningGoal values (default, ?, ?, ?)";
+    private static final String getLearngoals = "select * from LearningGoal";
+    private static final String editLearnGoals = "update LearningGoal set learn_goal_text = ?, learn_goal_points = ? where learn_goal_id = ? "; 
+   
+    
     public void printLearningGoals(String id, PrintWriter out) {
+        
+        String goalQuery = "select learn_goal_text, learn_goal_points from LearningGoal where module_id =" + id;
+        String moduleInfoQuery = "select * from Module where module_id =" + id;
+        
+        try(
         Connection conn = getConnection();
-        Statement stmt = getStatement(conn);
-        String goalQuery = "select learn_goal_text, learn_goal_points from LearningGoal where module_id = " + id;
-        String moduleInfoQuery = "select module_name, module_desc from Module where module_id = " + id;
-        try {
+        PreparedStatement stmt = conn.prepareStatement(goalQuery);
+        PreparedStatement prepStatement = conn.prepareStatement(moduleInfoQuery);
+        ResultSet rset = prepStatement.executeQuery();        
+        ) {
             
-            ResultSet modulSet = stmt.executeQuery(moduleInfoQuery);
-            while(modulSet.next()) {
-                out.println("<h3>" +modulSet.getString("module_name")+ "</h3>");
+
+            while(rset.next()) {
                 
-                out.println("<p>" +modulSet.getString("module_desc") + "</p>");
-                out.println("<br>");
-                //out.println("<p>" + modulSet.getString("module_content"));
+                out.println("<h3>" + rset.getString("module_name")+ "</h3><br>");
+                out.println("<h5>Beskrivelse</h5");
+                out.println("<p>" + rset.getString("module_desc") + "</p><br>");
+                out.println("<h5>Innhold</h5");
+                out.println("<p>" + rset.getString("module_content") + "</p>");
                 
+                out.println("<h5>Leveringsform: </h5>");
+                
+                boolean leveringsform = rset.getBoolean("module_inInterview");
+                
+                if (leveringsform == true) {
+                    
+                    out.println("<p>Muntlig</p>");
+                }
+                else if (leveringsform == false)    {
+                    
+                    out.println("<p>Video</p>");
+                }
+                  
             }
-            modulSet.close();
+            rset.close();
             ResultSet goalSet = stmt.executeQuery(goalQuery);
             out.println("<ul>");
-            out.println("<h5>Learning goals:</h5>");
+            out.println("<h5>Læringsmål:</h5>");
+            
             while (goalSet.next()) {
                 out.println("<li>");
-                out.println(goalSet.getString("learn_goal_text"));
-                out.println("Points:" + goalSet.getString("learn_goal_points"));
+                out.println(goalSet.getString("learn_goal_text") + "  - ");
+                out.println("Poeng: " + goalSet.getString("learn_goal_points"));
                 out.println("</li>");
             }
             out.println("</ul>");
             conn.close();
         }
+        
         catch (SQLException ex) {
-            out.println("Couldn't retrieve from database, because" + ex);
+            out.println("Exception in printLearningGoals: " + ex);
         }
     }
     
-    public boolean addLearningGoals(PrintWriter out, String learnGoalText, int learnGoalPoints, String moduleID)  {
+    public String getModuleID(PrintWriter out, String moduleName)  {
         
-        String addLearnGoal = "insert into LearningGoal values (default, ?, ?, ?";
         
-        try( Connection connection = getConnection();
-             PreparedStatement prepStatement = connection.prepareStatement(addLearnGoal);
+        try(
+                Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(getModuleID);
+                ){
             
+                prepStatement.setString(1, moduleName);
+                
+                try(ResultSet rset = prepStatement.executeQuery();) {
+                
+                while(rset.next())  {
+                    
+                    String moduleID = rset.getString("module_id");
+                    return moduleID;
+                    
+                }
+                
+                }
+        }
+        catch(SQLException exc) {
+            out.println("Error in getModuleID(): " + exc);
+        }
+        
+        return null;
+         
+    }
+    
+    public boolean addLearningGoals(PrintWriter out, String learnGoalText, String learnGoalPoints, String moduleName)  {
+        
+        init();
+        
+        try( 
+             Connection connection = getConnection();   
+             PreparedStatement prepStatement = connection.prepareStatement(addLearnGoal);
+                
                 ) {
             
+                String moduleID = getModuleID(out, moduleName);
+         
                 prepStatement.setString(1, learnGoalText);
-                prepStatement.setInt(2, learnGoalPoints);
+                prepStatement.setString(2, learnGoalPoints);
                 prepStatement.setString(3, moduleID);
-                
+               
                 prepStatement.executeUpdate();
+                
                 return true;
         }
         catch(SQLException ex)  {
@@ -83,7 +144,7 @@ public class LearningGoalDb extends Database {
     
     public ArrayList<LearningGoal> writeLearningGoals(PrintWriter out, String moduleID)    {
         
-        String getLearngoals = "select * from LearningGoal";
+       
         
         try( Connection connection = getConnection();
              PreparedStatement prepStatement = connection.prepareStatement(getLearngoals);
@@ -98,7 +159,7 @@ public class LearningGoalDb extends Database {
                     
                     lgoal.setLearn_goal_id(rset.getString("learn_goal_id"));
                     lgoal.setText(rset.getString("learn_goal_text"));
-                    lgoal.setPoints(rset.getInt("learn_goal_points"));
+                    lgoal.setPoints(rset.getString("learn_goal_points"));
                     lgoal.setModuleID(rset.getString("module_id"));
                     
                     lgList.add(lgoal);
@@ -114,21 +175,21 @@ public class LearningGoalDb extends Database {
             
     }
     
-    public boolean editLearnGoals(PrintWriter out, HttpServletRequest request, String learnGoalText, int learnGoalPoints, String learnGoalID)    {
+    public boolean editLearnGoals(PrintWriter out, HttpServletRequest request, String learnGoalText, String learnGoalPoints, String learnGoalID)    {
         
-        String editLearnGoals = "update LearningGoal set learn_goal_text = ?, learn_goal_points = ? where learn_goal_id = ? ";
-        
+
          try( Connection connection = getConnection();
              PreparedStatement prepStatement = connection.prepareStatement(editLearnGoals);
-             
+         
             )   {
              
-             prepStatement.setString(1, learnGoalText);
-             prepStatement.setInt(2, learnGoalPoints);
-             prepStatement.setString(3, learnGoalID);
+                 prepStatement.setString(1, learnGoalText);
+                 prepStatement.setString(2, learnGoalPoints);
+                 prepStatement.setString(3, learnGoalID);
+                 prepStatement.executeUpdate();
              
-             prepStatement.executeQuery();
              return true;
+          
          }
           catch(SQLException ex) {
              out.println("SQL Exception in function editLearnGoals(): " + ex);
@@ -136,6 +197,5 @@ public class LearningGoalDb extends Database {
          
          return false;
     }
-    
-    
+
 }
