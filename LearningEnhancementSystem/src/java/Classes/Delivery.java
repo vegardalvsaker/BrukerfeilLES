@@ -10,15 +10,48 @@ import java.sql.Timestamp;
 public class Delivery {
    
     private String moduleName;
-    private int deliveryID;
+    private String deliveryID;
     private String studentID;
+    private String studentName;
     private String moduleID;
     private String deliveryContent;
-    private int worklistID;
+    private String worklistID;
     private String deliveryTimestamp;
     private boolean deliveryIsEvaluated;
-    
 
+    public Delivery (String delivery_id, String student_id, String module_id, String delivery_content, String worklist_id, String delivery_timestamp, boolean delivery_isEvaluated) {
+    
+    this.deliveryID = delivery_id;
+    this.studentID = student_id;
+    this.moduleID = module_id;
+    this.deliveryContent = delivery_content;
+    this.worklistID = worklist_id;
+    this.deliveryTimestamp = delivery_timestamp;
+    this.deliveryIsEvaluated = delivery_isEvaluated;
+    }
+    
+    public Delivery () {
+        
+    }
+   
+    public String getStudentName() {
+        return studentName;
+    }
+
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public boolean isDeliveryIsEvaluated() {
+        return deliveryIsEvaluated;
+    }
+
+    public void setDeliveryIsEvaluated(boolean deliveryIsEvaluated) {
+        this.deliveryIsEvaluated = deliveryIsEvaluated;
+    }
+
+    
     public String getModuleName()   {
         return moduleName;
     }
@@ -28,11 +61,11 @@ public class Delivery {
         
     }
     
-    public void setDeliveryID(int deliveryID)    {
+    public void setDeliveryID(String deliveryID)    {
         this.deliveryID = deliveryID;
     }
     
-    public int getDeliveryID()  {
+    public String getDeliveryID()  {
         return deliveryID;
     }
     
@@ -60,11 +93,11 @@ public class Delivery {
         return deliveryContent;
     }
     
-    public void setWorklistID(int worklistID)   {
+    public void setWorklistID(String worklistID)   {
         this.worklistID = worklistID;
     }
     
-    public int getWorklistID()  {
+    public String getWorklistID()  {
         return worklistID;
     }
     

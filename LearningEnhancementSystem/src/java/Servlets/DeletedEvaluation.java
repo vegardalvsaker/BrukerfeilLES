@@ -14,8 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import Classes.Score;
+import Classes.Evaluation;
 import Database.ScoreDb;
 import Database.EvaluationDb;
+import java.util.Enumeration;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -35,20 +38,36 @@ public class DeletedEvaluation extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("on servlet 'DeletedEvaluation'");
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            ArrayList<Score> scores = new ArrayList<>();
-            scores = (ArrayList<Score>) request.getSession().getAttribute("Scores");
-            
-            ScoreDb sDb = new ScoreDb();
-            for (Score score : scores) {
-                sDb.deleteScore(score.getId());
+            Evaluation evaluation = (Evaluation) request.getSession().getAttribute("Evaluation");
+            if (evaluation == null) {
+                out.println("<h1 style=\"text-aligned: center;\">Her skal du vel strengt tatt ikke være?</h1>");
+                out.println("<a href=\"Index\">Gå hjem igjen</a>");
+            } else {
+                ArrayList<Score> scores = new ArrayList<>();
+                scores = evaluation.getScorelist();
+                ScoreDb sDb = new ScoreDb();
+                for (Score score : scores) {
+                    sDb.deleteScore(score.getId());
+                }
+
+                EvaluationDb eDb = new EvaluationDb();
+                eDb.deleteEvaluation(evaluation.getEvaluationid());
+
+                HttpSession session = request.getSession();
+                session.removeAttribute("Evaluation");
+                //debug for å sjekke hvilke objekter som er i session.
+                Enumeration enumm = session.getAttributeNames();
+                while (enumm.hasMoreElements()) {
+                    System.out.println((String) enumm.nextElement());
+            }
+
+                out.println("<h1>Deleted this evaluation!</h1>");
+                out.println("<a href=\"Index\"> Go home </a>");
             }
             
-            EvaluationDb eDb = new EvaluationDb();
-            eDb.deleteEvaluation(request.getParameter("evaluationid"));
-            out.println("<h1>Deleted this evaluation!</h1>");
-            out.println("<a href=\"Index\"> Go home </a>");
         }
     }
 

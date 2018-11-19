@@ -2,71 +2,72 @@ package Classes;
 
 /**
  *
- * @author Gorm-Erik
+ * @author Marius
  */
 public class Results {
-    
-    private int moduleID;
-    private int scoreID;
-    private int learngoalID;
+
+    private String studentId;
+    private String moduleId;
     private String moduleName;
-    private int scorePoints;
-    private String learngoal;
+    private String teacherName;
+    private String evalId;
+    private String evalComment;
+    private String delId;
+    private String learnGoalPoints;
+    private String scorePoints;
     
-    public int getScoreID() {
-        
-        return scoreID;  
+    public String getStudentId() {
+        return studentId;
     }
-    
-    public int getLearngoalID()   {
-    
-    return learngoalID;
-    
-}
-    
-    public String getModuleName()   {
+    public void setStudentId (String studentId) {
+        this.studentId = studentId;
+    }
+    public String getModuleId() {
+        return moduleId;
+    }
+    public void setModuleId (String moduleId) {
+        this.moduleId = moduleId;
+    }
+    public String getModuleName() {
         return moduleName;
     }
-    
-    public int getModuleID() {
-        return moduleID;
-    }
-    
-    public int getScorePoints() {
-        return scorePoints;
-    }
-    
-    public String getLearngoal()    {
-        return learngoal;
-    }
-    
-    public void setScoreID(int scoreID) {
-        
-        this.scoreID = scoreID;
-    }
-    
-    public void setLearngoalID(int learngoalID) {
-        this.learngoalID = learngoalID;
-        
-    }
-    
-    public void setScorePoints(int scorePoints) {
-        
-        this.scorePoints = scorePoints;
-    }
-    
-    public void setLearngoal(String learngoal)  {
-        
-        this.learngoal = learngoal;
-    }
-    
-    public void setModuleID(int moduleID)   {
-        this.moduleID = moduleID;
-    }
-    
-    public void setModuleName(String moduleName)    {
-        
+    public void setModuleName (String moduleName) {
         this.moduleName = moduleName;
     }
-    
+    public String getTeacherName() {
+        return teacherName;
+    }
+    public void setTeacherName (String teacherName) {
+        this.teacherName = teacherName;
+    }
+    public String getEvalId() {
+        return evalId;
+    }
+    public void setEvalId (String evalId) {
+        this.evalId = evalId;
+    }
+    public String getEvalComment() {
+        return evalComment;
+    }
+    public void setEvalComment (String evalComment) {
+        this.evalComment = evalComment;
+    }
+    public String getDelId() {
+        return delId;
+    }
+    public void setDelId (String delId) {
+        this.delId = delId;
+    } 
+    public String getLGPoints() {
+        return learnGoalPoints;
+    }
+    public void setLGPoints (String learnGoalPoints) {
+        this.learnGoalPoints = learnGoalPoints;
+    } 
+    public String getScorePoints() {
+        return scorePoints;
+    }
+    public void setScorePoints (String scorePoints) {
+        this.scorePoints = scorePoints;
+    } 
 }
