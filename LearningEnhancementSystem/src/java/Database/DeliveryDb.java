@@ -146,6 +146,7 @@ public class DeliveryDb extends Database{
     
     //VVVV FOSSE VVVVV
 
+    //Returnerer int total antall evaluerte deliveries 
     public int getAllEvaluatedDeliveries(PrintWriter out) {
         String oneDelivery = ("select * from Delivery where delivery_isEvaluated = 1;");
         int allEvaluatedDeliveriesCount = 0;
@@ -167,6 +168,7 @@ public class DeliveryDb extends Database{
         return allEvaluatedDeliveriesCount;
     }     
     
+    //Tar i mot student_id og returnerer total antall evaluerte deliveries for en student
     public int getEvaluatedDeliveries(PrintWriter out, String id) {
         String oneDelivery = ("select * from Delivery where student_id = ? AND delivery_isEvaluated = 1;");
         int evaluatedDeliveriesCount = 0;
@@ -187,7 +189,34 @@ public class DeliveryDb extends Database{
             out.println("SQL exception: in getEvaluatedDeliveries" + liste);
         }  
         return evaluatedDeliveriesCount;
-    }     
+    }   
+    
+    public ArrayList<Delivery> getDeliveryArray(PrintWriter out, String id) {
+        String allEvaluatedDeliveries = ("select * from Delivery where module_id = ? AND delivery_isEvaluated = 1");
+        
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(allEvaluatedDeliveries);
+                ){
+            
+            prepStatement.setString(1, id);
+            
+            try(ResultSet rset = prepStatement.executeQuery(); ){
+                ArrayList<Delivery> deliveryList = new ArrayList<>();
+                while(rset.next())   {
+                    Delivery del = new Delivery();
+                    
+                    del.setModuleID(rset.getString("module_id"));
+
+                    deliveryList.add(del);
+                }
+                return deliveryList;
+            }
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getDeliveryArray" + liste);
+           } 
+        return null;
+    } 
     //^^^^ FOSSE ^^^^
     
     

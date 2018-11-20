@@ -19,15 +19,33 @@ public class Module {
     private boolean published;
     private boolean interview;
     private ArrayList<LearningGoal> lgoals = new ArrayList<>();
+    
+    private String moduleID;
+    
 
     public int getModuleid() {
         return moduleid;
     }
+    
+    //^^^^^denne må reworkes/slettes
 
     public void setId(int moduleid) {
         this.moduleid = moduleid;
     }
 
+        //^^^^^denne må reworkes/slettes
+    
+    
+    public String getModuleID() {
+        return moduleID;
+    }
+    
+    public void setModuleID(String id) {
+        this.moduleID = id;
+    }
+    
+    
+    
     public String getName() {
         return name;
     }
