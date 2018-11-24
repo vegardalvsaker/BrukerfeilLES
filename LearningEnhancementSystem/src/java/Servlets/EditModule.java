@@ -13,6 +13,7 @@ import HtmlTemplates.BootstrapTemplate;
 import java.util.Map;
 import Database.LearningGoalDb;
 import java.util.ArrayList;
+import Database.NotificationDb;
 /**
  *
  * @author Gorm-Erik
@@ -67,9 +68,11 @@ public class EditModule extends SuperServlet {
                     }
                 }
                 
-               
+                NotificationDb notification = new NotificationDb();
+                
                 if (request.getParameter("varsling").equals("on"))    {
                     
+                    notification.sendNotificationsToAll(modulName + " har blitt endret.");
                     
                 }
             }
