@@ -67,9 +67,11 @@ public class EditModule extends SuperServlet {
                     }
                 }
                 
-                String varsling = request.getParameter("varsling");
-              
-                
+               
+                if (request.getParameter("varsling").equals("on"))    {
+                    
+                    
+                }
             }
             
 
