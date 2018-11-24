@@ -16,6 +16,7 @@ public class UserDb extends Database {
     private static final String USER_EXIST = "select  count(*) from Users where user_email = ?";
     private static final String SLCT_USER = "select * from Users where user_email = ?";
     private static final String SELECT_USERID = "select user_id from Users where user_email = ?";
+    private static final String SELECT_ALL_USER_ID = "select user_id from Users";
     
 
   // Fosse
@@ -25,6 +26,9 @@ public class UserDb extends Database {
     ArrayList<User> profileList = new ArrayList<>();
   //STOP  
     
+    public UserDb() {
+        init();
+    }
     /**
      * Checks if there is a user in the database with the same name
      * @param email
@@ -233,6 +237,21 @@ public class UserDb extends Database {
            
         } 
 
+    public ArrayList<String> getAllUserIds() {
+        ArrayList<String> userIds = new ArrayList();
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(SELECT_ALL_USER_ID);
+                ResultSet rs = ps.executeQuery();) {
+            while(rs.next()) {
+                userIds.add(rs.getString("user_id"));
+            }
+            return userIds;
+        } catch (SQLException ex) {
+            System.out.println("Method getAllUserIds(), error: " + ex);
+        }
+        return userIds;
+    }
+    
     //
     //     FOSSE SITT
     //    | | | | | | |

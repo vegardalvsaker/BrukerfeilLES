@@ -18,8 +18,31 @@ import java.sql.SQLException;
 public class NotificationDb extends Database {
     private static final String SELECT_NOTIFICATION = "select * from Notification where user_id = ? order by notification_timestamp desc";
     private static final String UPDATE_NOTIFICATION = "update Notification set notification_seen = 1 where notification_id = ?";
+    private static final String INSERT_NOTIFICATION = "insert into values (default, ?, ?, default, default)";
+   
     public NotificationDb () {
         init();
+    }
+    
+    public void sendNotificationsToAll(String notification) {
+        UserDb uDb = new UserDb();
+        
+        ArrayList<String> allIds = uDb.getAllUserIds();
+        if (allIds.isEmpty()) {
+            return;
+        }
+        
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(INSERT_NOTIFICATION);) {
+            for (String id : allIds) {
+                ps.setString(1, id);
+                ps.setString(2, notification);
+                ps.executeUpdate();
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Method: sendNotificationsToAll(), error: " + ex);
+        }
     }
     
     public ArrayList<Notification> getUsersNotification(String userId) {
