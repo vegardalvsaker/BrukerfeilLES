@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -22,10 +23,88 @@ public class DeliveryDb extends Database{
     private static final String ADD_DELIVERY = "insert into Delivery values (default, ?, ?, ?, ?, default, default)";
     private static final String GET_DELIVERY_FORM ="select * from Module where module_id = ?";
     private static final String SLCT_ALL_DELIVERIES = "select * from Delivery where module_id = ?";
+    private static final String CHECK_DELIVERY = "select delivery_id, delivery_content, module_id, D.student_id, user_id, user_name from Delivery D inner join Users U on D.student_id = U.user_id where module_id = ? and user_id = ?";
+    private static final String EDIT_DELIVERY = "select delivery_id, delivery content from Delivery";
+    private static final String UPDATE_DELIVERY ="update Delivery set delivery_content = ? where delivery_id = ?";
+    private static final String SELECT_ALL_DELIVERIES = "select * from Delivery where worklist_id = ? and delivery_isEvaluated = 0";
+    
+     public ArrayList<Delivery> getUnevaluatedDeliveriesWithinWorklist(String worklistId) {
+        ArrayList<Delivery> deliveries = new ArrayList<>();
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(SELECT_ALL_DELIVERIES)) {
+            ps.setString(1, worklistId);
+            try (ResultSet rset = ps.executeQuery();) {
+                while (rset.next()) {
+                    String delId = rset.getString("delivery_id");
+                    String studentId = rset.getString("student_id");
+                    String moduleId = rset.getString("module_id");
+                    String desc = rset.getString("delivery_content");
+                    String workId = rset.getString("worklist_id");
+                    String timestamp = rset.getString("delivery_timestamp");
+                    boolean isEvaluated = rset.getBoolean("delivery_isEvaluated");
+                                        
+                    Delivery del = new Delivery(delId, studentId, moduleId, desc, workId, timestamp, isEvaluated);
+                    deliveries.add(del);
+
+                }
+                return deliveries;
+            }
+        } catch (SQLException ex) {
+            System.out.print("Method: getUnevaluatedDeliveriesWithinWorklist(), error:" + ex);
+            return null;
+        }
+        
+    }
+    
+    public List<Delivery> getDeliveryWithUserIdAndModuleId(String moduleId, String studentId) {
+        ArrayList<Delivery> delivery =new ArrayList<>();
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(CHECK_DELIVERY);)
+               {
+             ps.setString(1, moduleId);
+            ps.setString(2, studentId);   
+            try (ResultSet deliverySet = ps.executeQuery();) {
+            while(deliverySet.next()) {
+                Delivery deliveries = new Delivery();
+                deliveries.setDeliveryID(deliverySet.getString("delivery_id"));
+                deliveries.setDeliveryContent(deliverySet.getString("delivery_content"));
+                deliveries.setModuleID(deliverySet.getString("module_id"));
+                deliveries.setStudentID(deliverySet.getString("student_id"));
+                delivery.add(deliveries);
+            }
+            return delivery;
+        }
+               }
+        catch (SQLException ex) {
+            System.out.println("Query error:" + ex);
+        }
+        return null;
+    }
+    
+    
     
     public DeliveryDb() {
         init();
     }
+    public void editDelivery(String deliveryContent, String deliveryId) {
+   try( Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(UPDATE_DELIVERY);
+                ) {
+            
+            ps.setString(1, deliveryContent);
+            ps.setString(2,deliveryId);
+            ps.executeUpdate();
+            
+        }
+        catch(SQLException ex)   {
+            System.out.println(ex);
+        }
+
+     }
+    
+
     
     public Delivery getDeliveryWithUser(String deliveryId) {
         try (
@@ -40,12 +119,12 @@ public class DeliveryDb extends Database{
          
                 Delivery delivery = new Delivery();
                 
-                delivery.setDeliveryID(rs.getInt("delivery_id"));
+                delivery.setDeliveryID(rs.getString("delivery_id"));
                 delivery.setStudentID(rs.getString("student_id"));
                 delivery.setStudentName(rs.getString("user_name"));
                 delivery.setModuleID(rs.getString("module_id"));
                 delivery.setDeliveryContent(rs.getString("delivery_content"));
-                delivery.setWorklistID(rs.getInt("worklist_id"));
+                delivery.setWorklistID(rs.getString("worklist_id"));
                 delivery.setDeliveryTimestamp(rs.getString("delivery_timestamp"));
                 
                 return delivery;
@@ -137,11 +216,11 @@ public class DeliveryDb extends Database{
             while(rset.next())   {
                 Delivery del = new Delivery();
                 del.setModuleName(rset.getString("module_name"));
-                del.setDeliveryID(rset.getInt("delivery_id"));
+                del.setDeliveryID(rset.getString("delivery_id"));
                 del.setStudentID(rset.getString("user_id"));
                 del.setModuleID(rset.getString("module_id"));
                 del.setDeliveryContent(rset.getString("delivery_content"));
-                del.setWorklistID(rset.getInt("worklist_id"));
+                del.setWorklistID(rset.getString("worklist_id"));
                 del.setDeliveryTimestamp(rset.getString("delivery_timestamp"));
                 del.setIsEvaluated(rset.getBoolean("delivery_isEvaluated"));
 
@@ -178,7 +257,33 @@ public class DeliveryDb extends Database{
             System.out.println(ex);
         }
     }
+
+    /*
+    public boolean editDelivery (String deliveryId, String content){
+        
+        String editDeliveryContent = "update Delivery set delivery_content = ?, where delivery_id = ?";
+        
+        try(
+            Connection connection = getConnection();
+            PreparedStatement prepStatement = connection.prepareStatement(editDeliveryContent);
+        
+        ) {
+            prepStatement.setString(1, content);
+            prepStatement.setString(2, deliveryId);
+        
+            prepStatement.executeUpdate();
+            
+            
+            return true;
+          }
+        
+        catch(SQLException ex)  {
+            System.out.println("Error");
+        }
+        return false;
+    }*/
     
+
     
     //VVVV FOSSE VVVVV
 
@@ -202,7 +307,8 @@ public class DeliveryDb extends Database{
         }  
         return allEvaluatedDeliveriesCount;
     }     
-    
+
+  
     public int getEvaluatedDeliveries(PrintWriter out, String id) {
         String oneDelivery = ("select * from Delivery where student_id = ? AND delivery_isEvaluated = 1;");
         int evaluatedDeliveriesCount = 0;

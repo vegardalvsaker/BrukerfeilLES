@@ -81,7 +81,7 @@ public class BootstrapTemplate {
 "          <a class=\"nav-link disabled\" href=\"Results\">Results </a>\n" +
 "        </li>\n" +
 "        <li class=\"nav-item %s\" >\n" +
-"          <a class=\"nav-link disabled\" href=\"#\">Inbox </a>\n" +
+"          <a class=\"nav-link disabled\" href=\"Inbox\">Inbox </a>\n" +
 "        </li>\n" +
 "        <li class=\"nav-item %s\">\n" +
 "          <a class=\"nav-link disabled\" href=\"Worklist\">Worklist </a>\n" +
@@ -145,13 +145,29 @@ public class BootstrapTemplate {
      * A bootstrap Jumbotron which displays announcements. placeholder at this moment {18.09}
      * @param out 
      */
-    public void jumbotron(PrintWriter out,String annoSubject,String annoBody,String annoID) {
+    public void jumbotron(PrintWriter out) {
         
-        out.println("<h2>"+ annoID + ". " + annoSubject + "</h2>");
-        out.println("<p>" + annoBody + "</p>");
+        out.println("<div class=\"jumbotron\">");
+        out.println("<div class=\"container\">");
+        out.println("<h1 class=\"display-4\">Announcements:</h1>");
         out.println("<hr class=\"my-4\">");
     }
+    public void collapseTop(PrintWriter out) {
+            out.println("<p>");
+            out.println("<div class=\"jumbotron\">");
+            out.println("<div class=\"container\">");
+            out.println("<button class=\"btn btn-outline-secondary\" data-toggle=\"collapse\" data-target=\"#collapse\" aria-expanded=\"true\" aria-controls=\"collapse\">");
+            out.println("<h4 class=\"display-4\">Kommentarer</h4>");
+            out.println("</button>");
+            out.println("<hr class=\"my-4\">");
+            out.println("<div class=\"collapse show\" id=\"collapse\">");
+            out.println("<div class=\"card-body\">");
+    }
     
+    public void collapseBottom(PrintWriter out) {
+            out.println("</div>");
+            out.println("</div>");
+    }
     
     
     /**

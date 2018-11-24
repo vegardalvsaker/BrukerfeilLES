@@ -9,6 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse; 
 import Database.AnnouncementDb;
+import java.sql.Timestamp;
+import java.util.List;
 /**
  *
  * @author Marius
@@ -27,17 +29,40 @@ public class Announcement extends SuperServlet {
              db.init();
              
              if (request.getMethod().equals("POST"))  {
-                if (request.getParameter("delete").equals("TRUE")) {
-                    String aid = request.getParameter("annId");
-                    int annId = Integer.parseInt(aid);
-                    db.deleteAnnouncement(annId);  
-                }
+                    String annId = request.getParameter("annId");
+                    db.deleteAnnouncement(annId);
              }
              if (user.getUserIsTeacher()){
-             out.println("<a href=\"AddAnnouncement\"a class=\"btn btn-primary\">Add more</button></a>");
+             addAnnouncement(out);             
              }
-             db.skrivAnnouncement(out);
+             bst.jumbotron(out);
+             List<Classes.Announcement> announcementList = db.getAnnouncement();
+             for (Classes.Announcement announcement : announcementList){
+                String annId = announcement.getAnnId();
+                String annSubject = announcement.getAnnSubject();
+                String annBody = announcement.getAnnBody();
+                String annUser = announcement.getAnnUserName();
+                Timestamp annTime = announcement.getAnnTime();
+                out.println("<h2>"+ annSubject + "</h2>");
+                out.println("<p>" + annBody + "</p>");
+                out.println("<p>" + annUser + "</p>");
+                out.println("<small>" + annTime + "</small>");
+                if (user.getUserIsTeacher()){
+                deleteAnnouncement(out,annId);
+                }
+                out.println("<hr class=\"my-4\">");
+             }
         }
+    }
+        private void deleteAnnouncement(PrintWriter out, String annId) {
+        out.println("<form action=\"Announcement\" method=\"POST\">");
+        out.println("<input type=\"text\" name=\"delete\" value=\"TRUE\"style=\"visibility:hidden;\">");
+        out.println("<input type=\"text\" name=\"annId\" value=\""+ annId +"\"style=\"visibility:hidden;\">");
+        out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete\">");
+        out.println("</form>");
+    }
+    private void addAnnouncement(PrintWriter out) {
+        out.println("<a href=\"AddAnnouncement\"a class=\"btn btn-secondary btn-lg btn-block\">Add more</button></a>");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

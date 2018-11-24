@@ -13,8 +13,10 @@ import java.util.ArrayList;
  * @author Vegard & Gorm & Fosse
  */
 public class UserDb extends Database {
-    static final String USER_EXIST = "select  count(*) from Users where user_email = ?";
-    static final String SLCT_USER = "select * from Users where user_email = ?";
+    private static final String USER_EXIST = "select  count(*) from Users where user_email = ?";
+    private static final String SLCT_USER = "select * from Users where user_email = ?";
+    private static final String SELECT_USERID = "select user_id from Users where user_email = ?";
+    private static final String SELECT_ALL_USER_ID = "select user_id from Users";
     
 
   // Fosse
@@ -24,6 +26,9 @@ public class UserDb extends Database {
     ArrayList<User> profileList = new ArrayList<>();
   //STOP  
     
+    public UserDb() {
+        init();
+    }
     /**
      * Checks if there is a user in the database with the same name
      * @param email
@@ -52,6 +57,26 @@ public class UserDb extends Database {
         } 
          
         return false;
+    }
+    
+    public String getUserId(String email) {
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(SELECT_USERID);
+                ) {
+                    ps.setString(1, email);
+                    try (ResultSet rs = ps.executeQuery();) {
+                        if(rs.next()) {
+                        return rs.getString("user_id");
+                    }
+                    }
+                    
+                } 
+                    catch (SQLException ex) {
+                        System.out.println("Method: getUserId(), Error: "+ ex);
+                        return null;
+                        }
+        return null;
     }
     
     public User getUser(String email) {
@@ -212,6 +237,21 @@ public class UserDb extends Database {
            
         } 
 
+    public ArrayList<String> getAllUserIds() {
+        ArrayList<String> userIds = new ArrayList();
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(SELECT_ALL_USER_ID);
+                ResultSet rs = ps.executeQuery();) {
+            while(rs.next()) {
+                userIds.add(rs.getString("user_id"));
+            }
+            return userIds;
+        } catch (SQLException ex) {
+            System.out.println("Method getAllUserIds(), error: " + ex);
+        }
+        return userIds;
+    }
+    
     //
     //     FOSSE SITT
     //    | | | | | | |
