@@ -159,7 +159,7 @@ public class LearningGoalDb extends Database {
                     
                     lgoal.setLearn_goal_id(rset.getString("learn_goal_id"));
                     lgoal.setText(rset.getString("learn_goal_text"));
-                    lgoal.setPoints(rset.getString("learn_goal_points"));
+                    lgoal.setPoints(rset.getInt("learn_goal_points"));
                     lgoal.setModuleID(rset.getString("module_id"));
                     
                     lgList.add(lgoal);

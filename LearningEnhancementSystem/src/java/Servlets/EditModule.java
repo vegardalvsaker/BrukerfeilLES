@@ -66,6 +66,10 @@ public class EditModule extends SuperServlet {
                     
                     }
                 }
+                
+                String varsling = request.getParameter("varsling");
+              
+                
             }
             
 
@@ -127,7 +131,7 @@ public class EditModule extends SuperServlet {
                 
                 String learnGoalID = learnGoal.getLearn_goal_id();
                 String learnGoalText = learnGoal.getText();
-                String learnGoalPoints = learnGoal.getPoints();
+                int learnGoalPoints = learnGoal.getPoints();
                  
                 out.println("<input type=\"text\" name=\"Laringsmal" + i + "\" value=\"" + learnGoalText + "\"></input>");
                 out.println("<input type=\"text\" hidden=\"true\" name=\"LearnGoalID" + i + "\" value=\"" + learnGoalID + "\"></input>");
@@ -153,7 +157,9 @@ public class EditModule extends SuperServlet {
             out.println("</script>");
     
             out.println("<span id=\"inputID\">&nbsp;</span><br>");
-            out.println("<input type=\"button\" value=\"Nytt læringsmål\" onclick=\"add()\"/></input>");
+            out.println("<input type=\"button\" value=\"Nytt læringsmål\" onclick=\"add()\"/></input><br>");
+            
+            out.println("<input type=\"checkbox\" name=\"varsling\">Varsle studenter om endring</input><br>");
             
             out.println("<input type=\"submit\" value=\"Rediger modul\"><br>");  
             

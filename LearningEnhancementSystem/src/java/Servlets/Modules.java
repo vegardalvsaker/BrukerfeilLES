@@ -9,10 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import Database.ModuleDb;
-import Database.LearningGoalDb;
-import Classes.LearningGoal;
-import java.util.Map;
-
 /**
  *
  * @author Vegard
@@ -40,117 +36,30 @@ public class Modules extends SuperServlet {
         try (PrintWriter out = response.getWriter()){  
             super.processRequest(request, response, "Modules", out);
          ModuleDb db = new ModuleDb();
-         LearningGoalDb learnGoal = new LearningGoalDb();
+       
          db.init();
         
-         LearningGoal lg = new LearningGoal();
-         
-         
-        if (request.getMethod().equals("POST"))  {
-                
-                String modulnavn = request.getParameter("Modulnavn");
-                
-                String beskrivelse = request.getParameter("Beskrivelse");
-         
-                String innhold = request.getParameter("Innhold");
-                
-                String leveringsform = request.getParameter("leveringsform");
-         
-                db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform);
-                
-                Map map = request.getParameterMap();
-                
-                for (int i = 0; i < (map.size() - 4)/2; i++)   {
-                    
-                    String learnGoalText = request.getParameter("Laringsmal" + i);
-                    String learnGoalPoints = request.getParameter("Poeng" + i);
-                    
-                    learnGoal.addLearningGoals(out, learnGoalText, learnGoalPoints, modulnavn);
-                }
-              
-            }
-            
-            
+        
             bst.containerOpen(out);
             
             db.skrivModuler(out);
             
             bst.containerClose(out);
             
-            addModuleForm(out);
+            addModuleButton(out);
             
             bst.bootstrapFooter(out);
             
         }
     }
-        private void addModuleForm(PrintWriter out)  {
-            
-            
-         
-            out.println("<html>");
-       
-            out.println("<div>");
- 
-            out.println("<h1>Legg til modul</h1>");
-            
-            out.println("<form action=\"Modules\" method=\"POST\">");
-            out.println("<h3>Modulnavn</h3><br>");
-            out.println("<input type =\"text\" name=\"Modulnavn\"><br>");
-            out.println("<h3>Beskrivelse</h3><br>");
-            out.println("<input type=\"text\" name=\"Beskrivelse\"><br>");
-            out.println("<h3>Innhold</h3><br>");
-            out.println("<input type=\"text\" name=\"Innhold\"><br>");      
-            out.println("<br>");
-            out.println("<h3>Velg leveringsform</h3><br>");
-            out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Muntlig\">Muntlig");
-            out.println("<br>");
-            out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Video\">Video");
-            out.println("<br>");
-            
-
-            out.println("<h1>Legg til læringsmål</h1>");
-            
-            
-            out.println("<script language=\"javascript\">");
-            out.println("var i = 0;");
-            out.println("function add() {");
-            
-       
-	    out.println("var div = document.createElement(\"div\");");
-            
-            out.println("div.innerHTML = '<input type=\"text\" name=\"Laringsmal' + i + '\"></input> <input type=\"text\" name=\"Poeng' + i + '\"></input><br>';");
-            out.println("i++");
-            out.println("var id = document.getElementById(\"inputID\");");
-            
-            out.println("id.appendChild(div);");
-            
-            out.println("}");
-            out.println("</script>");
     
-            out.println("<style>");
-            out.println("h3 {display:inline;}");
-            out.println("</style>");
+        private void addModuleButton(PrintWriter out)  {
             
-            out.println("<h3>Læringsmål</h3>");
-            
-            out.println("<h3>Poeng</h3>");
-            
-            out.println("<span id=\"inputID\">&nbsp;</span><br>");
-            out.println("<input type=\"button\" value=\"Nytt læringsmål\" onclick=\"add()\"/>");
-            
-            
-            out.println("<input type=\"submit\" value=\"Publiser modul\"><br>");
+            out.println("<form action=\"CreateModule\">");
+            out.println("<input type=\"submit\" value=\"Opprett ny modul\"");
             out.println("</form>");
-            
-            out.println("</div>");
-            out.println("</html>");
-            
-            
-  
-            
-            
+      
         }
-        
     
         
             // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
