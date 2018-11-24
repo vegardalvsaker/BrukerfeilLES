@@ -127,7 +127,7 @@ public class EditModule extends SuperServlet {
                 
                 String learnGoalID = learnGoal.getLearn_goal_id();
                 String learnGoalText = learnGoal.getText();
-                String learnGoalPoints = learnGoal.getPoints();
+                int learnGoalPoints = learnGoal.getPoints();
                  
                 out.println("<input type=\"text\" name=\"Laringsmal" + i + "\" value=\"" + learnGoalText + "\"></input>");
                 out.println("<input type=\"text\" hidden=\"true\" name=\"LearnGoalID" + i + "\" value=\"" + learnGoalID + "\"></input>");

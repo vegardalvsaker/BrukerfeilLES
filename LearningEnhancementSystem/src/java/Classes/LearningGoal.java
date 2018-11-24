@@ -12,7 +12,7 @@ package Classes;
 public class LearningGoal {
     
     private String learn_goal_id;
-    private String points;
+    private int points;
     private String text;
     private String moduleID;
     
@@ -24,11 +24,11 @@ public class LearningGoal {
         return learn_goal_id;
     }
     
-    public String getPoints() {
+    public int getPoints() {
         return points;
     }
 
-    public void setPoints(String points) {
+    public void setPoints(int points) {
         this.points = points;
     }
 

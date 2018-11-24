@@ -83,7 +83,7 @@ public class ModuleDb extends Database {
                     LearningGoal lg = new LearningGoal();
                     lg.setLearn_goal_id(rs.getString("learn_goal_id"));
                     lg.setText(rs.getString("learn_goal_text"));
-                    lg.setPoints(rs.getString("learn_goal_points"));
+                    lg.setPoints(rs.getInt("learn_goal_points"));
                     
                     module.addLearningGoal(lg);
                     
@@ -91,7 +91,7 @@ public class ModuleDb extends Database {
                         LearningGoal lg2 = new LearningGoal();
                         lg2.setLearn_goal_id(rs.getString("learn_goal_id"));
                         lg2.setText(rs.getString("learn_goal_text"));
-                        lg2.setPoints(rs.getString("learn_goal_points"));
+                        lg2.setPoints(rs.getInt("learn_goal_points"));
                         
                         module.addLearningGoal(lg2);
                         
