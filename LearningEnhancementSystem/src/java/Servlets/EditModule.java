@@ -13,6 +13,7 @@ import HtmlTemplates.BootstrapTemplate;
 import java.util.Map;
 import Database.LearningGoalDb;
 import java.util.ArrayList;
+import Database.NotificationDb;
 /**
  *
  * @author Gorm-Erik
@@ -65,6 +66,14 @@ public class EditModule extends SuperServlet {
                     learnGoalDb.addLearningGoals(out, newLearnGoalText, newLearnGoalPoint, modulName);
                     
                     }
+                }
+                
+                NotificationDb notification = new NotificationDb();
+                
+                if (request.getParameter("varsling").equals("on"))    {
+                    
+                    notification.sendNotificationsToAll(modulName + " har blitt endret.");
+                    
                 }
             }
             
@@ -153,7 +162,9 @@ public class EditModule extends SuperServlet {
             out.println("</script>");
     
             out.println("<span id=\"inputID\">&nbsp;</span><br>");
-            out.println("<input type=\"button\" value=\"Nytt læringsmål\" onclick=\"add()\"/></input>");
+            out.println("<input type=\"button\" value=\"Nytt læringsmål\" onclick=\"add()\"/></input><br>");
+            
+            out.println("<input type=\"checkbox\" name=\"varsling\">Varsle studenter om endring</input><br>");
             
             out.println("<input type=\"submit\" value=\"Rediger modul\"><br>");  
             
