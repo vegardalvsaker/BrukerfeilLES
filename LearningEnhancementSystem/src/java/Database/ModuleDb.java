@@ -29,6 +29,7 @@ public class ModuleDb extends Database {
     private static final String SLCT_ALL_MODULES = "select * from Module";
     private static final String SELECT_ONE_MODULE = "select * from Module where module_id = ?";
     private static final String SLCT_MODULES_WITH_GOALS = "select * from Module m inner join LearningGoal l on m.module_id = l.module_id where m.module_id = ?";
+    private static final String UPDATE_ISPUBLISHED = "update Module set module_isPublished = true where module_id = ?";
     private static final String SLCT_LEARNGOAL = "select * from LearningGoal where module_id = ?";
     /**
      * This method retrieves all of the modules in the database, create an object of each record and is then
@@ -100,6 +101,18 @@ public class ModuleDb extends Database {
         return getModule(module_id);
     }
     
+    
+    public void makeModulePublic(String moduleId) {
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(UPDATE_ISPUBLISHED);
+                ) {
+            ps.setString(1, moduleId);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("method makeModulePublic(), error: " + ex);
+        }
+    }
     
     /**
      * Redundant*

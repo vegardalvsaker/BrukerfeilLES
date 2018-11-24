@@ -41,33 +41,17 @@ public class Modules extends SuperServlet {
          
          db.init();
         
-        if (request.getMethod().equals("POST"))  {
-                
-                String modulnavn = request.getParameter("Modulnavn");
-                
-                String beskrivelse = request.getParameter("Beskrivelse");
-         
-                String innhold = request.getParameter("Innhold");
-                
-                boolean leveringsform = Boolean.parseBoolean(request.getParameter("leveringsform"));
-                
-                //boolean video = Boolean.parseBoolean(request.getParameter("Video"));
-                           
-                db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform);
-                
+        if (request.getParameterMap().containsKey("publish"))  {      
+            db.makeModulePublic(request.getParameter("publish"));
             }
-            
-            
+
             bst.containerOpen(out);
             
             printModules(request, out);
-            
-            
-            
-            addModuleForm(out);
+   
+            addModuleButton(out);
             bst.containerClose(out);
-            bst.bootstrapFooter(out);
-            
+            bst.bootstrapFooter(out);    
         }
     }
     
@@ -83,6 +67,7 @@ public class Modules extends SuperServlet {
         
         if (request.isUserInRole("Teacher")) {
             out.println("<th scope=\"col\">Delete</th>");
+            out.println("<th scope=\"col\">Publish</th>");
         }
                 out.println("</tr>"
                 + "</thead>"
@@ -96,6 +81,9 @@ public class Modules extends SuperServlet {
             
            if (request.isUserInRole("Teacher")) {
                out.println("<td><a class=\"btn btn-danger\" href=\"RemoveModule?moduleId="+ moduleId + "\">Delete</a></td>");
+               if (!module.isPublished()) {
+                   out.println("<td><a class=\"btn btn-success\" href=\"Modules?publish=" + moduleId+ "\">Publish</a></td>");
+               }
            }
            
            out.println("<tr>");
@@ -104,37 +92,13 @@ public class Modules extends SuperServlet {
                 + "</table>");
     }        
             
-        private void addModuleForm(PrintWriter out)  {
-            
-            out.println("<div>");
-          //  out.println("<a href=\"Modules\">");
-           // out.println("</a>");
-            out.println("<h1>Legg til modul</h1>");
-            out.println("<form action=\"Modules\" method=\"POST\">");
-            out.println("<h3>Modulnavn</h3><br>");
-            out.println("<input type =\"text\" name=\"Modulnavn\"><br>");
-            out.println("<h3>Beskrivelse</h3><br>");
-            out.println("<input type=\"text\" name=\"Beskrivelse\"><br>");
-            out.println("<h3>Innhold</h3><br>");
-            out.println("<input type=\"text\" name=\"Innhold\"><br>");      
-            out.println("<br>");
-            out.println("<h3>Velg leveringsform</h3>");
-            out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Muntlig\">Muntlig");
-            out.println("<br>");
-            out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Video\">Video");
-            out.println("<br>");
-            out.println("<input type=\"submit\" value=\"Legg til modul\"><br>");
-            out.println("</form>");
-            out.println("</div>");
-            
-            out.println("<h1>Legg til læringsmål</h1><br>");
-            out.println("<form action=\"Modules\" method=\"POST\">");
-            out.println("<button onclick=\"newLearnGoal()\">Nytt læringsmål</button>");
-            out.println("");
-            out.println("<input type=\"text\" name=\"Læringsmål\"<br>");
-            out.println("</form>");
- 
-        }
+    private void addModuleButton(PrintWriter out)  {
+
+     out.println("<form action=\"CreateModule\">");
+     out.println("<input type=\"submit\" value=\"Opprett ny modul\"");
+     out.println("</form>");
+
+ }
         
     
         
