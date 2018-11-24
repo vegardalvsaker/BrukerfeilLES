@@ -41,7 +41,17 @@ public class CreateModule extends SuperServlet {
                 
                 String leveringsform = request.getParameter("leveringsform");
          
-                db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform);
+                boolean published = true;
+                
+                if (request.getParameter("save").equals("on"))  {
+                    published = false; 
+                }
+                else if (request.getParameter("save").equals("off"))    {
+                    published = true;
+                }
+                
+                
+                db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform, published);
                 
                 
                 
@@ -112,8 +122,11 @@ public class CreateModule extends SuperServlet {
             
             out.println("<h3>Læringsmål og Poeng</h3>");
             out.println("<span id=\"inputID\">&nbsp;</span><br>");
-            out.println("<input type=\"button\" value=\"Nytt læringsmål\" onclick=\"add()\"/>");
-            out.println("<input type=\"submit\" value=\"Publiser modul\"><br>");
+            out.println("<input type=\"button\" value=\"Nytt læringsmål\" onclick=\"add()\"/><br>");
+            
+            out.println("<input type=\"checkbox\" name=\"save\">Lagre modul uten å publisere</input><br>");
+            
+            out.println("<input type=\"submit\" value=\"Submit\"><br>");
             out.println("</form>");
             out.println("</div>");
             out.println("</html>");

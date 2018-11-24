@@ -48,6 +48,7 @@ public class Modules extends SuperServlet {
             
             addModuleButton(out);
             
+            
             bst.bootstrapFooter(out);
             
         }
@@ -56,10 +57,12 @@ public class Modules extends SuperServlet {
         private void addModuleButton(PrintWriter out)  {
             
             out.println("<form action=\"CreateModule\">");
-            out.println("<input type=\"submit\" value=\"Opprett ny modul\"");
+            out.println("<input type=\"submit\" value=\"Opprett ny modul\"></input><br>");
             out.println("</form>");
       
         }
+      
+        
     
         
             // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
