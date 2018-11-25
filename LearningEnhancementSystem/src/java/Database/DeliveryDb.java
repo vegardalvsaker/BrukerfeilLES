@@ -27,6 +27,20 @@ public class DeliveryDb extends Database{
     private static final String EDIT_DELIVERY = "select delivery_id, delivery content from Delivery";
     private static final String UPDATE_DELIVERY ="update Delivery set delivery_content = ? where delivery_id = ?";
     private static final String SELECT_ALL_DELIVERIES = "select * from Delivery where worklist_id = ? and delivery_isEvaluated = 0";
+    private static final String UPDATE_ISEVALUATED = "update Delivery set delivery_isEvaluated = true where delivery_id = ?";
+    
+    public void updateIsEvaluated(String deliveryId) {
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(UPDATE_ISEVALUATED);
+                ) {
+            ps.setString(1, deliveryId);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("method: updateIsEvaluated(), error: " + ex);
+        }
+            
+    }
     
      public ArrayList<Delivery> getUnevaluatedDeliveriesWithinWorklist(String worklistId) {
         ArrayList<Delivery> deliveries = new ArrayList<>();

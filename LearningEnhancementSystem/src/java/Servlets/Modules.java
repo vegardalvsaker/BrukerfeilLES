@@ -49,8 +49,9 @@ public class Modules extends SuperServlet {
             bst.containerOpen(out);
             
             printModules(request, out);
-   
-            addModuleButton(out);
+            if (request.isUserInRole("Teacher")) {
+                addModuleButton(out);
+            }
             bst.containerClose(out);
             bst.bootstrapFooter(out);    
         }
