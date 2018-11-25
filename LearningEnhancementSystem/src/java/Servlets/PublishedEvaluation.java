@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Database.EvaluationDb;
+import Database.DeliveryDb;
 import Classes.Evaluation;
 import java.util.Enumeration;
 /**
@@ -43,9 +44,10 @@ public class PublishedEvaluation extends HttpServlet {
                 out.println("<a href=\"Index\">Gå hjem igjen</a>");
             } else {
                 EvaluationDb eDb = new EvaluationDb();
+                DeliveryDb dDb = new DeliveryDb();
                 eDb.publish(true, evaluation.getEvaluationid());
-
-                //evaluation = null;
+                dDb.updateIsEvaluated(evaluation.getDeliveryid());
+                
                 HttpSession session = request.getSession();
                 session.removeAttribute("Evaluation");
                 //debug for å sjekke hvilke objekter som er i session.
