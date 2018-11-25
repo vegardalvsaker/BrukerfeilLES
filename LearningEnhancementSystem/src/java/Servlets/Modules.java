@@ -53,7 +53,14 @@ public class Modules extends SuperServlet {
                 addModuleButton(out);
             }
             bst.containerClose(out);
-            bst.bootstrapFooter(out);    
+
+            
+            addModuleButton(out);
+            
+            
+            bst.bootstrapFooter(out);
+            
+
         }
     }
     
@@ -81,6 +88,9 @@ public class Modules extends SuperServlet {
                     + "<td><a href=\"OneModule?id="+ moduleId +"\">" + module.getName() +"</td>"
                     + "<td>" + module.getDesc() +"</td></a>");
             
+
+      
+
            if (request.isUserInRole("Teacher")) {
                out.println("<td><a class=\"btn btn-danger\" href=\"RemoveModule?moduleId="+ moduleId + "\">Delete</a></td>");
                if (!module.isPublished()) {
@@ -96,11 +106,12 @@ public class Modules extends SuperServlet {
             
     private void addModuleButton(PrintWriter out)  {
 
-     out.println("<form action=\"CreateModule\">");
-     out.println("<input type=\"submit\" value=\"Opprett ny modul\"");
-     out.println("</form>");
+            out.println("<form action=\"CreateModule\">");
+            out.println("<input type=\"submit\" value=\"Opprett ny modul\"></input><br>");
+            out.println("</form>");
 
  }
+
         
     
         
