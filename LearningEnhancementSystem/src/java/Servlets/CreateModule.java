@@ -41,21 +41,15 @@ public class CreateModule extends SuperServlet {
                 
                 String leveringsform = request.getParameter("leveringsform");
          
-                boolean published = true;
+                boolean published;
                 
-                if (request.getParameter("save").equals("on"))  {
-                    published = false; 
-                }
-                else if (request.getParameter("save").equals("off"))    {
-                    published = true;
-                }
+
+                Map map = request.getParameterMap();
                 
-                
+                published = !map.containsKey("save"); 
+                    
                 db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform, published);
                 
-                
-                
-                Map map = request.getParameterMap();
                 
                 for (int i = 0; i < (map.size() - 4)/2; i++)   {
                     

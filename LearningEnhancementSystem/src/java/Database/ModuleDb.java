@@ -231,8 +231,8 @@ public class ModuleDb extends Database {
              
                      }
              
-             else {
-                 prepStatement.setBoolean(4, false);
+             else if (leveringsform.equals("Video")){
+                 prepStatement.setBoolean(5, false);
              }
              
             prepStatement.executeUpdate();
