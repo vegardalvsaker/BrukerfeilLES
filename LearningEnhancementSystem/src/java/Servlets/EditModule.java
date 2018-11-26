@@ -31,7 +31,7 @@ public class EditModule extends SuperServlet {
         
         try (PrintWriter out = response.getWriter()) {
             
-            super.processRequest(request, response, "Modules", out);
+            super.processRequest(request, response, "EditModules", out);
             ModuleDb db = new ModuleDb();
             LearningGoalDb learnGoalDb = new LearningGoalDb();
             db.init();
@@ -49,7 +49,21 @@ public class EditModule extends SuperServlet {
                 
                 boolean lf = leveringsform.equals("true") ? true : false;
                 
-                db.editModule(out, request, modulName, modulDesc, modulContent, lf);
+                boolean published = false;
+                if (request.getParameter("unpublish").equals("on")) {
+                    
+                    published = false;
+                    
+                }
+                else if (request.getParameter("unpublish").equals("off")) {
+                    
+                    published = true;
+                }
+                
+                
+                
+                
+                db.editModule(out, request, modulName, modulDesc, modulContent, published, lf);
                 
                 for (int i = 0; i < (map.size()- 4)/2; i++)    {
                     
@@ -68,6 +82,7 @@ public class EditModule extends SuperServlet {
                     }
                 }
                 
+
                 NotificationDb notification = new NotificationDb();
                 
                 if (request.getParameter("varsling").equals("on"))    {
@@ -75,6 +90,8 @@ public class EditModule extends SuperServlet {
                     notification.sendNotificationsToAll(modulName + " har blitt endret.");
                     
                 }
+                
+                
             }
             
 
@@ -165,6 +182,7 @@ public class EditModule extends SuperServlet {
             out.println("<input type=\"button\" value=\"Nytt læringsmål\" onclick=\"add()\"/></input><br>");
             
             out.println("<input type=\"checkbox\" name=\"varsling\">Varsle studenter om endring</input><br>");
+            out.println("<input type=\"checkbox\" name=\"unpublish\">Gjør modul upublisert</input><br>");
             
             out.println("<input type=\"submit\" value=\"Rediger modul\"><br>");  
             

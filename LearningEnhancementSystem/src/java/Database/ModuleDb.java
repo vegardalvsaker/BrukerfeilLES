@@ -25,14 +25,15 @@ import java.sql.PreparedStatement;
 public class ModuleDb extends Database {
     
     
-    private static final String SLCT_MODULE = "select * from Module";
+    
     private static final String SLCT_ALL_MODULES = "select * from Module";
     private static final String SELECT_ONE_MODULE = "select * from Module where module_id = ?";
     private static final String SLCT_MODULES_WITH_GOALS = "select * from Module m inner join LearningGoal l on m.module_id = l.module_id where m.module_id = ?";
     private static final String UPDATE_ISPUBLISHED = "update Module set module_isPublished = true where module_id = ?";
     private static final String SLCT_LEARNGOAL = "select * from LearningGoal where module_id = ?";
-    private static final String addModule = "insert into Module values (default, ?, ?, ?, true, ?)";
-    private static final String editModule = "update Module set module_name = ?, module_desc = ?, module_content = ?, module_inInterview = ? where module_id = ?";
+    private static final String ADD_MODULE = "insert into Module values (default, ?, ?, ?, ?, ?)";
+    private static final String EDIT_MODULE = "update Module set module_name = ?, module_desc = ?, module_content = ?, module_isPublished = ?, module_inInterview = ? where module_id = ?";
+    
     /**
      * This method retrieves all of the modules in the database, create an object of each record and is then
      * added to a list of modules
@@ -126,12 +127,12 @@ public class ModuleDb extends Database {
      * @param out 
      */
     public void skrivModuler(PrintWriter out) {
-         System.out.println("The SQL query is: " + SLCT_MODULE); // Echo For debugging
+         System.out.println("The SQL query is: " + SLCT_ALL_MODULES); // Echo For debugging
 
 
 
      try( Connection connection = getConnection();
-          PreparedStatement prepStatement = connection.prepareStatement(SLCT_MODULE);
+          PreparedStatement prepStatement = connection.prepareStatement(SLCT_ALL_MODULES);
           ResultSet rset = prepStatement.executeQuery();
                 ) {         
 
@@ -146,13 +147,16 @@ public class ModuleDb extends Database {
                 String moduleContent = rset.getString("module_content");
                 boolean isPublished = Boolean.parseBoolean(rset.getString("module_isPublished"));
 
-
+                
                 out.println("<a href=\"OneModule?id="+ moduleID+"\">" +moduleID +": " + moduleName + ", " + moduleDescription +"</a>");
                 //if (userIsAdmin) {
+                
                 deleteUI(out, moduleID);
-            //}
+            
 
                 ++rowCount;
+                
+                
              }  
              out.println("Total number of records = " + rowCount);
 
@@ -220,28 +224,28 @@ public class ModuleDb extends Database {
 
     
     
-    public boolean addModule(PrintWriter out, String modulnavn, String beskrivelse, String innhold, String leveringsform)  {
+    public boolean addModule(PrintWriter out, String modulnavn, String beskrivelse, String innhold, String leveringsform, boolean published)  {
         
         init();
         
         try( Connection connection = getConnection();
-             PreparedStatement prepStatement = connection.prepareStatement(addModule);
+             PreparedStatement prepStatement = connection.prepareStatement(ADD_MODULE);
              
                 ) {
 
-             //Må legge til published variabel
+             
              prepStatement.setString(1, modulnavn);
              prepStatement.setString(2, beskrivelse);
              prepStatement.setString(3, innhold);
-             //prepStatement.setBoolean(5, published);
+             prepStatement.setBoolean(4, published);
              
              if (leveringsform.equals("Muntlig")) {
-             prepStatement.setBoolean(4, true);
+             prepStatement.setBoolean(5, true);
              
                      }
              
-             else {
-                 prepStatement.setBoolean(4, false);
+             else if (leveringsform.equals("Video")){
+                 prepStatement.setBoolean(5, false);
              }
              
             prepStatement.executeUpdate();
@@ -257,12 +261,12 @@ public class ModuleDb extends Database {
      }
     
 
-    public boolean editModule(PrintWriter out, HttpServletRequest request, String modulName, String modulDesc, String modulContent, boolean leveringsform)  {
+    public boolean editModule(PrintWriter out, HttpServletRequest request, String modulName, String modulDesc, String modulContent, boolean isPublished, boolean leveringsform)  {
         
    
       try(
              Connection connection = getConnection();
-             PreparedStatement prepStatement = connection.prepareStatement(editModule);
+             PreparedStatement prepStatement = connection.prepareStatement(EDIT_MODULE);
      
               ) {
                
@@ -271,8 +275,9 @@ public class ModuleDb extends Database {
               prepStatement.setString(1, modulName);
               prepStatement.setString(2, modulDesc);
               prepStatement.setString(3, modulContent);
-              prepStatement.setBoolean(4, leveringsform);
-              prepStatement.setString(5, moduleID);
+              prepStatement.setBoolean(4, isPublished);
+              prepStatement.setBoolean(5, leveringsform);
+              prepStatement.setString(6, moduleID);
               
         
               prepStatement.executeUpdate();
