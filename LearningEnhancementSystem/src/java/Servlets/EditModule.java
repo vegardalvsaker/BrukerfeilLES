@@ -14,6 +14,7 @@ import java.util.Map;
 import Database.LearningGoalDb;
 import java.util.ArrayList;
 import Database.NotificationDb;
+
 /**
  *
  * @author Gorm-Erik
@@ -36,34 +37,27 @@ public class EditModule extends SuperServlet {
             LearningGoalDb learnGoalDb = new LearningGoalDb();
             db.init();
             learnGoalDb.init();
-            
+            Map map = request.getParameterMap();
              
-            if (request.getMethod().equals("POST")) {
+            if (request.getMethod().equals("POST")) { 
                 
-                String modulName = request.getParameter("Modulnavn");
+               
+                String modulName = request.getParameter("Modulnavn");   
                 String modulDesc = request.getParameter("Beskrivelse");
                 String modulContent = request.getParameter("Innhold");
-                String leveringsform = request.getParameter("leveringsform");
+                String lf = request.getParameter("leveringsform");
                 
-                Map map = request.getParameterMap();
+                boolean leveringsform = false;
                 
-                boolean lf = leveringsform.equals("true") ? true : false;
-                
-                boolean published = false;
-                if (request.getParameter("unpublish").equals("on")) {
-                    
-                    published = false;
-                    
-                }
-                else if (request.getParameter("unpublish").equals("off")) {
-                    
-                    published = true;
+                if (lf.equals("true"))   {      
+                    leveringsform = true;
+                } else if (lf.equals("false"))  {
+                    leveringsform = false;
                 }
                 
                 
-                
-                
-                db.editModule(out, request, modulName, modulDesc, modulContent, published, lf);
+                boolean published;
+                published = !map.containsKey("unpublish");
                 
                 for (int i = 0; i < (map.size()- 4)/2; i++)    {
                     
@@ -82,7 +76,10 @@ public class EditModule extends SuperServlet {
                     }
                 }
                 
-
+                db.editModule(out, request, modulName, modulDesc, modulContent, published, leveringsform);
+                
+                redirectHeader(out);
+                
                 NotificationDb notification = new NotificationDb();
                 
                 if (request.getParameter("varsling").equals("on"))    {
@@ -90,8 +87,6 @@ public class EditModule extends SuperServlet {
                     notification.sendNotificationsToAll(modulName + " har blitt endret.");
                     
                 }
-                
-                
             }
             
 
@@ -115,7 +110,7 @@ public class EditModule extends SuperServlet {
             
             Module module = db.getModuleWithLearningGoals(module_id);
             
-          
+            
             String modulName = module.getName();
             String modulDesc = module.getDesc();
             String modulContent = module.getContent();
@@ -137,7 +132,7 @@ public class EditModule extends SuperServlet {
                 
             out.println("<input type=\"radio\" name=\"leveringsform\" value=\"false\">Video<br>");
             out.println("<input type=\"radio\" name=\"leveringsform\" checked value=\""+ leveringsform + "\">Muntlig<br>");
-                
+            
             }
             else if (leveringsform == false)    {
                 
@@ -188,6 +183,12 @@ public class EditModule extends SuperServlet {
             
             out.println("</form>");
 
+    }
+    
+    protected void redirectHeader(PrintWriter out) {
+        out.println("<head>\n" +
+"                    <meta http-equiv=\"refresh\" content=\"0;url=Modules\" />\n" +
+"                    </head");
     }
   
 

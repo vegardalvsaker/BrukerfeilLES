@@ -36,14 +36,14 @@ public class CreateModule extends SuperServlet {
                 String modulnavn = request.getParameter("Modulnavn");
                 
                 String beskrivelse = request.getParameter("Beskrivelse");
-         
+                
                 String innhold = request.getParameter("Innhold");
                 
                 String leveringsform = request.getParameter("leveringsform");
-         
+                
                 boolean published;
                 
-
+                
                 Map map = request.getParameterMap();
                 
                 published = !map.containsKey("save"); 
@@ -76,8 +76,8 @@ public class CreateModule extends SuperServlet {
     
     protected void redirectHeader(PrintWriter out) {
         out.println("<head>\n" +
-"        <meta http-equiv=\"refresh\" content=\"0;url=Modules\" />\n" +
-"    </head");
+        "        <meta http-equiv=\"refresh\" content=\"0;url=Modules\" />\n" +
+        "    </head");
     }
     
     private void addModuleForm(PrintWriter out)  {
@@ -117,18 +117,14 @@ public class CreateModule extends SuperServlet {
             out.println("<h3>Læringsmål og Poeng</h3>");
             out.println("<span id=\"inputID\">&nbsp;</span><br>");
             out.println("<input type=\"button\" value=\"Nytt læringsmål\" onclick=\"add()\"/><br>");
-            
             out.println("<input type=\"checkbox\" name=\"save\">Lagre modul uten å publisere</input><br>");
-            
             out.println("<input type=\"submit\" value=\"Submit\"><br>");
             out.println("</form>");
             out.println("</div>");
             out.println("</html>");
      
         }
-    
-    
-    
+
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

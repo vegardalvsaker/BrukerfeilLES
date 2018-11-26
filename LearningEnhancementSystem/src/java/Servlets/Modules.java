@@ -53,11 +53,7 @@ public class Modules extends SuperServlet {
                 addModuleButton(out);
             }
             bst.containerClose(out);
-
-            
-            addModuleButton(out);
-            
-            
+ 
             bst.bootstrapFooter(out);
             
 
