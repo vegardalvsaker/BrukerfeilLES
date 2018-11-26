@@ -41,7 +41,7 @@ public class Inbox extends SuperServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
            printJavaScript(out);
-           super.processRequest(request, response, "", out);
+           super.processRequest(request, response, "Inbox", out);
            if (request.getMethod().equals("POST")) {
                sendMessage(out, request);
            }

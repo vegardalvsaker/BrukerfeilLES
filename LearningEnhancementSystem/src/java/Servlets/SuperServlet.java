@@ -110,12 +110,12 @@ public class SuperServlet extends HttpServlet {
                 
             }   else {
                     sbf.append("<div style=\"background-color:#f3f3f3;\">" +
-    "                            <a class=\"dropdown-item\"><p style=\"color: red;\">◉</p >"+ not.getNotificationContent() +"</a>\n" +
+    "                            <a class=\"dropdown-item\" href=\"Notifications\"><p style=\"color: red;\">◉</p >"+ not.getNotificationContent() +"</a>\n" +
     "                               </div> \n" +
                             "<div class=\"dropdown-divider\"></div>\n");
                 }
             }
-            sbf.append("<button style=\"float: right;\"class=\"btn btn-primary\" href=\"Notifications\">See all</button>");
+            sbf.append("<a style=\"float: right;\"class=\"btn btn-primary\" href=\"Notifications\">See all</a>");
         } else {
             for (int i = 0; i < 5; i++) {
                 if (notifications.get(i).isIsNotificationSeen()) {

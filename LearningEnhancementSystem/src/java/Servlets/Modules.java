@@ -95,11 +95,7 @@ public class Modules extends SuperServlet {
     }        
             
     private void addModuleButton(PrintWriter out)  {
-
-     out.println("<form action=\"CreateModule\">");
-     out.println("<input type=\"submit\" value=\"Opprett ny modul\"");
-     out.println("</form>");
-
+     out.println("<a class=\"btn btn-primary\" href=\"CreateModule\">Opprett ny modul</a>");
  }
         
     
