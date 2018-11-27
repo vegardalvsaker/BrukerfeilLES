@@ -5,6 +5,7 @@ import Classes.LearningGoal;
 import Classes.Module;
 import Classes.Score;
 import Classes.User;
+import Classes.Results;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,7 +27,7 @@ import java.util.List;
 @WebServlet(name = "OneResult", urlPatterns = {"/OneResult"})
 public class OneResult extends SuperServlet {
 
-BootstrapTemplate bst = new BootstrapTemplate();
+    BootstrapTemplate bst = new BootstrapTemplate();
    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -38,7 +39,7 @@ BootstrapTemplate bst = new BootstrapTemplate();
             bst.containerOpen(out);
             if (request.getMethod().equals("POST")) {
                 String evalId = request.getParameter("evaluationId");
-                oneresult(out,evalId);
+                oneResult(out,evalId);
             }
             bst.containerClose(out);
             bst.bootstrapFooter(out);
@@ -49,41 +50,50 @@ BootstrapTemplate bst = new BootstrapTemplate();
             
     }
     
-    private void oneresult(PrintWriter out,String evalId)   {
+    private void oneResult(PrintWriter out, String evalId)   {
         
-        ResultsDb rdb = new ResultsDb();
-        rdb.init();
+        ResultsDb resultsDb = new ResultsDb();
+        resultsDb.init();
         
-        List<Classes.Results> resultsList = rdb.getLResults(evalId);
+        ArrayList<Results> resultsList = resultsDb.getResults(evalId);
         
-        out.println("<table class=\"table table-hovere\">");
+            out.println("<table class=\"table table-hovere\">");
             out.println("<thead>");
             out.println("<tr class=\"table-active\">");
-            out.println("<th scope=\"col\">Modulnavn</th>");
-            out.println("<th scope=\"col\">Kommentar</th>");
+            out.println("<th scope=\"col\">Læringsmål</th>");
+        
             out.println("<th scope=\"col\">Dine poeng</th> ");
             out.println("<th scope=\"col\">Totale poeng</th> ");
             out.println("</tr>");
             out.println("</thead>");
             out.println("<tbody>");
-        for (Classes.Results results : resultsList)  {
-            String moduleName = results.getModuleName();
-            String evalComment = results.getEvalComment();
+            
+        for (Results results : resultsList)  {
+              
+            String learnGoal = results.getLearnGoal();
             String LGPoints = results.getLGPoints();
             String ScorePoints = results.getScorePoints();
-
-        out.println("<td>"+moduleName+"</td>");
-        out.println("<td>"+evalComment+"</td> ");
+            
+            
+        out.println("<td>"+learnGoal+"</td>");
         out.println("<td>"+ScorePoints+"</td>");
         out.println("<td>"+LGPoints+"</td>");
         out.println("</tr>");
+        
         }
+
         out.println("</tr>");
-            out.println("</tbody>");
-            out.println("</table>");
+        out.println("</tbody>");
+        out.println("</table>");
         
         
-    }
+        String comment = resultsList.get(0).getEvalComment();
+        out.println("<h4>Kommentar fra lærer: </h4>");
+        out.println("<p>" + comment + "</p>");
+            
+        }
+        
+    
     
     private void deliveries2(PrintWriter out, HttpServletRequest request)   {
         
@@ -107,10 +117,7 @@ BootstrapTemplate bst = new BootstrapTemplate();
                     out.println("<li> Learning goal: " + lg.getText() + " | <p> "+ scores.get(i).getPoints() +"/"+ lg.getPoints() +"</li>");
                     i++;
                 }
-        
-        
-        
-        
+
     }
 
 

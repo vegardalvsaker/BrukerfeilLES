@@ -15,6 +15,8 @@ public class Results {
     private String delId;
     private String learnGoalPoints;
     private String scorePoints;
+    private String learnGoal;
+
     
     public String getStudentId() {
         return studentId;
@@ -27,6 +29,12 @@ public class Results {
     }
     public void setModuleId (String moduleId) {
         this.moduleId = moduleId;
+    }
+    public void setLearnGoal(String learnGoal)  {
+        this.learnGoal = learnGoal;
+    }
+    public String getLearnGoal()    {
+        return learnGoal;
     }
     public String getModuleName() {
         return moduleName;
