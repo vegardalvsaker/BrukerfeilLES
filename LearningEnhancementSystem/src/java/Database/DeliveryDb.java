@@ -217,6 +217,33 @@ public class DeliveryDb extends Database{
            } 
         return null;
     } 
+    
+    public int getAmountOfDeliveriesPerModule(PrintWriter out, String id) {
+        String oneDelivery = ("select * from Delivery where module_id = ? AND delivery_isEvaluated = 1;");
+        int evaluatedDeliveriesCount = 0;
+        
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(oneDelivery);
+                ){
+            prepStatement.setString(1, id);
+            
+            try(ResultSet rset = prepStatement.executeQuery(); ){
+                while(rset.next())   {
+                    evaluatedDeliveriesCount++;
+                }  
+                return evaluatedDeliveriesCount;
+            }
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getAmountOfDeliveriesPerModule" + liste);
+        }  
+        return evaluatedDeliveriesCount;
+    }   
+    
+    
+    
+    
+    
     //^^^^ FOSSE ^^^^
     
     

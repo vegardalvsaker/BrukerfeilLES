@@ -116,31 +116,37 @@ public void printProgressbarForm(PrintWriter out, String id) {
     out.println("<h2>Progress Bar</h2>");
     out.println("<p>You have been evaluated on " + evaluatedDeliveriesCount + " modules, there are " + deliveriesRemaining + " modules remaining!</p>");
     
+    //Prints the progressbar for the relevant student, it shows his progress on completing the modules.
     out.println("<div>This is your progress towards the end of the year:</div>");
     out.println("<div class=\"w3-light-grey\">");
     out.println("<div class=\"w3-container w3-green w3-center\" style=\"width:" + percent + "%\">" + percent + "%</div>");
     out.println("</div><br>");
+    
+    //Prints the progressbar for an average student, it shows how many % of deliveries one average student has delivered.
     out.println("<div>This the average progress of your classmates.</div>");
     out.println("<div class=\"w3-light-grey\">");
     out.println("<div class=\"w3-container w3-blue\" style=\"width:" + avgpercent + "%\">" + avgpercent + "%</div>");
     out.println("</div><br>");
 
     
+    //For loop that runs once per published module, it retrieves a Delivery Array for every module - this includes 
+    //every evaluated delivery for that 
     for (int i=1; i<=moduleCount; i++){
         int moduleNr = i;
         String moduleNrString = Integer.toString(moduleNr);
-        int amountOfDeliveries = 0;
-        
+        //int amountOfDeliveries = 0;
        
         Module oneModule = module.getOneModule(out, moduleNrString);
-        ArrayList<Delivery> deliveryArray = delivery.getDeliveryArray(out, moduleNrString);
+        int amountOfDeliveries = delivery.getAmountOfDeliveriesPerModule(out, moduleNrString);
         
+        /*
+        ArrayList<Delivery> deliveryArray = delivery.getDeliveryArray(out, moduleNrString);
         for (Delivery temp : deliveryArray) {
             amountOfDeliveries++; 
         }
+        */
         int oneModulePercent = amountOfDeliveries * 100 / studentCount;
         
-    //    out.println("<p>This the average progress of your classmates on module "+ oneModule.getName() +".</p>");
         out.println("<div>" + oneModule.getName() + ":</div>");
         out.println("<div class=\"w3-light-grey\">");
         out.println("<div class=\"w3-container w3-blue\" style=\"width:" + oneModulePercent + "%\">" + oneModulePercent + "%</div>");
