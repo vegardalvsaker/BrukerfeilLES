@@ -83,6 +83,9 @@ public class Modules extends SuperServlet {
                 + "<tbody>");
                 
         for (Module module : modules) {
+            if (request.isUserInRole("Student") && !module.isPublished()) {
+                continue;
+            }
             String moduleId = Integer.toString(module.getModuleid());
             out.println("<tr>"
                     + "<td><a href=\"OneModule?id="+ moduleId +"\">" + module.getName() +"</td>"
