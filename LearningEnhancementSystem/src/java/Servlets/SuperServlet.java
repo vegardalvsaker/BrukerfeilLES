@@ -51,7 +51,8 @@ public class SuperServlet extends HttpServlet {
         //Henter notifications til useren
         String notifications = getNotificationHtml(request); 
         bst.bootstrapHeader(out, currentTab);
-        bst.bootstrapNavbar(out, currentTab, notifications);
+        User user = (User)request.getSession().getAttribute("userLoggedIn");
+        bst.bootstrapNavbar(out, currentTab, notifications, user.getUserName(), user.getUserId());
         
     }
     
