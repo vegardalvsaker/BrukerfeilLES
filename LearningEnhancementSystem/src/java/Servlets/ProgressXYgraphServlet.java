@@ -12,14 +12,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
+import com.keypoint.PngEncoder;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import Database.ProgressXYgraphDb;
 
 
 
 /**
  *
- * @author ferra
+ * @author Espen
  * @Override
 
  */
@@ -27,16 +29,18 @@ import java.io.IOException;
 public class ProgressXYgraphServlet extends SuperServlet  {
         BootstrapTemplate bst = new BootstrapTemplate();
         @Override
-          protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+        protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
         bst.containerOpen(out);
+        ProgressXYgraphDb db = new ProgressXYgraphDb();
+        db.init();
         User user = (User)request.getSession().getAttribute("userLoggedIn");
-        
-        BufferedImage chartImage = (BufferedImage)request.getAttribute("chartImage");        
 
-        response.setContentType("image.png");
+        BufferedImage chartImage = (BufferedImage)request.getAttribute("chartImage");        
+            
+        response.setContentType("image/jpeg");
         PngEncoder encoder = new PngEncoder(chartImage, false, 0, 9);
         response.getOutputStream().write(encoder.pngEncode());
     }
