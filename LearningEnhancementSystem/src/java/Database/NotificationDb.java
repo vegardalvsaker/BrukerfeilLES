@@ -73,6 +73,26 @@ public class NotificationDb extends Database {
         return null;
     }
     
+    public boolean sendNotification(String recipient, String notification) {
+        try (
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(INSERT_NOTIFICATION)
+                ) {
+            ps.setString(1, recipient);
+            ps.setString(2, notification);
+            return ps.execute();
+            
+        } catch (SQLException ex) {
+            System.out.println("method sendNotification(), error: " + ex);
+            return false;
+        }
+    }
+    
+    /**
+     * Setter den aktuelle notifikasjonen som sett i databasen.
+     * @param notificationId
+     * @return 
+     */
     public boolean setNotifcationIsSeen(String notificationId) {
         try (
                 Connection conn = getConnection();

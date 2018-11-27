@@ -116,7 +116,7 @@ public class BootstrapTemplate {
           name + "</a>\n" +
                 
                 "<div class=\"dropdown-menu\" aria-labelledby=\"profileDropdown\">\n" +
-                "<a class=\"m-1 btn btn-sm btn-primary\" href=\"Profile?id=\"" + id+ "\">Profil</a><br>\n" +
+                "<a class=\"m-1 btn btn-sm btn-primary\" href=\"Profile?id=" + id+ "\">Profil</a><br>\n" +
                 "<a href=\"LogOut\" class=\"m-1 btn-sm btn btn-danger\">Logg ut!</a>\n"+
 "    </div>\n" +
 "  </nav>";
