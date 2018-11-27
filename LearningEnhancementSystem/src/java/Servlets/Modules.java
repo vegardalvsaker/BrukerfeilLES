@@ -49,9 +49,9 @@ public class Modules extends SuperServlet {
             bst.containerOpen(out);
             
             printModules(request, out);
-            if (request.isUserInRole("Teacher")) {
-                addModuleButton(out);
-            }
+            
+            addModuleButton(out, request);
+            
             bst.containerClose(out);
  
             bst.bootstrapFooter(out);
@@ -100,13 +100,15 @@ public class Modules extends SuperServlet {
                 + "</table>");
     }        
             
-    private void addModuleButton(PrintWriter out)  {
-
+    private void addModuleButton(PrintWriter out, HttpServletRequest request)  {
+            
+            if (request.isUserInRole("Teacher"))    {
             out.println("<form action=\"CreateModule\">");
             out.println("<input type=\"submit\" value=\"Opprett ny modul\"></input><br>");
             out.println("</form>");
-
- }
+            
+            }
+        }
 
         
     

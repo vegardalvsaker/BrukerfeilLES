@@ -148,15 +148,17 @@ public class OneModule extends SuperServlet {
     
     
     private void editModuleButtonForm(PrintWriter out, HttpServletRequest request)    {
-        String id = request.getParameter("id");
         
-            out.println("<a href=\"EditModule?id="+ id +"\">"
-                    + "<button>Rediger modul</button>"
-  
-
-                    + "</a>");                    
-
-    }
+            String id = request.getParameter("id");
+            
+            if (request.isUserInRole("Teacher")) {
+                
+            out.println("<a href=\"EditModule?id="+ id +"\">");
+            out.println("<button>Rediger modul</button>");
+            out.println("</a>");    
+            
+            }
+        }
     
     private void deliver(PrintWriter out, HttpServletRequest request){
             String id = request.getParameter("id");

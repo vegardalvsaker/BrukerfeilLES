@@ -84,27 +84,26 @@ public class CreateModule extends SuperServlet {
             
             out.println("<html>");
             out.println("<div>");
-            out.println("<h1>Legg til modul</h1>");
+            out.println("<h1>Opprett modul</h1>");
             out.println("<form action=\"CreateModule\" method=\"POST\">");
             out.println("<h3>Modulnavn</h3><br>");
             out.println("<input type =\"text\" name=\"Modulnavn\"><br>");
             out.println("<h3>Beskrivelse</h3><br>");
             out.println("<input type=\"text\" name=\"Beskrivelse\"><br>");
             out.println("<h3>Innhold</h3><br>");
-            out.println("<input type=\"text\" name=\"Innhold\" size=\"35\"><br>");      
+            out.println("<textarea rows=\"10\" cols=\"50\" name=\"Innhold\"></textarea><br>");      
             out.println("<br>");
             out.println("<h3>Velg leveringsform</h3><br>");
             out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Muntlig\">Muntlig");
             out.println("<br>");
             out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Video\">Video");
             out.println("<br>");
-            out.println("<h1>Legg til læringsmål</h1>");
-            
+       
             out.println("<script language=\"javascript\">");
             out.println("var i = 0;");
             out.println("function add() {");
 	    out.println("var div = document.createElement(\"div\");");
-            out.println("div.innerHTML = '<input type=\"text\" size=\"35\" name=\"Laringsmal' + i + '\"></input> <input type=\"text\" name=\"Poeng' + i + '\"></input><br>';");
+            out.println("div.innerHTML = '<textarea rows=\"1\" cols=\"45\" name=\"Laringsmal' + i + '\"></textarea> <textarea rows=\"1\" cols=\"10\" name=\"Poeng' + i + '\"></textarea><br>';");
             out.println("i++");
             out.println("var id = document.getElementById(\"inputID\");");
             out.println("id.appendChild(div);");

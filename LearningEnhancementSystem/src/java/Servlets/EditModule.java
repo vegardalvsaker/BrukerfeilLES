@@ -125,7 +125,7 @@ public class EditModule extends SuperServlet {
             out.println("<h3>Beskrivelse</h3><br>");
             out.println("<input type=\"text\" name=\"Beskrivelse\" value=\""+ modulDesc +"\"><br>");
             out.println("<h3>Innhold</h3><br>");
-            out.println("<input type=\"text\" name=\"Innhold\" value=\""+ modulContent + "\"><br>");
+            out.println("<textarea rows=\"10\" cols=\"50\" name=\"Innhold\">" + modulContent + "</textarea><br>");
             out.println("<h3>Leveringsform</h3><br>");
             
             if (leveringsform == true)  {
@@ -150,9 +150,9 @@ public class EditModule extends SuperServlet {
                 String learnGoalText = learnGoal.getText();
                 int learnGoalPoints = learnGoal.getPoints();
                  
-                out.println("<input type=\"text\" name=\"Laringsmal" + i + "\" value=\"" + learnGoalText + "\"></input>");
+                out.println("<textarea rows=\"1\" cols=\"45\" name=\"Laringsmal" + i + "\">"+ learnGoalText +"</textarea>");
                 out.println("<input type=\"text\" hidden=\"true\" name=\"LearnGoalID" + i + "\" value=\"" + learnGoalID + "\"></input>");
-                out.println("<input type=\"text\" name=\"Poeng" + i + "\" value=\"" + learnGoalPoints + "\"></input><br>");
+                out.println("<textarea rows=\"1\" cols=\"10\" name=\"Poeng" + i + "\">" + learnGoalPoints + "</textarea><br>");
                 
                 i++;
             }
