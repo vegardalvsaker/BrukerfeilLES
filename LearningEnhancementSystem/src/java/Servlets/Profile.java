@@ -58,8 +58,10 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         if (request.isUserInRole("Teacher")) {
             out.println("Du er logget inn som en lærer: ");
             printUserInfo(out, userID);
-            printProgressbarForm(out, userID);
-
+            if(!profile.getOneProfile(out, userID).getUserIsTeacher()){
+                printProgressbarForm(out, userID);
+            }
+            
         } else if (user.getUserId().equals(userID) ) {            //IF user logged in = user profile requested
             out.println("Dette er din profil: ");
             printUserInfo(out, userID);
