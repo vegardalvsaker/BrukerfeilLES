@@ -63,7 +63,7 @@ public class Index extends SuperServlet {
             }  */
             FrontpagePrinter fp = new FrontpagePrinter();
             setUserLoggedIn(request);
-            fp.printFrontpage(out, "LES IS-110", getNotificationHtml(request)); 
+            fp.printFrontpage(out, "LES IS-110", getNotificationHtml(request), request); 
         }
     }
 

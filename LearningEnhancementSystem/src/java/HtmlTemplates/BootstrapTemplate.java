@@ -35,24 +35,24 @@ public class BootstrapTemplate {
      * @param out
      * @param tab is a String with the name of the active tab.
      */
-    public void bootstrapNavbar(PrintWriter out, String tab, String notifications) {
+    public void bootstrapNavbar(PrintWriter out, String tab, String notifications, String name, String id) {
         String current_tab = "active";
         switch (tab) {
-            case "Home":         out.format(getBootstrapNavbar(notifications), current_tab, "", "", "", "", "", "");
+            case "Home":         out.format(getBootstrapNavbar(notifications, name, id), current_tab, "", "", "", "", "", "");
                                  break;
-            case "Modules":      out.format(getBootstrapNavbar(notifications), "", current_tab, "", "", "", "", "");
+            case "Modules":      out.format(getBootstrapNavbar(notifications, name, id), "", current_tab, "", "", "", "", "");
                                  break;
-            case "Results":      out.format(getBootstrapNavbar(notifications), "", "", current_tab, "", "", "", "");
+            case "Results":      out.format(getBootstrapNavbar(notifications, name, id), "", "", current_tab, "", "", "", "");
                                  break;
-            case "Inbox":        out.format(getBootstrapNavbar(notifications), "", "", "", current_tab, "", "", "");
+            case "Inbox":        out.format(getBootstrapNavbar(notifications, name, id), "", "", "", current_tab, "", "", "");
                                  break;
-            case "Worklist":     out.format(getBootstrapNavbar(notifications), "", "", "", "", current_tab, "", "");
+            case "Worklist":     out.format(getBootstrapNavbar(notifications, name, id), "", "", "", "", current_tab, "", "");
                                  break;
-            case "People":       out.format(getBootstrapNavbar(notifications), "", "", "", "", "", current_tab, "");
+            case "People":       out.format(getBootstrapNavbar(notifications, name, id), "", "", "", "", "", current_tab, "");
                                  break;
-            case "Notifications":out.format(getBootstrapNavbar(notifications), "", "", "", "", "", "", current_tab);
+            case "Notifications":out.format(getBootstrapNavbar(notifications, name, id), "", "", "", "", "", "", current_tab);
                                  break;
-            default:             out.format(getBootstrapNavbar(notifications), "", "", "", "", "", "", "");
+            default:             out.format(getBootstrapNavbar(notifications, name, id), "", "", "", "", "", "", "");
                                  break;  
         }
     }
@@ -62,7 +62,7 @@ public class BootstrapTemplate {
      * %s is for which tab is active. This is used in bootstrapNavbar().
      * @return 
      */
-    public String getBootstrapNavbar(String notifications) {
+    public String getBootstrapNavbar(String notifications, String name, String id) {
         return "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark \">\n" +
 "    <div class=\"container\">\n" +
 "    <a class=\"navbar-brand\" href=\"Index\">IS-110</a>\n" +
@@ -98,8 +98,7 @@ public class BootstrapTemplate {
 "            <a class=\"dropdown-item \" href=\"#\">Test</a>\n" +
 "          </div>\n" +
 "        </li>\n" +
-"      </ul>\n" +
-                                "<ul class=\"navbar navbar-nav navbar-right\">\n" +
+
                 "<li class=\"nav-item %s dropdown\">" +
                 "<a class=\"nav-link dropdown-toggle\" href=\"\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
 "            Notifications </a>\n" +
@@ -108,6 +107,18 @@ public class BootstrapTemplate {
            "</div>\n" +
                 "</li>\n" +
                 "</ul>\n" +
+                
+                
+                
+                
+
+                                "<ul class=\"navbar navbar-nav navbar-right\">\n" +
+                                "<a class=\"nav-link dropdown-toggle\" href=\"\" id=\"profileDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+          name + "</a>\n" +
+                
+                "<div class=\"dropdown-menu\" aria-labelledby=\"profileDropdown\">\n" +
+                "<a class=\"m-1 btn btn-sm btn-primary\" href=\"Profile?id=\"" + id+ "\">Profil</a><br>\n" +
+                "<a href=\"LogOut\" class=\"m-1 btn-sm btn btn-danger\">Logg ut!</a>\n"+
 "    </div>\n" +
 "  </nav>";
         
@@ -121,7 +132,7 @@ public class BootstrapTemplate {
      */
     public void bootstrapCard(PrintWriter out,String modulNo, String modulName, String modulDesc) {
         out.println("<div class=\"col-4\">\n" +
-"      <div class=\"card\">\n" +
+"      <div class=\"card m-2\">\n" +
 "        <div class=\"card-body\">\n" +
 "          <h2 class=\"card-title\">" + modulName + "</h2>\n" +
 "          <p class=\"card_text\">"+ modulDesc +"</p>\n" +
@@ -147,7 +158,7 @@ public class BootstrapTemplate {
      */
     public void jumbotron(PrintWriter out) {
         
-        out.println("<div class=\"jumbotron\">");
+        out.println("<div class=\"jumbotron mt-2\">");
         out.println("<div class=\"container\">");
         out.println("<h1 class=\"display-4\">Announcements:</h1>");
         out.println("<hr class=\"my-4\">");
