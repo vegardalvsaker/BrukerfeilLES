@@ -43,12 +43,9 @@ public class OneModule extends SuperServlet {
             LearningGoalDb db = new LearningGoalDb();
             CommentDb cdb = new CommentDb();
             CommentReplyDb crdb = new CommentReplyDb();
-            db.init();
-            cdb.init();
-            crdb.init();
 
             DeliveryDb ddb = new DeliveryDb();
-            ddb.init();
+ 
             bst.containerOpen(out);
 
             ddb.getNrOfDeliveries(id,out);

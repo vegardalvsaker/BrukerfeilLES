@@ -20,7 +20,10 @@ public class ResultsDb extends Database {
     private static final String RESULT_SHORT = "select D.student_id, U.user_name, E.evaluation_id, D.delivery_id, M.module_name from Evaluation E \n" +
                                                 "inner join Delivery D on E.delivery_id = D.delivery_id inner join Module M on \n" +
                                                 "D.module_id = M.module_id inner join Users U on E.teacher_id = U.user_id where student_id = ?";
-
+    public ResultsDb() {
+        init();
+    }
+    
     public List<Results> getSResults(String student_id){
         List<Results> result = new ArrayList<>();
         

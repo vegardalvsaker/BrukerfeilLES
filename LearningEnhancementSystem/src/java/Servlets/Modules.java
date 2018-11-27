@@ -37,9 +37,6 @@ public class Modules extends SuperServlet {
         
         try (PrintWriter out = response.getWriter()){  
             super.processRequest(request, response, "Modules", out);
-
-         
-         db.init();
         
         if (request.getParameterMap().containsKey("publish"))  {      
             db.makeModulePublic(request.getParameter("publish"));

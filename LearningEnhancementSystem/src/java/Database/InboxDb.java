@@ -55,7 +55,6 @@ public class InboxDb extends Database {
     
     public void sendMessage(String[] messageInfo) {
         UserDb uDb = new UserDb();
-        uDb.init();
         String recipientId = uDb.getUserId(messageInfo[1]);
         try (
                 Connection conn = getConnection();

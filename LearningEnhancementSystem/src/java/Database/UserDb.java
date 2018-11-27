@@ -59,6 +59,19 @@ public class UserDb extends Database {
         return false;
     }
     
+    public ArrayList<String> getAllUserIds() {
+        ArrayList<String> ids = new ArrayList();
+        try (ResultSet rs = getConnection().prepareStatement(SELECT_ALL_USER_ID).executeQuery();) {
+            while(rs.next()) {
+                ids.add(rs.getString("user_id"));
+            }
+            return ids;
+        } catch (SQLException ex) {
+            System.out.println("method getAllUserIds(), error " + ex);
+            return ids;
+        }
+    }
+    
     public String getUserId(String email) {
         try (
                 Connection conn = getConnection();

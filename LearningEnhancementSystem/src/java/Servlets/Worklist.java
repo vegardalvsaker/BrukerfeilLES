@@ -44,7 +44,6 @@ public class Worklist extends SuperServlet {
         super.processRequest(request, response, "Worklist", out);
         bst.containerOpen(out);
         WorklistDb db = new WorklistDb();
-        db.init();
 	User user = (User)request.getSession().getAttribute("userLoggedIn");
         String worklistId = db.getWorklistId(user.getUserId());
 	

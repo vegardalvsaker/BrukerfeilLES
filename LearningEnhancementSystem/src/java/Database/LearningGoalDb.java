@@ -31,6 +31,9 @@ public class LearningGoalDb extends Database {
     private static final String getLearngoals = "select * from LearningGoal";
     private static final String editLearnGoals = "update LearningGoal set learn_goal_text = ?, learn_goal_points = ? where learn_goal_id = ? "; 
    
+    public LearningGoalDb() {
+        init();
+    }
     
     public void printLearningGoals(String id, PrintWriter out) {
         
@@ -116,10 +119,7 @@ public class LearningGoalDb extends Database {
          
     }
     
-    public boolean addLearningGoals(PrintWriter out, String learnGoalText, String learnGoalPoints, String moduleName)  {
-        
-        init();
-        
+    public boolean addLearningGoals(PrintWriter out, String learnGoalText, String learnGoalPoints, String moduleName)  {    
         try( 
              Connection connection = getConnection();   
              PreparedStatement prepStatement = connection.prepareStatement(addLearnGoal);

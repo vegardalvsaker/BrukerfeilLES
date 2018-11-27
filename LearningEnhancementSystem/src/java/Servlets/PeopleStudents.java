@@ -32,7 +32,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         bst.bootstrapFooter(out);
               
         UserDb students = new UserDb();
-        students.init();
         
 
         students.getOnlyStudent(out);

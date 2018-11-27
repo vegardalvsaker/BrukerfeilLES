@@ -36,7 +36,6 @@ public class RemoveModule extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             ModuleDb db = new ModuleDb();
-            db.init();
             if (request.getMethod().equals("POST")) {
                 if (request.getParameter("remove").equals("TRUE")) {
                     db.deleteModule(request);

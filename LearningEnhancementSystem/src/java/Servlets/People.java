@@ -34,7 +34,6 @@ public class People extends SuperServlet {
             bst.bootstrapFooter(out);
               
             UserDb students = new UserDb();
-            students.init();
             
             if (request.getMethod().equals("POST"))  {
                 
