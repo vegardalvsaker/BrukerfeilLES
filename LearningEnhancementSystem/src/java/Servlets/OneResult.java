@@ -4,6 +4,7 @@ import Classes.Evaluation;
 import Classes.LearningGoal;
 import Classes.Module;
 import Classes.Score;
+import Classes.User;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,40 +14,73 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import Database.EvaluationDb;
 import Database.ModuleDb;
+import Database.ResultsDb;
+import HtmlTemplates.BootstrapTemplate;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Gorm-Erik
  */
 @WebServlet(name = "OneResult", urlPatterns = {"/OneResult"})
-public class OneResult extends HttpServlet {
+public class OneResult extends SuperServlet {
 
-    
+BootstrapTemplate bst = new BootstrapTemplate();
+   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
-            deliveries2(out, request);
+            super.processRequest(request, response, "Results", out);
+            User user = (User)request.getSession().getAttribute("userLoggedIn");
+            bst.containerOpen(out);
+            if (request.getMethod().equals("POST")) {
+                String evalId = request.getParameter("evaluationId");
+                oneresult(out,evalId);
+            }
+            bst.containerClose(out);
+            bst.bootstrapFooter(out);
+            //deliveries2(out, request);
+            
+            
         }
             
     }
     
-    private void deliveries(PrintWriter out)   {
+    private void oneresult(PrintWriter out,String evalId)   {
         
-        out.println("<table style=\"width:50%\">");
-        out.println("<tr>");
-        out.println("<th>Modulnavn</th>");
-        out.println("<th>Lastname</th> ");
-        out.println("<th>Age</th>");
+        ResultsDb rdb = new ResultsDb();
+        rdb.init();
+        
+        List<Classes.Results> resultsList = rdb.getLResults(evalId);
+        
+        out.println("<table class=\"table table-hovere\">");
+            out.println("<thead>");
+            out.println("<tr class=\"table-active\">");
+            out.println("<th scope=\"col\">Modulnavn</th>");
+            out.println("<th scope=\"col\">Kommentar</th>");
+            out.println("<th scope=\"col\">Dine poeng</th> ");
+            out.println("<th scope=\"col\">Totale poeng</th> ");
+            out.println("</tr>");
+            out.println("</thead>");
+            out.println("<tbody>");
+        for (Classes.Results results : resultsList)  {
+            String moduleName = results.getModuleName();
+            String evalComment = results.getEvalComment();
+            String LGPoints = results.getLGPoints();
+            String ScorePoints = results.getScorePoints();
+
+        out.println("<td>"+moduleName+"</td>");
+        out.println("<td>"+evalComment+"</td> ");
+        out.println("<td>"+ScorePoints+"</td>");
+        out.println("<td>"+LGPoints+"</td>");
         out.println("</tr>");
-        out.println("<tr>");
-        out.println("<td>Jill</td>");
-        out.println("<td>Smith</td> ");
-        out.println("<td>50</td>");
+        }
         out.println("</tr>");
-        out.println("</table>");
+            out.println("</tbody>");
+            out.println("</table>");
         
         
     }

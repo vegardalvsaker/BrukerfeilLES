@@ -7,15 +7,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
-import Database.ModuleDb;
-import Database.DeliveryDb;
+import Database.ResultsDb;
 import Classes.User;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import Classes.Delivery;
+import java.util.List;
 /**
  *
- * @author Gorm-Erik
+ * @author Marius
  */
 @WebServlet(name = "Results", urlPatterns = {"/Results"})
 public class Results extends SuperServlet {
@@ -27,37 +26,61 @@ public class Results extends SuperServlet {
         try (PrintWriter out = response.getWriter()) {
             
             super.processRequest(request, response, "Results", out);
-            ModuleDb db = new ModuleDb();
-            db.init();
-         
+            
             bst.containerOpen(out);
-            bst.containerClose(out);
             results(out, request);
+            bst.containerClose(out);
             bst.bootstrapFooter(out);  
          
         }
     }
     private void results(PrintWriter out, HttpServletRequest request)    {
         
-        DeliveryDb deliverydb = new DeliveryDb();
-        deliverydb.init();
-        out.println("<h1>Dine evaluerte moduler:</h1><br>");
+        ResultsDb rdb = new ResultsDb();
+        rdb.init();
+        //out.println("<h1>Dine evaluerte moduler:</h1><br>");
         setUserLoggedIn(request);
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("userLoggedIn");
         String userID = user.getUserId();
-        ArrayList<Delivery> deliveryList = deliverydb.getDelivery(out, userID);
+        List<Classes.Results> resultsList = rdb.getSResults(userID);
         
-        for (Delivery delivery : deliveryList)  {
-            String moduleName = delivery.getModuleName();
-            int deliveryID = delivery.getDeliveryID();
-            String moduleID = delivery.getModuleID();
-            out.println("<ul>");
-            out.println("<li><a href=\"OneResult?userID=" + userID + "&deliveryID="+ deliveryID + "&moduleID="+ moduleID + "\">" + moduleName + "</a></li>");
-            out.println("</ul>");
+            out.println("<table class=\"table table-hovere\">");
+            out.println("<thead>");
+            out.println("<tr class=\"table-active\">");
+            out.println("<th scope=\"col\">Modulnavn</th>");
+            out.println("<th scope=\"col\">Evaluert av</th>");
+            out.println("<th scope=\"col\">Se Evaluering</th> ");
+            out.println("</tr>");
+            out.println("</thead>");
+            out.println("<tbody>");
+            
+        for (Classes.Results results : resultsList)  {
+            String moduleName = results.getModuleName();
+            String moduleID = results.getModuleId();
+            String teacherName = results.getTeacherName();
+            String evalId = results.getEvalId();
+
+            out.println("<td>"+moduleName+"</td>");
+            out.println("<td>"+teacherName+"</td>");
+            out.println("<td>");
+            ViewResult(out, evalId, moduleID, moduleName);
+            out.println("</td>");
+            out.println("</tr>");
         }  
+            out.println("</tr>");
+            out.println("</tbody>");
+            out.println("</table>");
     }
- 
+ private void ViewResult(PrintWriter out, String evalId, String moduleId, String moduleName){
+            out.println("<form action=\"OneResult?id="+ evalId+"\" method=\"POST\">");
+            out.println("<input type=\"hidden\" name=\"moduleId\" value=\""+ moduleId +"\">");
+            out.println("<input type=\"hidden\" name=\"evaluationId\" value=\""+ evalId +"\">");       
+            out.println("<br>");
+            out.println("<input type=\"submit\" value=\""+moduleName+"\"><br>");        
+            out.println("<br>");
+            out.println("</form>");
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

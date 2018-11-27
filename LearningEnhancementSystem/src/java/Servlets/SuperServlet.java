@@ -19,6 +19,7 @@ import Classes.User;
 import Database.NotificationDb;
 import java.util.ArrayList;
 import HtmlTemplates.BootstrapTemplate;
+import java.nio.charset.StandardCharsets;
 
 /**
  *
@@ -39,7 +40,7 @@ public class SuperServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response, String currentTab, PrintWriter out)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+        request.setCharacterEncoding("UTF-8");
         BootstrapTemplate bst = new BootstrapTemplate();
         //Hvis systemet ikke greier å legge Useren i session så blir du bedt om å logge inn på nytt
         if (!setUserLoggedIn(request)) {
@@ -109,12 +110,12 @@ public class SuperServlet extends HttpServlet {
                 
             }   else {
                     sbf.append("<div style=\"background-color:#f3f3f3;\">" +
-    "                            <a class=\"dropdown-item\"><p style=\"color: red;\">◉</p >"+ not.getNotificationContent() +"</a>\n" +
+    "                            <a class=\"dropdown-item\" href=\"Notifications\"><p style=\"color: red;\">◉</p >"+ not.getNotificationContent() +"</a>\n" +
     "                               </div> \n" +
                             "<div class=\"dropdown-divider\"></div>\n");
                 }
             }
-            sbf.append("<button style=\"float: right;\"class=\"btn btn-primary\" href=\"Notifications\">See all</button>");
+            sbf.append("<a style=\"float: right;\"class=\"btn btn-primary\" href=\"Notifications\">See all</a>");
         } else {
             for (int i = 0; i < 5; i++) {
                 if (notifications.get(i).isIsNotificationSeen()) {
@@ -135,6 +136,12 @@ public class SuperServlet extends HttpServlet {
         
         return sbf.toString();
     }
+    
+    protected String encodeToUTF8(String s) {
+        byte[] bytes = s.getBytes(StandardCharsets.ISO_8859_1);
+        return new String(bytes, StandardCharsets.UTF_8);
+    }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -149,6 +156,9 @@ public class SuperServlet extends HttpServlet {
             throws ServletException, IOException {
     }
 
+    
+    
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *

@@ -17,7 +17,8 @@ public class Evaluation {
     private String deliveryid;
     private String comment;
     private boolean isPublished;
-
+    private ArrayList<Score> scorelist = new ArrayList<>();
+    
     public boolean isIsPublished() {
         return isPublished;
     }
@@ -26,8 +27,6 @@ public class Evaluation {
         this.isPublished = isPublished;
     }
     
-    private ArrayList<Score> scorelist = new ArrayList<>();
-
     public String getEvaluationid() {
         return evaluationid;
     }
