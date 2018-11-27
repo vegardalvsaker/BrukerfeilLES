@@ -17,14 +17,7 @@ public class UserDb extends Database {
     private static final String SLCT_USER = "select * from Users where user_email = ?";
     private static final String SELECT_USERID = "select user_id from Users where user_email = ?";
     private static final String SELECT_ALL_USER_ID = "select user_id from Users";
-    
-
-  // Fosse
-    //Stating arraylists here to be able to split methods into get and print
-    ArrayList<User> onlyStudents = new ArrayList<>();
-    ArrayList<User> onlyTeachers = new ArrayList<>();
-    ArrayList<User> profileList = new ArrayList<>();
-  //STOP  
+     
     
     public UserDb() {
         init();
@@ -253,7 +246,16 @@ public class UserDb extends Database {
 
     //    V V V V V V V 
     
-    public void getProfile(PrintWriter out, String id) {
+    
+      // Fosse
+    //Stating arraylists here to be able to split methods into get and print
+    ArrayList<User> onlyStudents = new ArrayList<>();
+    ArrayList<User> onlyTeachers = new ArrayList<>();
+    ArrayList<User> profileList = new ArrayList<>();
+  //STOP 
+    
+
+    public User getOneProfile(PrintWriter out, String id) {
         String oneProfile = ("select * from Users where user_id = ?");
         
         try(    Connection connection = getConnection();
@@ -263,111 +265,77 @@ public class UserDb extends Database {
             prepStatement.setString(1, id);
             
             try(ResultSet rset = prepStatement.executeQuery(); ){
+                User usr = new User();
+                
                 while(rset.next())   {
-                    String userID = rset.getString("user_ID");
-                    String userName = rset.getString("user_name");
-                    String userEmail = rset.getString("user_email");
-                    boolean isTeacher = rset.getBoolean("user_isTeacher");
-                   
-                    User user = new User(userID, userName, userEmail, isTeacher);
-                    profileList.add(user);
-                }  
+                    usr.setUserid(rset.getString("user_id"));
+                    usr.setUserName(rset.getString("user_name"));
+                    usr.setUserEmail(rset.getString("user_email"));
+                    usr.setUserIsTeacher(rset.getBoolean("user_isTeacher"));
+                }
+                return usr;
             }
         }
         catch(SQLException liste) {
-            out.println("SQL exception: in getProfile" + liste);
-           }  
-    } 
-    
-    public void printProfile(PrintWriter out) {
-
-        for (User user : profileList) {
-            out.println("<h1>"+"Information about "+ user.getUserName() + "</h1>");
-            out.println("User ID: " + user.getUserId() + "<br>");
-            out.println(" Name: " + user.getUserName() + "<br>");
-            out.println(" Email: " + user.getUserEmail() + "<br>");
-        }
+            out.println("SQL exception: in getOneProfile" + liste);
+           } 
+        return null;
     }
+ 
+    public ArrayList getArrayOfStudents(PrintWriter out) {
+        String allStudents = ("select * from Users where user_isTeacher = 0");
+        
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(allStudents);
+                ){
    
-    public void printProfileLimited(PrintWriter out) {
-
-        for (User user : profileList) {
-            out.println("<h1>"+"Information about "+ user.getUserName() + "</h1>");
-            out.println(" Name: " + user.getUserName() + "<br>");
-            out.println(" Email: " + user.getUserEmail() + "<br>");
-        }
-    }
-    
-    public void getOnlyStudent(PrintWriter out) {
-        String studentList = ("select * from Users where user_isTeacher = 0");
-        
-        try(    Connection connection = getConnection();
-                PreparedStatement prepStatement = connection.prepareStatement(studentList);
-                ResultSet rset = prepStatement.executeQuery();
-                ){
-
-            while(rset.next())   {
-                String userID = rset.getString("user_ID");
-                String userName = rset.getString("user_name");
-                String userEmail = rset.getString("user_email");
-                boolean isTeacher = rset.getBoolean("user_isTeacher");
-                   
-                User user = new User(userID, userName, userEmail, isTeacher);
-                onlyStudents.add(user);
-            }  
+            try(ResultSet rset = prepStatement.executeQuery(); ){
+                ArrayList <User> studentList = new ArrayList<>();
+                
+                while(rset.next())   {
+                    User usr = new User();
+                    usr.setUserid(rset.getString("user_id"));
+                    usr.setUserName(rset.getString("user_name"));
+                    usr.setUserEmail(rset.getString("user_email"));
+                    usr.setUserIsTeacher(rset.getBoolean("user_isTeacher"));
+                    studentList.add(usr);
+                }
+                return studentList;
+            }
         }
         catch(SQLException liste) {
-            out.println("SQL exception: in getOnlyStudent" + liste);
-        }  
-    } 
-    
-    public void printOnlyStudent(PrintWriter out) {
-        out.println("<h1>List of all students:</h1>");
-        
-        for (User user : onlyStudents) {
-            String id = user.getUserId();
-            out.println(" Name: " + user.getUserName() + "<br>");
-            out.println(" Email: " + user.getUserEmail() + "<br>");
-            out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
-            out.println("<br>" + "<br>");
-            }
+            out.println("SQL exception: in getArrayOfStudents" + liste);
+           } 
+        return null;
     }
-    
-    public void getOnlyTeacher(PrintWriter out) {
-        String teacherList = ("select * from Users where user_isTeacher = 1");
-       
+  
+    public ArrayList getArrayOfTeachers(PrintWriter out) {
+        String allTeachers = ("select * from Users where user_isTeacher = 1");
+        
         try(    Connection connection = getConnection();
-                PreparedStatement prepStatement = connection.prepareStatement(teacherList);
-                ResultSet rset = prepStatement.executeQuery();
+                PreparedStatement prepStatement = connection.prepareStatement(allTeachers);
                 ){
-            
-            while(rset.next())   {
-                String userID = rset.getString("user_ID");
-                String userName = rset.getString("user_name");
-                String userEmail = rset.getString("user_email");
-                boolean isTeacher = rset.getBoolean("user_isTeacher");
-                   
-                User user = new User(userID, userName, userEmail, isTeacher);
-                onlyTeachers.add(user);
-            }  
+   
+            try(ResultSet rset = prepStatement.executeQuery(); ){
+                ArrayList <User> TeacherList = new ArrayList<>();
+                
+                while(rset.next())   {
+                    User usr = new User();
+                    usr.setUserid(rset.getString("user_id"));
+                    usr.setUserName(rset.getString("user_name"));
+                    usr.setUserEmail(rset.getString("user_email"));
+                    usr.setUserIsTeacher(rset.getBoolean("user_isTeacher"));
+                    TeacherList.add(usr);
+                }
+                return TeacherList;
+            }
         }
         catch(SQLException liste) {
-            out.println("SQL exception: in getOnlyTeacher" + liste);
-           }  
-    } 
-    
-    public void printOnlyTeacher(PrintWriter out) {
-        out.println("<h1>List of all teachers:</h1>");
-        
-        for (User user : onlyTeachers) {
-            String id = user.getUserId();
-            out.println(" Name: " + user.getUserName() + "<br>");
-            out.println(" Email: " + user.getUserEmail() + "<br>");
-            out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
-            out.println("<br>" + "<br>");
-            }
+            out.println("SQL exception: in getArrayOfTeachers" + liste);
+           } 
+        return null;
     }
-    
+
     public int getStudentCount(PrintWriter out) {
         String modules = ("select * from Users where user_isTeacher = 0");
         int studentCount = 0;

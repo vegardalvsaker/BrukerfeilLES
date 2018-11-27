@@ -48,8 +48,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         
 
         
-        profile.getProfile(out,userID);
-        
         setUserLoggedIn(request);                                 //Calls super method, fills in user-data from database into session   
 
         HttpSession session = request.getSession();               //Sets variable "session" to current session
@@ -58,17 +56,17 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         
         if (request.isUserInRole("Teacher")) {
             out.println("Du er logget inn som en lærer: ");
-            profile.printProfile(out);
+            printUserInfo(out, userID);
             printProgressbarForm(out, userID);
-            //Eventuelt print PROGRESS/RESULTS
+
         } else if (user.getUserId().equals(userID) ) {            //IF user logged in = user profile requested
             out.println("Dette er din profil: ");
-            profile.printProfile(out);
+            printUserInfo(out, userID);
             printProgressbarForm(out, userID);
-            //Eventuelt print PROGRESS/RESULTS
+
         } else {
             out.println("Du er logget inn som en student: ");
-            profile.printProfileLimited(out);
+            printUserInfo(out, userID);
         }
     }    
 }
@@ -108,10 +106,9 @@ public void printProgressbarForm(PrintWriter out, String id) {
     out.println("<div class=\"w3-container\">");
 
     out.println("<h2>Progress Bar</h2>");
-    out.println("<p>You have been evaluated on " + evaluatedDeliveriesCount + " modules, there are " + deliveriesRemaining + " modules remaining!</p>");
     
     //Prints the progressbar for the relevant student, it shows his progress on completing the modules.
-    out.println("<div>This is your progress towards the end of the year:</div>");
+    out.println("<div>Du har blitt evaluert på " + evaluatedDeliveriesCount + " moduler, bare " + deliveriesRemaining + " moduler igjen!</div>");
     out.println("<div class=\"w3-light-grey\">");
     out.println("<div class=\"w3-container w3-green w3-center\" style=\"width:" + percent + "%\">" + percent + "%</div>");
     out.println("</div><br>");
@@ -144,8 +141,15 @@ public void printProgressbarForm(PrintWriter out, String id) {
     out.println("</html>");
 }
 
-
-
+public void printUserInfo(PrintWriter out, String id){
+    UserDb user = new UserDb();
+    User oneProfile = user.getOneProfile(out, id);
+    
+    out.println("<h2>"+"Information about "+ oneProfile.getUserName() + "</h2>");
+    out.println("User ID: " + oneProfile.getUserId() + "<br>");
+    out.println(" Name: " + oneProfile.getUserName() + "<br>");
+    out.println(" Email: " + oneProfile.getUserEmail() + "<br>");
+}
 
  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -185,5 +189,4 @@ public void printProgressbarForm(PrintWriter out, String id) {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
