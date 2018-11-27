@@ -34,6 +34,10 @@ public class ModuleDb extends Database {
     private static final String ADD_MODULE = "insert into Module values (default, ?, ?, ?, ?, ?)";
     private static final String EDIT_MODULE = "update Module set module_name = ?, module_desc = ?, module_content = ?, module_isPublished = ?, module_inInterview = ? where module_id = ?";
     
+    public ModuleDb() {
+        init();
+    }
+    
     /**
      * This method retrieves all of the modules in the database, create an object of each record and is then
      * added to a list of modules
@@ -225,8 +229,6 @@ public class ModuleDb extends Database {
     
     
     public boolean addModule(PrintWriter out, String modulnavn, String beskrivelse, String innhold, String leveringsform, boolean published)  {
-        
-        init();
         
         try( Connection connection = getConnection();
              PreparedStatement prepStatement = connection.prepareStatement(ADD_MODULE);

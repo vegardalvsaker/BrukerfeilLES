@@ -11,8 +11,12 @@ import java.sql.*;
 public class WorklistDb extends Database {
     
     //private static final String uses the SQL database to collect the data we need and converts it to Stings so that we can use it later;
-        private static final String GET_WORKLIST_ID =                   "select worklist_id from Worklist where teacher_id = ?";
+    private static final String GET_WORKLIST_ID =                   "select worklist_id from Worklist where teacher_id = ?";
     
+    public WorklistDb(){
+        init();
+    }
+        
     public String getWorklistId(String userId) {
         try (
                 Connection conn = getConnection();

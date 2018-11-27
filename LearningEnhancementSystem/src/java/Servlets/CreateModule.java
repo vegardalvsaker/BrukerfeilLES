@@ -28,7 +28,6 @@ public class CreateModule extends SuperServlet {
             
             ModuleDb db = new ModuleDb();
             LearningGoalDb learnGoal = new LearningGoalDb();
-            db.init();
             
             
             if (request.getMethod().equals("POST"))  {

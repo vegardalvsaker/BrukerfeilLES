@@ -29,6 +29,10 @@ public class DeliveryDb extends Database{
     private static final String SELECT_ALL_DELIVERIES = "select * from Delivery where worklist_id = ? and delivery_isEvaluated = 0";
     private static final String UPDATE_ISEVALUATED = "update Delivery set delivery_isEvaluated = true where delivery_id = ?";
     
+    public DeliveryDb() {
+        init();
+    }
+    
     public void updateIsEvaluated(String deliveryId) {
         try (
                 Connection conn = getConnection();
@@ -97,11 +101,6 @@ public class DeliveryDb extends Database{
         return null;
     }
     
-    
-    
-    public DeliveryDb() {
-        init();
-    }
     public void editDelivery(String deliveryContent, String deliveryId) {
    try( Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(UPDATE_DELIVERY);

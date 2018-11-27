@@ -34,8 +34,6 @@ public class FrontpagePrinter {
         bs = new BootstrapTemplate();
         mdb = new ModuleDb();
         adb = new AnnouncementDb();
-        mdb.init();
-        adb.init();
     }
 
     /**

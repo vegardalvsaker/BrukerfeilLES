@@ -81,7 +81,6 @@ public class SuperServlet extends HttpServlet {
         }
         
         UserDb uDb = new UserDb();
-        uDb.init();
         User user = uDb.getUser(email);
         if (user == null) {
             return false;

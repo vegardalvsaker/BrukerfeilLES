@@ -132,7 +132,6 @@ public class EvaluateServlet extends SuperServlet {
             return false;
         }
         ModuleDb mdb = new ModuleDb();
-        mdb.init();
         module = mdb.getModuleWithLearningGoals(delivery.getModuleID());
         System.out.println(module.getName());
         

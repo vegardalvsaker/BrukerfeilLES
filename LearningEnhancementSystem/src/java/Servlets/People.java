@@ -29,8 +29,8 @@ public class People extends SuperServlet {
         bst.containerClose(out);
         bst.bootstrapFooter(out);
               
+
         UserDb users = new UserDb();
-        users.init();
         
         ArrayList<User> onlyStudents = users.getArrayOfStudents(out);
         ArrayList<User> onlyTeachers = users.getArrayOfTeachers(out);

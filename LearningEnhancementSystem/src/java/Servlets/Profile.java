@@ -46,8 +46,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         UserDb profile = new UserDb();
         DeliveryDb delivery = new DeliveryDb();
         
-        profile.init();
-        delivery.init();
+
         
         setUserLoggedIn(request);                                 //Calls super method, fills in user-data from database into session   
 
@@ -81,10 +80,7 @@ public void printProgressbarForm(PrintWriter out, String id) {
     DeliveryDb delivery = new DeliveryDb();
     UserDb user = new UserDb();
     
-    delivery.init();
-    module.init();
-    user.init();
-    
+  
     //total students
     int studentCount = user.getStudentCount(out);
     //total published modules

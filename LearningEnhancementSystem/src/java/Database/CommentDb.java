@@ -18,6 +18,10 @@ public class CommentDb extends Database{
     private static final String ALL_COMMENTS = "select c.module_id, c.comment_id, c.comment_text, u.user_name from Comments c inner join Users u on c.user_id = u.user_id where c.module_id = ? order by c.comment_timestamp";
     private static final String DEL_COMMENT = "delete from Comments where comment_id = ?";
     
+    public CommentDb() {
+        init();
+    }
+    
     public List<Comment> getComments(String moduleId){
         List<Comment> comments = new ArrayList<>();
     

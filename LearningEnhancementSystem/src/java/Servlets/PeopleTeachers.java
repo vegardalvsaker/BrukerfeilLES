@@ -34,7 +34,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         bst.bootstrapFooter(out);
               
         UserDb teachers = new UserDb();
-        teachers.init();
         
         ArrayList<User> onlyTeachers = teachers.getArrayOfTeachers(out);
         out.println("<h1>List of all teachers:</h1>");
