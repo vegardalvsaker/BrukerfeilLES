@@ -50,7 +50,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         delivery.init();
         
         profile.getProfile(out,userID);
-     //   delivery.getOneStudentsDeliveries(out, userID);
         
         setUserLoggedIn(request);                                 //Calls super method, fills in user-data from database into session   
 
@@ -72,7 +71,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
             out.println("Du er logget inn som en student: ");
             profile.printProfileLimited(out);
         }
-    //  profileForm(out);
     }    
 }
 
@@ -134,27 +132,17 @@ public void printProgressbarForm(PrintWriter out, String id) {
     for (int i=1; i<=moduleCount; i++){
         int moduleNr = i;
         String moduleNrString = Integer.toString(moduleNr);
-        //int amountOfDeliveries = 0;
        
         Module oneModule = module.getOneModule(out, moduleNrString);
         int amountOfDeliveries = delivery.getAmountOfDeliveriesPerModule(out, moduleNrString);
-        
-        /*
-        ArrayList<Delivery> deliveryArray = delivery.getDeliveryArray(out, moduleNrString);
-        for (Delivery temp : deliveryArray) {
-            amountOfDeliveries++; 
-        }
-        */
         int oneModulePercent = amountOfDeliveries * 100 / studentCount;
         
         out.println("<div>" + oneModule.getName() + ":</div>");
         out.println("<div class=\"w3-light-grey\">");
         out.println("<div class=\"w3-container w3-blue\" style=\"width:" + oneModulePercent + "%\">" + oneModulePercent + "%</div>");
-        out.println("</div><br>");
-        
+        out.println("</div>"); 
     }
 
-    
     out.println("</div>");
     out.println("</body>");
     out.println("</html>");
@@ -162,23 +150,6 @@ public void printProgressbarForm(PrintWriter out, String id) {
 
 
 
-/*
-public void profileForm(PrintWriter out) {
-
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<title>People</title>");            
-    out.println("</head>");
-    out.println("<body>");
-    out.println("<div>");
-    out.println("<form action=\"Profile\" method=\"POST\">");
-    out.println("<br>");
-    out.println("<input type=\"submit\" value=\"Placeholder\">");
-    out.println("</form>");
-    out.println("</div>"); 
-}
-*/
 
  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -212,14 +212,10 @@ public class UserDb extends Database {
            
         } 
 
-    //
-    //     FOSSE SITT
-    //    | | | | | | |
-    //    V V V V V V V 
-    //
-    
 
     
+    
+    //    V V V V V V V 
     
     public void getProfile(PrintWriter out, String id) {
         String oneProfile = ("select * from Users where user_id = ?");
@@ -355,10 +351,6 @@ public class UserDb extends Database {
         }  
         return studentCount;
     }
-
-//
 //    ^ ^ ^ ^ ^ ^ ^ 
-//    | | | | | | | 
-//     FOSSE SITT 
-//
+
 }

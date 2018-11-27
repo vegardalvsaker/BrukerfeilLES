@@ -144,7 +144,7 @@ public class DeliveryDb extends Database{
     }
     
     
-    //VVVV FOSSE VVVVV
+    //VVVVVVVVV
 
     //Returnerer int total antall evaluerte deliveries 
     public int getAllEvaluatedDeliveries(PrintWriter out) {
@@ -190,34 +190,8 @@ public class DeliveryDb extends Database{
         }  
         return evaluatedDeliveriesCount;
     }   
-    
-    public ArrayList<Delivery> getDeliveryArray(PrintWriter out, String id) {
-        String allEvaluatedDeliveries = ("select * from Delivery where module_id = ? AND delivery_isEvaluated = 1");
-        
-        try(    Connection connection = getConnection();
-                PreparedStatement prepStatement = connection.prepareStatement(allEvaluatedDeliveries);
-                ){
-            
-            prepStatement.setString(1, id);
-            
-            try(ResultSet rset = prepStatement.executeQuery(); ){
-                ArrayList<Delivery> deliveryList = new ArrayList<>();
-                while(rset.next())   {
-                    Delivery del = new Delivery();
-                    
-                    del.setModuleID(rset.getString("module_id"));
 
-                    deliveryList.add(del);
-                }
-                return deliveryList;
-            }
-        }
-        catch(SQLException liste) {
-            out.println("SQL exception: in getDeliveryArray" + liste);
-           } 
-        return null;
-    } 
-    
+    //Recives a module id, retrives the amount of deliveries for said module and returns that number
     public int getAmountOfDeliveriesPerModule(PrintWriter out, String id) {
         String oneDelivery = ("select * from Delivery where module_id = ? AND delivery_isEvaluated = 1;");
         int evaluatedDeliveriesCount = 0;
@@ -239,14 +213,8 @@ public class DeliveryDb extends Database{
         }  
         return evaluatedDeliveriesCount;
     }   
-    
-    
-    
-    
-    
-    //^^^^ FOSSE ^^^^
-    
-    
+    //^^^^ ^^^^
+
 }
  
      

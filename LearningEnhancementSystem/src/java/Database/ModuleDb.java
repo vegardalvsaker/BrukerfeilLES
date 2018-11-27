@@ -247,7 +247,7 @@ public class ModuleDb extends Database {
        
     } 
     
-// VVVVV Fosse VVVVV
+// VVVVV VVVVV
     
     public int getModuleCount(PrintWriter out) {
         String modules = ("select * from Module where module_isPublished = 1");
@@ -301,7 +301,7 @@ public class ModuleDb extends Database {
         return null;
     } 
     
-// ^^^^ Fosse ^^^^
+// ^^^^ ^^^^
     
     
 }
