@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Classes.User;
 import Classes.Delivery;
+import Classes.Module;
+import java.util.ArrayList;
 
 /**
  *
@@ -48,7 +50,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         delivery.init();
         
         profile.getProfile(out,userID);
-     //   delivery.getOneStudentsDeliveries(out, userID);
         
         setUserLoggedIn(request);                                 //Calls super method, fills in user-data from database into session   
 
@@ -70,7 +71,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
             out.println("Du er logget inn som en student: ");
             profile.printProfileLimited(out);
         }
-    //  profileForm(out);
     }    
 }
 
@@ -85,18 +85,23 @@ public void printProgressbarForm(PrintWriter out, String id) {
     module.init();
     user.init();
     
+    //total students
     int studentCount = user.getStudentCount(out);
+    //total published modules
     int moduleCount = module.getModuleCount(out);
+    //total evaluated deliveries for one student (max 1 per module)
     int evaluatedDeliveriesCount = delivery.getEvaluatedDeliveries(out, userID);
+    //total evaluated deliveries for total students
     int allEvaluatedDeliveries = delivery.getAllEvaluatedDeliveries(out);
     
     //Sets "percent" to the percentage of deliveries a student has delivered
     int percent = evaluatedDeliveriesCount * 100 / moduleCount;
-    
     //Sets "totalDeliveries" to the max possible deliveries for all students
-    //Sets "avgpercent" to the percentage of an average student
     int totalDeliveries = studentCount * moduleCount;
+    //Sets "avgpercent" to the percentage of an average student
     int avgpercent = allEvaluatedDeliveries * 100 / totalDeliveries;
+    //Sets "deliveriesRemaining" to the number of modules that has yet to be evaluated.
+    int deliveriesRemaining = moduleCount - evaluatedDeliveriesCount;
     
     out.println("<!DOCTYPE html>");
     out.println("<html>");
@@ -107,41 +112,44 @@ public void printProgressbarForm(PrintWriter out, String id) {
     out.println("<div class=\"w3-container\">");
 
     out.println("<h2>Progress Bar</h2>");
-    out.println("<p>This is your progress towards the end of the year.</p>");
+    out.println("<p>You have been evaluated on " + evaluatedDeliveriesCount + " modules, there are " + deliveriesRemaining + " modules remaining!</p>");
+    
+    //Prints the progressbar for the relevant student, it shows his progress on completing the modules.
+    out.println("<div>This is your progress towards the end of the year:</div>");
+    out.println("<div class=\"w3-light-grey\">");
+    out.println("<div class=\"w3-container w3-green w3-center\" style=\"width:" + percent + "%\">" + percent + "%</div>");
+    out.println("</div><br>");
+    
+    //Prints the progressbar for an average student, it shows how many % of deliveries one average student has delivered.
+    out.println("<div>This the average progress of your classmates.</div>");
+    out.println("<div class=\"w3-light-grey\">");
+    out.println("<div class=\"w3-container w3-blue\" style=\"width:" + avgpercent + "%\">" + avgpercent + "%</div>");
+    out.println("</div><br>");
 
-    out.println("<div class=\"w3-light-grey\">");
-    out.println("<div class=\"w3-container w3-green w3-center\" style=\"width:" + percent + "%\">50%</div>");
-    out.println("</div><br>");
-    out.println("<p>This the average progress of your classmates.</p>");
-    out.println("<div class=\"w3-light-grey\">");
-    out.println("<div class=\"w3-container w3-blue\" style=\"width:50%\">" + avgpercent + "%</div>");
-    out.println("</div><br>");
+    
+    //For loop that runs once per published module, it retrieves a Delivery Array for every module - this includes 
+    //every evaluated delivery for that 
+    for (int i=1; i<=moduleCount; i++){
+        int moduleNr = i;
+        String moduleNrString = Integer.toString(moduleNr);
+       
+        Module oneModule = module.getOneModule(out, moduleNrString);
+        int amountOfDeliveries = delivery.getAmountOfDeliveriesPerModule(out, moduleNrString);
+        int oneModulePercent = amountOfDeliveries * 100 / studentCount;
+        
+        out.println("<div>" + oneModule.getName() + ":</div>");
+        out.println("<div class=\"w3-light-grey\">");
+        out.println("<div class=\"w3-container w3-blue\" style=\"width:" + oneModulePercent + "%\">" + oneModulePercent + "%</div>");
+        out.println("</div>"); 
+    }
 
     out.println("</div>");
     out.println("</body>");
     out.println("</html>");
-    
 }
 
 
 
-/*
-public void profileForm(PrintWriter out) {
-
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<title>People</title>");            
-    out.println("</head>");
-    out.println("<body>");
-    out.println("<div>");
-    out.println("<form action=\"Profile\" method=\"POST\">");
-    out.println("<br>");
-    out.println("<input type=\"submit\" value=\"Placeholder\">");
-    out.println("</form>");
-    out.println("</div>"); 
-}
-*/
 
  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

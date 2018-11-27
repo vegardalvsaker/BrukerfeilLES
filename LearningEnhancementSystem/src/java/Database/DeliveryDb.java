@@ -299,8 +299,9 @@ public class DeliveryDb extends Database{
     
 
     
-    //VVVV FOSSE VVVVV
+    //VVVVVVVVV
 
+    //Returnerer int total antall evaluerte deliveries 
     public int getAllEvaluatedDeliveries(PrintWriter out) {
         String oneDelivery = ("select * from Delivery where delivery_isEvaluated = 1;");
         int allEvaluatedDeliveriesCount = 0;
@@ -322,7 +323,8 @@ public class DeliveryDb extends Database{
         return allEvaluatedDeliveriesCount;
     }     
 
-  
+    
+    //Tar i mot student_id og returnerer total antall evaluerte deliveries for en student
     public int getEvaluatedDeliveries(PrintWriter out, String id) {
         String oneDelivery = ("select * from Delivery where student_id = ? AND delivery_isEvaluated = 1;");
         int evaluatedDeliveriesCount = 0;
@@ -343,10 +345,32 @@ public class DeliveryDb extends Database{
             out.println("SQL exception: in getEvaluatedDeliveries" + liste);
         }  
         return evaluatedDeliveriesCount;
-    }     
-    //^^^^ FOSSE ^^^^
-    
-    
+    }   
+
+    //Recives a module id, retrives the amount of deliveries for said module and returns that number
+    public int getAmountOfDeliveriesPerModule(PrintWriter out, String id) {
+        String oneDelivery = ("select * from Delivery where module_id = ? AND delivery_isEvaluated = 1;");
+        int evaluatedDeliveriesCount = 0;
+        
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(oneDelivery);
+                ){
+            prepStatement.setString(1, id);
+            
+            try(ResultSet rset = prepStatement.executeQuery(); ){
+                while(rset.next())   {
+                    evaluatedDeliveriesCount++;
+                }  
+                return evaluatedDeliveriesCount;
+            }
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getAmountOfDeliveriesPerModule" + liste);
+        }  
+        return evaluatedDeliveriesCount;
+    }   
+    //^^^^ ^^^^
+
 }
  
      

@@ -237,29 +237,8 @@ public class UserDb extends Database {
            
         } 
 
-    public ArrayList<String> getAllUserIds() {
-        ArrayList<String> userIds = new ArrayList();
-        try (Connection conn = getConnection();
-                PreparedStatement ps = conn.prepareStatement(SELECT_ALL_USER_ID);
-                ResultSet rs = ps.executeQuery();) {
-            while(rs.next()) {
-                userIds.add(rs.getString("user_id"));
-            }
-            return userIds;
-        } catch (SQLException ex) {
-            System.out.println("Method getAllUserIds(), error: " + ex);
-        }
-        return userIds;
-    }
-    
-    //
-    //     FOSSE SITT
-    //    | | | | | | |
-    //    V V V V V V V 
-    //
-    
 
-    
+    //    V V V V V V V 
     
     public void getProfile(PrintWriter out, String id) {
         String oneProfile = ("select * from Users where user_id = ?");
@@ -395,10 +374,6 @@ public class UserDb extends Database {
         }  
         return studentCount;
     }
-
-//
 //    ^ ^ ^ ^ ^ ^ ^ 
-//    | | | | | | | 
-//     FOSSE SITT 
-//
+
 }

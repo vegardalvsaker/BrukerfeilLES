@@ -293,7 +293,7 @@ public class ModuleDb extends Database {
        
     } 
     
-// VVVVV Fosse VVVVV
+// VVVVV VVVVV
     
     public int getModuleCount(PrintWriter out) {
         String modules = ("select * from Module where module_isPublished = 1");
@@ -315,7 +315,39 @@ public class ModuleDb extends Database {
         return moduleCount;
     } 
     
-// ^^^^ Fosse ^^^^
+
+
+    public Module getOneModule(PrintWriter out, String id) {
+        String oneModule = ("select * from Module where module_id = ?");
+        
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(oneModule);
+                ){
+            
+            prepStatement.setString(1, id);
+            
+            try(ResultSet rset = prepStatement.executeQuery(); ){
+                Module mod = new Module();
+                
+                while(rset.next())   {
+                    mod.setModuleID(rset.getString("module_id"));
+                    mod.setName(rset.getString("module_name"));
+                    mod.setDesc(rset.getString("module_desc"));
+                    mod.setContent(rset.getString("module_content"));
+                    mod.setPublished(rset.getBoolean("module_isPublished"));
+                    mod.setinInterview(rset.getBoolean("module_inInterview"));
+
+                }
+                return mod;
+            }
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getOneModule" + liste);
+           } 
+        return null;
+    } 
+    
+// ^^^^ ^^^^
     
     
 }
