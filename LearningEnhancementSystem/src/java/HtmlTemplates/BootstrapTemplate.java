@@ -78,13 +78,13 @@ public class BootstrapTemplate {
 "          <a class=\"nav-link\" href=\"Modules\">Modules </a>\n" +
 "        </li>\n" +
 "        <li class=\"nav-item %s\" >\n" +
-"          <a class=\"nav-link disabled\" href=\"Results\">Results </a>\n" +
+"          <a class=\"nav-link\" href=\"Results\">Results </a>\n" +
 "        </li>\n" +
 "        <li class=\"nav-item %s\" >\n" +
-"          <a class=\"nav-link disabled\" href=\"Inbox\">Inbox </a>\n" +
+"          <a class=\"nav-link\" href=\"Inbox\">Inbox </a>\n" +
 "        </li>\n" +
 "        <li class=\"nav-item %s\">\n" +
-"          <a class=\"nav-link disabled\" href=\"Worklist\">Worklist </a>\n" +
+"          <a class=\"nav-link\" href=\"Worklist\">Worklist </a>\n" +
 "        </li>\n" +       
 "        <li class=\"nav-item %s dropdown\">\n" +
 "          <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
