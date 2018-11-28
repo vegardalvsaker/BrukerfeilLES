@@ -55,14 +55,14 @@ public class DeliveryDb extends Database{
             try (ResultSet rset = ps.executeQuery();) {
                 while (rset.next()) {
                     String delId = rset.getString("delivery_id");
-                    String studentName = rset.getString("student_name");
+                    String userName = rset.getString("user_name");
                     String moduleName = rset.getString("module_name");
                     String desc = rset.getString("delivery_content");
                     String workId = rset.getString("worklist_id");
                     String timestamp = rset.getString("delivery_timestamp");
                     boolean isEvaluated = rset.getBoolean("delivery_isEvaluated");
                                         
-                    Delivery del = new Delivery(delId, studentName, moduleName, desc, workId, timestamp, isEvaluated);
+                    Delivery del = new Delivery(delId, userName, moduleName, desc, workId, timestamp, isEvaluated);
                     deliveries.add(del);
 
                 }
@@ -89,7 +89,7 @@ public class DeliveryDb extends Database{
                 deliveries.setDeliveryID(deliverySet.getString("delivery_id"));
                 deliveries.setDeliveryContent(deliverySet.getString("delivery_content"));
                 deliveries.setModuleName(deliverySet.getString("module_name"));
-                deliveries.setStudentName(deliverySet.getString("student_name"));
+                deliveries.setUserName(deliverySet.getString("student_name"));
                 delivery.add(deliveries);
             }
             return delivery;
@@ -134,7 +134,7 @@ public class DeliveryDb extends Database{
                 
                 delivery.setDeliveryID(rs.getString("delivery_id"));
                 delivery.setStudentID(rs.getString("student_id"));
-                delivery.setStudentName(rs.getString("user_name"));
+                delivery.setUserName(rs.getString("user_name"));
                 delivery.setModuleID(rs.getString("module_id"));
                 delivery.setDeliveryContent(rs.getString("delivery_content"));
                 delivery.setWorklistID(rs.getString("worklist_id"));

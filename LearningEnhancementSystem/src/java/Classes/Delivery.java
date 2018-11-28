@@ -12,18 +12,18 @@ public class Delivery {
     private String moduleName;
     private String deliveryID;
     private String studentID;
-    private String studentName;
+    private String userName;
     private String moduleID;
     private String deliveryContent;
     private String worklistID;
     private String deliveryTimestamp;
     private boolean deliveryIsEvaluated;
 
-    public Delivery (String delivery_id, String student_id, String module_id, String delivery_content, String worklist_id, String delivery_timestamp, boolean delivery_isEvaluated) {
+    public Delivery (String delivery_id, String user_name, String module_name, String delivery_content, String worklist_id, String delivery_timestamp, boolean delivery_isEvaluated) {
     
     this.deliveryID = delivery_id;
-    this.studentID = student_id;
-    this.moduleID = module_id;
+    this.userName = user_name;
+    this.moduleName = module_name;
     this.deliveryContent = delivery_content;
     this.worklistID = worklist_id;
     this.deliveryTimestamp = delivery_timestamp;
@@ -34,13 +34,13 @@ public class Delivery {
         
     }
    
-    public String getStudentName() {
-        return studentName;
+    public String getUserName() {
+        return userName;
     }
 
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public boolean isDeliveryIsEvaluated() {
