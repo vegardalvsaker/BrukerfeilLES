@@ -156,9 +156,8 @@ public class BootstrapTemplate {
      * @param out 
      */
     public void jumbotron(PrintWriter out) {
-        
-        out.println("<div class=\"jumbotron mt-2\">");
         out.println("<div class=\"container\">");
+        out.println("<div class=\"jumbotron\">");
         out.println("<h1 class=\"display-4\">Announcements:</h1>");
         out.println("<hr class=\"my-4\">");
     }
@@ -167,7 +166,7 @@ public class BootstrapTemplate {
             out.println("<div class=\"jumbotron\">");
             out.println("<div class=\"container\">");
             out.println("<button class=\"btn btn-outline-secondary\" data-toggle=\"collapse\" data-target=\"#collapse\" aria-expanded=\"true\" aria-controls=\"collapse\">");
-            out.println("<h4 class=\"display-4\">Kommentarer</h4>");
+            out.println("<h2>Kommentarer</h2>");
             out.println("</button>");
             out.println("<hr class=\"my-4\">");
             out.println("<div class=\"collapse show\" id=\"collapse\">");
