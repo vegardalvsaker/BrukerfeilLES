@@ -10,23 +10,30 @@ import Classes.Results;
  * @author Marius
  */
 public class ResultsDb extends Database {
-    private static final String RESULT_LONG = "select D.student_id, U.user_name, E.evaluation_id,\n" + 
-                                              "E.evaluation_comment, D.delivery_id, M.module_name, L.learn_goal_points,\n" + 
-                                              "S.score_points from Users U inner join Evaluation E on U.user_id = E.teacher_id\n" +
-                                              "inner join Delivery D on D.delivery_id = E.delivery_id inner join Module M\n" + 
-                                              "on M.module_id = D.module_id inner join Score S on S.evaluation_id = E.evaluation_id\n" +
-                                              "inner join LearningGoal L on L.learn_goal_id = S.learn_goal_id where E.evaluation_id = ?;";
-    
+
     private static final String RESULT_SHORT = "select D.student_id, U.user_name, E.evaluation_id, D.delivery_id, M.module_name from Evaluation E \n" +
                                                 "inner join Delivery D on E.delivery_id = D.delivery_id inner join Module M on \n" +
                                                 "D.module_id = M.module_id inner join Users U on E.teacher_id = U.user_id where student_id = ?";
+
+
+
+
+    private static final String RESULT = "select D.student_id, U.user_name, E.evaluation_id, E.evaluation_comment, D.delivery_id, M.module_name, L.learn_goal_text, L.learn_goal_points, S.score_points from Users U \n" +
+    "inner join Evaluation E on U.user_id = E.teacher_id\n" +
+    "inner join Delivery D on D.delivery_id = E.delivery_id \n" +
+    "inner join Module M on M.module_id = D.module_id \n" +
+    "inner join Score S on S.evaluation_id = E.evaluation_id\n" +
+    "inner join LearningGoal L on L.learn_goal_id = S.learn_goal_id\n" +
+    "where E.evaluation_id = ?\n" +
+    "group by L.learn_goal_text;";
+
     public ResultsDb() {
         init();
     }
-    
+
     public List<Results> getSResults(String student_id){
         List<Results> result = new ArrayList<>();
-        
+
         try (
             Connection conn = getConnection();
             PreparedStatement ps = conn.prepareStatement(RESULT_SHORT);){
@@ -49,14 +56,19 @@ public class ResultsDb extends Database {
         }
         return null;
     }
-    
-    public List<Results> getLResults(String eval_id){
-        List<Results> result = new ArrayList<>();
+
+    public ArrayList<Results> getResults(String eval_id){
+
+        ArrayList<Results> result = new ArrayList<>();
+
         try (
             Connection conn = getConnection();
-            PreparedStatement ps = conn.prepareStatement(RESULT_LONG);){
-            ps.setString(1,eval_id);
+            PreparedStatement ps = conn.prepareStatement(RESULT);){
+
+            ps.setString(1, eval_id);
+
             try (ResultSet rSet = ps.executeQuery();){
+
                 while(rSet.next()){
                      Results res = new Results();
                      res.setStudentId(rSet.getString("student_id"));
@@ -67,9 +79,11 @@ public class ResultsDb extends Database {
                      res.setModuleName(rSet.getString("module_name"));
                      res.setLGPoints(rSet.getString("learn_goal_points"));
                      res.setScorePoints(rSet.getString("score_points"));
+                     res.setLearnGoal(rSet.getString("learn_goal_text"));
                      result.add(res);
                     }
                     return result;
+
                     }
                 }
                 catch (SQLException ex) {
@@ -77,5 +91,5 @@ public class ResultsDb extends Database {
         }
         return null;
     }
-       
+
 }

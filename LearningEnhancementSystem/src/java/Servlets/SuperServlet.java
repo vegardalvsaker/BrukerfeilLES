@@ -89,6 +89,12 @@ public class SuperServlet extends HttpServlet {
         return true;
     }
     
+    protected void redirectHeader(PrintWriter out) {
+        out.println("<head>\n" +
+                    "<meta http-equiv=\"refresh\" content=\"0;url=Modules\" />\n" +
+                    "</head");
+    }
+    
     protected String getNotificationHtml(HttpServletRequest request) {
         User user = (User)request.getSession().getAttribute("userLoggedIn");
         NotificationDb nDb = new NotificationDb();

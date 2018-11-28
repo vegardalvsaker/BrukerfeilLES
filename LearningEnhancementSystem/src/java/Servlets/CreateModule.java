@@ -35,13 +35,12 @@ public class CreateModule extends SuperServlet {
                 String modulnavn = request.getParameter("Modulnavn");
                 
                 String beskrivelse = request.getParameter("Beskrivelse");
-         
+                
                 String innhold = request.getParameter("Innhold");
                 
                 String leveringsform = request.getParameter("leveringsform");
-         
-                boolean published;
                 
+                boolean published;
 
                 Map map = request.getParameterMap();
                 
@@ -50,7 +49,7 @@ public class CreateModule extends SuperServlet {
                 db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform, published);
                 
                 
-                for (int i = 0; i < (map.size() - 4)/2; i++)   {
+                for (int i = 0; i < (map.size() - 4)/2; i++)   {    //Looper gjennom parameterMap for å finne antall læringsmål
                     
                     String learnGoalText = request.getParameter("Laringsmal" + i);
                     String learnGoalPoints = request.getParameter("Poeng" + i);
@@ -64,46 +63,41 @@ public class CreateModule extends SuperServlet {
             
             bst.containerOpen(out);
             
-            bst.containerClose(out);
-            
             addModuleForm(out);
+            
+            bst.containerClose(out);
             
             bst.bootstrapFooter(out);
             
          }
     }
     
-    protected void redirectHeader(PrintWriter out) {
-        out.println("<head>\n" +
-"        <meta http-equiv=\"refresh\" content=\"0;url=Modules\" />\n" +
-"    </head");
-    }
+   
     
     private void addModuleForm(PrintWriter out)  {
             
             out.println("<html>");
             out.println("<div>");
-            out.println("<h1>Legg til modul</h1>");
+            out.println("<h1>Opprett modul</h1>");
             out.println("<form action=\"CreateModule\" method=\"POST\">");
             out.println("<h3>Modulnavn</h3><br>");
             out.println("<input type =\"text\" name=\"Modulnavn\"><br>");
             out.println("<h3>Beskrivelse</h3><br>");
             out.println("<input type=\"text\" name=\"Beskrivelse\"><br>");
             out.println("<h3>Innhold</h3><br>");
-            out.println("<input type=\"text\" name=\"Innhold\" size=\"35\"><br>");      
+            out.println("<textarea rows=\"10\" cols=\"50\" name=\"Innhold\"></textarea><br>");      
             out.println("<br>");
             out.println("<h3>Velg leveringsform</h3><br>");
             out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Muntlig\">Muntlig");
             out.println("<br>");
             out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Video\">Video");
             out.println("<br>");
-            out.println("<h1>Legg til læringsmål</h1>");
-            
-            out.println("<script language=\"javascript\">");
+       
+            out.println("<script language=\"javascript\">");        //JavaScript for å legge til input-felt dynamisk
             out.println("var i = 0;");
             out.println("function add() {");
 	    out.println("var div = document.createElement(\"div\");");
-            out.println("div.innerHTML = '<input type=\"text\" size=\"35\" name=\"Laringsmal' + i + '\"></input> <input type=\"text\" name=\"Poeng' + i + '\"></input><br>';");
+            out.println("div.innerHTML = '<textarea rows=\"1\" cols=\"45\" name=\"Laringsmal' + i + '\"></textarea> <textarea rows=\"1\" cols=\"10\" name=\"Poeng' + i + '\"></textarea><br>';");
             out.println("i++");
             out.println("var id = document.getElementById(\"inputID\");");
             out.println("id.appendChild(div);");
@@ -116,18 +110,14 @@ public class CreateModule extends SuperServlet {
             out.println("<h3>Læringsmål og Poeng</h3>");
             out.println("<span id=\"inputID\">&nbsp;</span><br>");
             out.println("<input type=\"button\" value=\"Nytt læringsmål\" onclick=\"add()\"/><br>");
-            
             out.println("<input type=\"checkbox\" name=\"save\">Lagre modul uten å publisere</input><br>");
-            
             out.println("<input type=\"submit\" value=\"Submit\"><br>");
             out.println("</form>");
             out.println("</div>");
             out.println("</html>");
      
         }
-    
-    
-    
+
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

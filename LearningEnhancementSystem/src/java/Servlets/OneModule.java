@@ -8,12 +8,15 @@ package Servlets;
 import Classes.Comment;
 import Classes.CommentReply;
 import Classes.User;
-
+import Classes.Module;
+import Classes.LearningGoal;
 import Database.LearningGoalDb;
 import Database.CommentDb;
 import Database.CommentReplyDb;
 import Database.DeliveryDb;
-
+import Database.ModuleDb;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -31,28 +34,29 @@ import java.util.ArrayList;
 @WebServlet(name = "OneModule", urlPatterns = {"/OneModule"})
 public class OneModule extends SuperServlet {
 
+    BootstrapTemplate bst = new BootstrapTemplate();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         User user = (User)request.getSession().getAttribute("userLoggedIn");
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("id");
-        
+
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Modules", out);
-            
-            BootstrapTemplate bst = new BootstrapTemplate();
+
+
             LearningGoalDb db = new LearningGoalDb();
             CommentDb cdb = new CommentDb();
             CommentReplyDb crdb = new CommentReplyDb();
 
             DeliveryDb ddb = new DeliveryDb();
- 
+
             bst.containerOpen(out);
 
             ddb.getNrOfDeliveries(id,out);
 
 
-        
+
 
              if (request.getMethod().equals("POST"))  {
                 if (request.getParameter("edit")!=(null)) {
@@ -74,7 +78,7 @@ public class OneModule extends SuperServlet {
                     String comText = request.getParameter("comment");
                     if (comText.equals("")){
                         out.println("Enter text before posting");
-                    } else 
+                    } else
                     cdb.addComment(id, user.getUserId(), comText);
                 }
                 if (request.getParameter("addR")!=(null)){
@@ -82,7 +86,7 @@ public class OneModule extends SuperServlet {
                     String repText = request.getParameter("reply");
                     if (repText.equals("")){
                         out.println("Enter text before posting");
-                    } else 
+                    } else
                     crdb.addReply(commId, user.getUserId(), repText);
                 }
             }
@@ -101,12 +105,12 @@ public class OneModule extends SuperServlet {
                 Editdelivery(out,deliveryId, id);
                 }
             } else {
-                
+
                 deliver(out,request);
             }
-            
-                
-            
+
+
+
             List<Comment> commentList = cdb.getComments(id);
             bst.collapseTop(out);
             for (Comment comment : commentList){
@@ -140,38 +144,40 @@ public class OneModule extends SuperServlet {
             bst.collapseBottom(out);
 
             bst.containerClose(out);
-            bst.bootstrapFooter(out); 
+            bst.bootstrapFooter(out);
         }
         }
-    
-    
+
+
     private void editModuleButtonForm(PrintWriter out, HttpServletRequest request)    {
-        String id = request.getParameter("id");
-        
-            out.println("<a href=\"EditModule?id="+ id +"\">"
-                    + "<button>Rediger modul</button>"
-  
 
-                    + "</a>");                    
+            String id = request.getParameter("id");
 
-    }
-    
+            if (request.isUserInRole("Teacher")) {
+
+            out.println("<a href=\"EditModule?id="+ id +"\">");
+            out.println("<button>Rediger modul</button>");
+            out.println("</a>");
+
+            }
+        }
+
     private void deliver(PrintWriter out, HttpServletRequest request){
             String id = request.getParameter("id");
             out.println("<a href=\"Delivery?id="+ id +" \"a class=\"btn btn-info\">Deliver!</button></a>");
     }
-    
+
     private void addComment(PrintWriter out, String moduleId){
             out.println("<div>");
             out.println("<form action=\"OneModule?id="+ moduleId +"\" method=\"POST\">");
             out.println("<input type=\"hidden\" name=\"addC\" value=\"TRUE\">");
             out.println("<h3>Legg til kommentar</h3><br>");
             out.println("<textarea rows=\"4\" cols=\"30\" name=\"comment\"></textarea>");
-            out.println("<input type=\"submit\" value=\"Legg til\"><br>");        
+            out.println("<input type=\"submit\" value=\"Legg til\"><br>");
             out.println("</form>");
             out.println("</div>");
     }
-    
+
     private void deleteComment(PrintWriter out, String moduleId, String commentId) {
             out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
             out.println("<input type=\"hidden\" name=\"delete\" value=\"TRUE\">");
@@ -179,15 +185,15 @@ public class OneModule extends SuperServlet {
             out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete comment\">");
             out.println("</form>");
     }
-    
+
     private void addReply(PrintWriter out, String moduleId,String commentId){
             out.println("<div>");
             out.println("<form action=\"OneModule?id="+ moduleId +"\" method=\"POST\">");
             out.println("<input type=\"hidden\" name=\"addR\" value=\"TRUE\">");
             out.println("<p style=\"margin-left:2.5em;\"> Svar:</p>");
-            out.println("<textarea style=\"margin-left:2.5em;\" rows=\"2\" cols=\"30\" name=\"reply\"></textarea>"); 
+            out.println("<textarea style=\"margin-left:2.5em;\" rows=\"2\" cols=\"30\" name=\"reply\"></textarea>");
             out.println("<input style=\"margin-left:2.5em;\" type=\"hidden\" name=\"comment_id\" value=\""+ commentId +"\"/><br>");
-            out.println("<input style=\"margin-left:2.5em;\" type=\"submit\" value=\"Legg til\">");        
+            out.println("<input style=\"margin-left:2.5em;\" type=\"submit\" value=\"Legg til\">");
             out.println("</form>");
             out.println("</div>");
     }
@@ -195,19 +201,70 @@ public class OneModule extends SuperServlet {
             out.println("<form action=\"EditDelivery?id="+ deliveryId+"\" method=\"POST\">");
             out.println("<input type=\"hidden\" name=\"moduleId\" value=\""+ moduleId +"\">");
             out.println("<input type=\"hidden\" name=\"deliveryId\" value=\""+ deliveryId +"\">");
-            out.println("<input type =\"hidden\" name=\"comment\"><br>");           
+            out.println("<input type =\"hidden\" name=\"comment\"><br>");
             out.println("<br>");
-            out.println("<input type=\"submit\" value=\"Edit delivery\"><br>");        
+            out.println("<input type=\"submit\" value=\"Edit delivery\"><br>");
             out.println("<br>");
             out.println("</form>");
     }
-private void deleteReply(PrintWriter out, String moduleId, String replyid )  {
+    private void deleteReply(PrintWriter out, String moduleId, String replyid )  {
             out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
             out.println("<input style=\"margin-left:2.5em;\" type=\"hidden\" name=\"deleteR\" value=\"TRUE\">");
             out.println("<input style=\"margin-left:2.5em;\" type=\"hidden\" name=\"reply_id\" value=\""+ replyid +"\"/>");
             out.println("<input style=\"margin-left:2.5em;\" type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete reply\">");
             out.println("</form>");
-    }  
+    }
+    private void printLearnGoals(PrintWriter out, String id)   {
+
+
+            ModuleDb moduleDb = new ModuleDb();
+            moduleDb.init();
+
+            Module module = moduleDb.getModuleWithLearningGoals(id);
+
+            String moduleName = module.getName();
+            String moduleDesc = module.getDesc();
+            String moduleContent = module.getContent();
+            boolean leveringsform = module.getInInterview();
+
+            ArrayList<LearningGoal> learnGoalList = module.getLearningGoals();
+
+                out.println("<h3>" + moduleName + "</h3><br>");
+                out.println("<h5>Beskrivelse</h5");
+                out.println("<p>" + moduleDesc + "</p><br>");
+                out.println("<h5>Innhold</h5");
+                out.println("<p>" + moduleContent + "</p>");
+
+                out.println("<h5>Leveringsform: </h5>");
+
+                if (leveringsform == true) {
+
+                    out.println("<p>Muntlig</p>");
+                }
+                else if (leveringsform == false)    {
+
+                    out.println("<p>Video</p>");
+                }
+
+            out.println("<ul>");
+            out.println("<h5>Læringsmål:</h5>");
+
+            for (LearningGoal learnGoal : learnGoalList)    {
+
+                String lgText = learnGoal.getText();
+                int lgPoints = learnGoal.getPoints();
+
+                 out.println("<li>");
+                 out.println(lgText + "  - ");
+                 out.println("Poeng: " + lgPoints);
+                 out.println("</li>");
+            }
+            out.println("</ul>");
+
+
+        }
+
+
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

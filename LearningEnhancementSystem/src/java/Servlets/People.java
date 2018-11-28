@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
@@ -22,36 +21,36 @@ public class People extends SuperServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        try (PrintWriter out = response.getWriter()) { 
+        try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "People", out);
-            
+
             bst.containerOpen(out);
-        
+
         UserDb users = new UserDb();
-        
+
         ArrayList<User> onlyStudents = users.getArrayOfStudents(out);
         ArrayList<User> onlyTeachers = users.getArrayOfTeachers(out);
         out.println("<h1>List of all users:</h1>");
-        
+
         for (User user : onlyStudents) {
             String id = user.getUserId();
             out.println(" Name: " + user.getUserName() + "<br>");
             out.println(" Email: " + user.getUserEmail() + "<br>");
             out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
             out.println("<br>" + "<br>");
-        } 
+        }
         for (User user : onlyTeachers) {
             String id = user.getUserId();
             out.println(" Name: " + user.getUserName() + "<br>");
             out.println(" Email: " + user.getUserEmail() + "<br>");
             out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
             out.println("<br>" + "<br>");
-        } 
-        
+        }
+
         bst.containerClose(out);
         bst.bootstrapFooter(out);
     }
-}    
+}
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
