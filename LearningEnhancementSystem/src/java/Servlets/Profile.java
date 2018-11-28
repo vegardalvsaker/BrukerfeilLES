@@ -40,8 +40,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         
             
         bst.containerOpen(out);
-        bst.containerClose(out);
-        bst.bootstrapFooter(out);
+        
               
         UserDb profile = new UserDb();
         DeliveryDb delivery = new DeliveryDb();
@@ -70,6 +69,8 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
             out.println("Du er logget inn som en student: ");
             printUserInfo(out, userID);
         }
+        bst.containerClose(out);
+        bst.bootstrapFooter(out);
     }    
 }
 
