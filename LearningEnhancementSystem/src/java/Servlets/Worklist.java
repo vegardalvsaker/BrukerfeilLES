@@ -58,8 +58,8 @@ public class Worklist extends SuperServlet {
         for (Delivery del : deliveries) {
             out.println("<tr>");
             out.println("<td>" + del.getDeliveryID());
-            out.println("<td>" + del.getModuleID());
-            out.println("<td>" + del.getStudentID());
+            out.println("<td>" + del.getModuleName());
+            out.println("<td>" + del.getStudentName());
             out.println("<td>" + del.getDeliveryContent());
             out.println("<td>" + del.getDeliveryTimestamp());
             out.println("<a href=\"EvaluateServlet?deliveryId=" + del.getDeliveryID() +"\" class=\"btn btn-primary\">Evaluate!</a>");
@@ -80,8 +80,8 @@ public class Worklist extends SuperServlet {
         out.println("<table>");
         out.println("<thead>");
         out.println("<th> Delivery ID</th>");
-        out.println("<th> Module ID</th>");
-        out.println("<th> Student ID</th>");
+        out.println("<th> Module Name</th>");
+        out.println("<th> Student Name</th>");
         out.println("<th> Delivery Content</th>");
         out.println("<th> Timestamp</th>");
         out.println("</thead>");
