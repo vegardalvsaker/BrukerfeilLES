@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import Classes.Module;
 import Database.DeliveryDb;
 import HtmlTemplates.BootstrapTemplate;
 import java.io.IOException;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Classes.User;
+import Database.ModuleDb;
+import java.util.List;
 
 /**
  *
@@ -31,7 +34,7 @@ public class Delivery extends SuperServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         String moduleid = request.getParameter("id");
-        String inInterview = request.getParameter("module_inInterview");
+        //String inInterview = request.getParameter("module_inInterview");
         
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Modules", out);
@@ -42,7 +45,9 @@ public class Delivery extends SuperServlet {
         bst.bootstrapFooter(out);
         
         DeliveryDb deliver = new DeliveryDb();
-        deliver.init();
+        deliver.init(); 
+        ModuleDb mdb = new ModuleDb();
+        mdb.init();
         if(request.getMethod().equals("POST")){
             String link = request.getParameter("link");
             User user = (User)request.getSession().getAttribute("userLoggedIn");
@@ -50,32 +55,35 @@ public class Delivery extends SuperServlet {
             
         }
         
-        deliver.getDeliveryForm(moduleid,out);
-        System.out.println(inInterview);
         
-        /*if (request.getMethod().equals("POST")) {
-            
-            String deliveryContent = request.getParameter("link");
-            /*int studentId = Integer.parseInt(StudentId);
-            int moduleId = Integer.parseInt(ModuleId);
-             String annoContent = request.getParameter("Content");
-            int worklistId = Integer.parseInt(WorklistId);
-            
-            deliver.addDelivery("1", "1", deliveryContent, "2")
-            //db.Delivery(StudentID, ModuleId, annocontent, WorklistID);*/
-        
-        
-        
+        List<Module> DeliveryForm = mdb.getDeliveryForm(moduleid);
+                for (Module module : DeliveryForm){
+                     String desc = module.getDesc();
+                     String content = module.getContent();
+                     Boolean inInterview = module.getInInterview();
+                     
+                        out.println("<h2>"+ moduleid + "</h2>");
+                        out.println("<p>" + desc + "</p>");
+                        out.println("<p>" + content + "</p>");
+                     
+                     if (inInterview.equals(0)||(inInterview.equals(false))){
+                            out.println("<form action=\"Delivery?id="+ moduleid+"\" method=\"POST\">");
+                            out.println("<h3>Her kan du skrive inn linken til youtube-videoen<h3>");
+                            out.println("<input type=\"text\" name=\"link\">");
+                            out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Upload\">");
+                            //out.println("<href=\"OneModule?id="+ moduleid +">");
+                            out.println("</form>");
+                        } else {
+                            out.println("<form action=\"Delivery?id="+ moduleid+"\" method=\"POST\">");
+                            out.println("<h3>Modulen godkjennes av lærer eller hjelpelærer</h3>");
+                            out.println("<p>Trykk på knappen for å gi beskjed om at du ønsker modulgodkjenning</p><br>");
+                            out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Send\">");
+                            out.println("</form>");
+                    }
+                }
         }
     }
-    protected void printDeliveryform(PrintWriter out, HttpServletRequest request) {
-        //User user = (User)request.getSession().getAttribute("userLoggedIn");
-        //Strb ning userId = user.getUserId();
-        String moduleid = request.getParameter("id");
-        DeliveryDb deliver = new DeliveryDb();
-        deliver.getDeliveryForm(moduleid, out);
-       
-    }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

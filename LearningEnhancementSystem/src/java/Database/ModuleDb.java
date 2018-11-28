@@ -348,7 +348,28 @@ public class ModuleDb extends Database {
     } 
     
 // ^^^^ ^^^^
+    public ArrayList<Module> getDeliveryForm(String moduleId){
+        ArrayList<Module> DeliveryForm = new ArrayList<>();
+        try (
+            Connection conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement(SELECT_ONE_MODULE)) {
+            ps.setString(1, moduleId);
+            try (ResultSet deliverySet = ps.executeQuery();) {
+                while(deliverySet.next()) {
+                Module deliveriesForm = new Module();
+                deliveriesForm.setDesc(deliverySet.getString("module_desc"));
+                deliveriesForm.setContent(deliverySet.getString("module_content"));
+                deliveriesForm.setinInterview(deliverySet.getBoolean("module_inInterview"));
+                DeliveryForm.add(deliveriesForm);
+            }
+            return DeliveryForm;
+          }
+        }catch (SQLException ex) {
+            System.out.println("Query error:" + ex);
+        }
+        return null;
     
-    
+     }
 }
+    
 
