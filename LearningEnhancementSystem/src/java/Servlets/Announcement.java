@@ -28,13 +28,22 @@ public class Announcement extends SuperServlet {
              AnnouncementDb db = new AnnouncementDb();
              
              if (request.getMethod().equals("POST"))  {
-                    String annId = request.getParameter("annId");
+                if (request.getParameter("Subject")!=(null)) {
+               String annoSubject = request.getParameter("Subject");
+               String annoBody = request.getParameter("Body");
+               db.addAnnouncement(user.getUserId(), annoSubject, annoBody);
+                }
+                if (request.getParameter("annId")!=(null)) {
+                   String annId = request.getParameter("annId");
                     db.deleteAnnouncement(annId);
-             }
-             if (user.getUserIsTeacher()){
-             addAnnouncement(out);             
-             }
-             bst.jumbotron(out);
+                }
+            } 
+            
+            if (user.getUserIsTeacher()){
+            addAnnouncement(out);             
+            }
+            bst.jumbotron(out);
+
              List<Classes.Announcement> announcementList = db.getAnnouncement();
              for (Classes.Announcement announcement : announcementList){
                 String annId = announcement.getAnnId();
@@ -51,6 +60,7 @@ public class Announcement extends SuperServlet {
                 }
                 out.println("<hr class=\"my-4\">");
              }
+             bst.bootstrapFooter(out);
         }
     }
         private void deleteAnnouncement(PrintWriter out, String annId) {
