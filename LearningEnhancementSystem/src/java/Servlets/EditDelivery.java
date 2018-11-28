@@ -30,24 +30,20 @@ public class EditDelivery extends SuperServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-         
-        
-        
         
         try (PrintWriter out = response.getWriter()) {
             
             super.processRequest(request, response, "Modules", out);
             User user = (User)request.getSession().getAttribute("userLoggedIn");
             bst.containerOpen(out);
-            bst.containerClose(out);
+            
             bst.bootstrapFooter(out);
             
             DeliveryDb db = new DeliveryDb();
             
             if (request.getMethod().equals("POST")) {
-               // if (request.getParameter("moduleId")!=(null)) {
                 String moduleId = request.getParameter("moduleId");
-                //String deliveryId = request.getParameter("deliveryId");
+                
                 List<Classes.Delivery> deliveryList = db.getDeliveryWithUserIdAndModuleId(moduleId, user.getUserId());
                 for (Classes.Delivery delivery : deliveryList){
                     String deliveryId = delivery.getDeliveryID();
@@ -59,16 +55,13 @@ public class EditDelivery extends SuperServlet {
                     out.println("<input type=\"hidden\" name=\"edit\" value=\"TRUE\">");
                     out.println("<input type=\"hidden\" name=\"moduleId\" value=\""+ moduleId +"\">");
                     out.println("<input type=\"hidden\" name=\"deliveryId\" value=\""+ deliveryId +"\">");
-                    //out.println("<textarea style=\"margin-left:2.5em;\" rows=\"2\" cols=\"30\" name=\"deliveryContent\"> "+deliveryContent+"</textarea>");
                     out.println("<textarea style=\"margin-left:2.5em;\" rows=\"2\" cols=\"30\" name=\"deliveryContent\">"+deliveryContent+"</textarea>");
-                    //out.println("</textarea>");
                     out.println("<input type=\"submit\" value=\"Edit delivery\"><br>");        
                     out.println("<br>");
                     out.println("</form>");
-               // }
                 }
                 
-                
+                bst.containerClose(out);
             }
 
         } 
