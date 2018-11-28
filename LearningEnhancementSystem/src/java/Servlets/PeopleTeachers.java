@@ -27,12 +27,9 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
     
     try (PrintWriter out = response.getWriter()) {
         super.processRequest(request, response, "People", out);
-        
-            
+                    
         bst.containerOpen(out);
-        bst.containerClose(out);
-        bst.bootstrapFooter(out);
-              
+
         UserDb teachers = new UserDb();
         
         ArrayList<User> onlyTeachers = teachers.getArrayOfTeachers(out);
@@ -45,6 +42,8 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
             out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
             out.println("<br>" + "<br>");
             } 
+        bst.containerClose(out);
+        bst.bootstrapFooter(out);
     }     
 }
  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
