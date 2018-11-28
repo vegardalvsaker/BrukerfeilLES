@@ -19,18 +19,21 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class LearningGoalDb extends Database {
 
-    private static final String getModuleID = "select module_id from Module where module_name = ?";
-    private static final String addLearnGoal = "insert into LearningGoal values (default, ?, ?, ?)";
-    private static final String getLearngoals = "select * from LearningGoal";
-    private static final String editLearnGoals = "update LearningGoal set learn_goal_text = ?, learn_goal_points = ? where learn_goal_id = ? "; 
+    private static final String GET_MODULE_ID = "select module_id from Module where module_name = ?";
+    private static final String ADD_LEARN_GOAL = "insert into LearningGoal values (default, ?, ?, ?)";
+    private static final String GET_LEARN_GOALS = "select * from LearningGoal";
+    private static final String EDIT_LEARN_GOALS = "update LearningGoal set learn_goal_text = ?, learn_goal_points = ? where learn_goal_id = ? "; 
 
-
+    public LearningGoalDb() {
+        init();
+    }
+    
     public String getModuleID(PrintWriter out, String moduleName)  {
 
 
         try(
                 Connection connection = getConnection();
-                PreparedStatement prepStatement = connection.prepareStatement(getModuleID);
+                PreparedStatement prepStatement = connection.prepareStatement(GET_MODULE_ID);
                 ){
 
                 prepStatement.setString(1, moduleName);
@@ -57,7 +60,7 @@ public class LearningGoalDb extends Database {
     public boolean addLearningGoals(PrintWriter out, String learnGoalText, String learnGoalPoints, String moduleName)  {
         try(
              Connection connection = getConnection();
-             PreparedStatement prepStatement = connection.prepareStatement(addLearnGoal);
+             PreparedStatement prepStatement = connection.prepareStatement(ADD_LEARN_GOAL);
 
                 ) {
 
@@ -82,7 +85,7 @@ public class LearningGoalDb extends Database {
 
 
         try( Connection connection = getConnection();
-             PreparedStatement prepStatement = connection.prepareStatement(getLearngoals);
+             PreparedStatement prepStatement = connection.prepareStatement(GET_LEARN_GOALS);
              ResultSet rset = prepStatement.executeQuery();
             )   {
 
@@ -114,7 +117,7 @@ public class LearningGoalDb extends Database {
 
 
          try( Connection connection = getConnection();
-             PreparedStatement prepStatement = connection.prepareStatement(editLearnGoals);
+             PreparedStatement prepStatement = connection.prepareStatement(EDIT_LEARN_GOALS);
 
             )   {
 
