@@ -42,8 +42,7 @@ public class CreateModule extends SuperServlet {
                 String leveringsform = request.getParameter("leveringsform");
                 
                 boolean published;
-                
-                
+
                 Map map = request.getParameterMap();
                 
                 published = !map.containsKey("save"); 
@@ -51,7 +50,7 @@ public class CreateModule extends SuperServlet {
                 db.addModule(out, modulnavn, beskrivelse, innhold, leveringsform, published);
                 
                 
-                for (int i = 0; i < (map.size() - 4)/2; i++)   {
+                for (int i = 0; i < (map.size() - 4)/2; i++)   {    //Looper gjennom parameterMap for å finne antall læringsmål
                     
                     String learnGoalText = request.getParameter("Laringsmal" + i);
                     String learnGoalPoints = request.getParameter("Poeng" + i);
@@ -65,16 +64,16 @@ public class CreateModule extends SuperServlet {
             
             bst.containerOpen(out);
             
-            bst.containerClose(out);
-            
             addModuleForm(out);
+            
+            bst.containerClose(out);
             
             bst.bootstrapFooter(out);
             
          }
     }
     
-    protected void redirectHeader(PrintWriter out) {
+    private void redirectHeader(PrintWriter out) {
         out.println("<head>\n" +
         "        <meta http-equiv=\"refresh\" content=\"0;url=Modules\" />\n" +
         "    </head");
@@ -99,7 +98,7 @@ public class CreateModule extends SuperServlet {
             out.println("<input type=\"radio\" name=\"leveringsform\" value=\"Video\">Video");
             out.println("<br>");
        
-            out.println("<script language=\"javascript\">");
+            out.println("<script language=\"javascript\">");        //JavaScript for å legge til input-felt dynamisk
             out.println("var i = 0;");
             out.println("function add() {");
 	    out.println("var div = document.createElement(\"div\");");

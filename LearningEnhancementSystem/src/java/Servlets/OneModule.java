@@ -30,6 +30,7 @@ import java.util.List;
 @WebServlet(name = "OneModule", urlPatterns = {"/OneModule"})
 public class OneModule extends SuperServlet {
 
+    BootstrapTemplate bst = new BootstrapTemplate();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         User user = (User)request.getSession().getAttribute("userLoggedIn");
@@ -39,7 +40,7 @@ public class OneModule extends SuperServlet {
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Modules", out);
             
-            BootstrapTemplate bst = new BootstrapTemplate();
+            
             LearningGoalDb db = new LearningGoalDb();
             CommentDb cdb = new CommentDb();
             CommentReplyDb crdb = new CommentReplyDb();

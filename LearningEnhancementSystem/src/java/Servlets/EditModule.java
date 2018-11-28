@@ -92,9 +92,9 @@ public class EditModule extends SuperServlet {
 
             bootstrap.containerOpen(out);
             
-            bootstrap.containerClose(out);
-            
             editModuleForm(out, request);
+            
+            bootstrap.containerClose(out);
             
             bootstrap.bootstrapFooter(out);
             

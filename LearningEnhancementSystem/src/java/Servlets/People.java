@@ -4,14 +4,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import Database.UserDb;
 /**
  *
- * @author gorm-erikaarsheim
+ * @author Gorm-Erik
  */
 @WebServlet(urlPatterns = {"/People"})
 public class People extends SuperServlet {
@@ -24,13 +23,12 @@ public class People extends SuperServlet {
             super.processRequest(request, response, "People", out);
             
             bst.containerOpen(out);
-           
-            bst.containerClose(out);
-            
+  
             addStudentForm(out, response);
             removeStudentForm(out, response);
             listStudentsForm(out);
             
+            bst.containerClose(out);
             bst.bootstrapFooter(out);
               
             UserDb students = new UserDb();

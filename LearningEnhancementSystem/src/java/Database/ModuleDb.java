@@ -239,14 +239,19 @@ public class ModuleDb extends Database {
              prepStatement.setString(3, innhold);
              prepStatement.setBoolean(4, published);
              
-             if (leveringsform.equals("Muntlig")) {
-             prepStatement.setBoolean(5, true);
              
+                if (leveringsform == null)  {
+                    prepStatement.setBoolean(5, false);
+                }
+                else if (leveringsform.equals("Muntlig")) {
+                 prepStatement.setBoolean(5, true);
                      }
+                else if (leveringsform.equals("Video")){
+                prepStatement.setBoolean(5, false);
+                     }
+                 
+               
              
-             else if (leveringsform.equals("Video")){
-                 prepStatement.setBoolean(5, false);
-             }
              
             prepStatement.executeUpdate();
             

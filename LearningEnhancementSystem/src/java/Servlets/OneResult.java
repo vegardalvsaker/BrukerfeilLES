@@ -1,24 +1,16 @@
 package Servlets;
 
-import Classes.Evaluation;
-import Classes.LearningGoal;
-import Classes.Module;
-import Classes.Score;
-import Classes.User;
+
 import Classes.Results;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import Database.EvaluationDb;
-import Database.ModuleDb;
 import Database.ResultsDb;
 import HtmlTemplates.BootstrapTemplate;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -35,7 +27,7 @@ public class OneResult extends SuperServlet {
         try (PrintWriter out = response.getWriter()) {
             
             super.processRequest(request, response, "Results", out);
-            User user = (User)request.getSession().getAttribute("userLoggedIn");
+            
             bst.containerOpen(out);
             if (request.getMethod().equals("POST")) {
                 String evalId = request.getParameter("evaluationId");
@@ -43,9 +35,7 @@ public class OneResult extends SuperServlet {
             }
             bst.containerClose(out);
             bst.bootstrapFooter(out);
-            //deliveries2(out, request);
-            
-            
+
         }
             
     }
@@ -88,38 +78,11 @@ public class OneResult extends SuperServlet {
         
         
         String comment = resultsList.get(0).getEvalComment();
-        out.println("<h4>Kommentar fra lærer: </h4>");
+        out.println("<h4>Kommentar: </h4>");
         out.println("<p>" + comment + "</p>");
             
         }
         
-    
-    
-    private void deliveries2(PrintWriter out, HttpServletRequest request)   {
-        
-        
-        EvaluationDb evaluationdb = new EvaluationDb();
-        ModuleDb moduledb = new ModuleDb();
-        moduledb.init();
-        String deliveryId = request.getParameter("deliveryID");
-        String evaluationid = evaluationdb.getEvaluationId(deliveryId);
-        Evaluation eval = evaluationdb.getEvaluationWithScore(evaluationid);
-        
-        ArrayList<Score> scores = new ArrayList<>();
-        scores = eval.getScorelist();
-        ArrayList<LearningGoal> lgoals = new ArrayList<>();
-        String moduleID = request.getParameter("moduleID");
-        
-        Module module = moduledb.getModuleWithLearningGoals(moduleID);
-        lgoals = module.getLearningGoals();        
-                int i = 0;
-                for (LearningGoal lg : lgoals) {
-                    out.println("<li> Learning goal: " + lg.getText() + " | <p> "+ scores.get(i).getPoints() +"/"+ lg.getPoints() +"</li>");
-                    i++;
-                }
-
-    }
-
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

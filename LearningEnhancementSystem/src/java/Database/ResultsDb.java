@@ -10,12 +10,6 @@ import Classes.Results;
  * @author Marius
  */
 public class ResultsDb extends Database {
-    private static final String RESULT_LONG = "select D.student_id, U.user_name, E.evaluation_id,\n" + 
-                                              "E.evaluation_comment, D.delivery_id, M.module_name, L.learn_goal_points,\n" + 
-                                              "S.score_points from Users U inner join Evaluation E on U.user_id = E.teacher_id\n" +
-                                              "inner join Delivery D on D.delivery_id = E.delivery_id inner join Module M\n" + 
-                                              "on M.module_id = D.module_id inner join Score S on S.evaluation_id = E.evaluation_id\n" +
-                                              "inner join LearningGoal L on L.learn_goal_id = S.learn_goal_id where E.evaluation_id = ? group by L.learn_goal_text;";
     
     private static final String RESULT_SHORT = "select D.student_id, U.user_name, E.evaluation_id, D.delivery_id, M.module_name from Evaluation E \n" +
                                                 "inner join Delivery D on E.delivery_id = D.delivery_id inner join Module M on \n" +
