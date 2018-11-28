@@ -34,8 +34,6 @@ public class FrontpagePrinter {
         bs = new BootstrapTemplate();
         mdb = new ModuleDb();
         adb = new AnnouncementDb();
-        mdb.init();
-        adb.init();
     }
 
     /**
@@ -43,11 +41,12 @@ public class FrontpagePrinter {
      * @param out
      * @param title Title for the HTML title
      */
-    public void printFrontpage(PrintWriter out, String title, String notifications) {
+    public void printFrontpage(PrintWriter out, String title, String notifications, HttpServletRequest request) {
         List<Module> modulList = mdb.getModuler();
         List<Announcement> announcementList = adb.getAnnouncement();
+        User user = (User)request.getSession().getAttribute("userLoggedIn");
         bs.bootstrapHeader(out, title);
-        bs.bootstrapNavbar(out, "Home", notifications);
+        bs.bootstrapNavbar(out, "Home", notifications, user.getUserName(), user.getUserId());
         
         bs.containerOpen(out);
         bs.jumbotron(out);
@@ -72,43 +71,17 @@ public class FrontpagePrinter {
         bs.containerClose(out);
         bs.containerOpen(out);
         out.println("<div class=\"row\">");
-        
             for (Module modul : modulList) {
-                String number = Integer.toString(modul.getModuleid());
-                String name = modul.getName();
-                String desc = modul.getDesc();
-                bs.bootstrapCard(out, number, name, desc);
+                if (modul.isPublished()) {
+                    String number = Integer.toString(modul.getModuleid());
+                    String name = modul.getName();
+                    String desc = modul.getDesc();
+                    bs.bootstrapCard(out, number, name, desc);
+                }              
             }
             
         out.println("</div>");
-        out.println("<a href=\"LogOut\">Log out</a>");
         bs.containerClose(out);
         bs.bootstrapFooter(out);
-    }
-    
-    private String notificationBar(HttpServletRequest request) {
-        User user = (User)request.getSession().getAttribute("userLoggedIn");
-        NotificationDb nDb = new NotificationDb();
-        
-        //ArrayList<Notification> notifications = new ArrayList<>();
-        ArrayList<Notification> notifications = nDb.getUsersNotification(user.getUserId());
-        
-        StringBuilder sbf = new StringBuilder();
-        
-        
-        for (Notification not : notifications) {
-            if (!not.isIsNotificationSeen()) {
-                sbf.append(
-"                   <a class=\"dropdown-item\">"+ not.getNotificationContent() +"</a>\n" +
-                        "<div class=\"dropdown-divider\"></div>\n");
-                
-            } else {
-                sbf.append("<div style=\"background-color:#f3f3f3;\">" +
-"                            <a class=\"dropdown-item\">"+ not.getNotificationContent() +"</a>\n" +
-"                               </div> \n" +
-                        "<div class=\"dropdown-divider\"></div>\n");
-            }
-        }
-        return sbf.toString();
     }
 }

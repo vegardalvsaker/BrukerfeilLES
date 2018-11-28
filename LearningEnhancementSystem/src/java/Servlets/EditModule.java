@@ -34,10 +34,7 @@ public class EditModule extends SuperServlet {
             super.processRequest(request, response, "EditModules", out);
             ModuleDb db = new ModuleDb();
             LearningGoalDb learnGoalDb = new LearningGoalDb();
-            db.init();
-            learnGoalDb.init();
-            
-             
+                     
             if (request.getMethod().equals("POST")) {
                 
                 String modulName = request.getParameter("Modulnavn");
@@ -111,7 +108,6 @@ public class EditModule extends SuperServlet {
         
             String module_id = request.getParameter("id");
             ModuleDb db = new ModuleDb();
-            db.init();
             
             Module module = db.getModuleWithLearningGoals(module_id);
             

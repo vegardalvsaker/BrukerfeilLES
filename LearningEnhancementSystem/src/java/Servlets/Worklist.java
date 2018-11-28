@@ -44,7 +44,6 @@ public class Worklist extends SuperServlet {
         super.processRequest(request, response, "Worklist", out);
         bst.containerOpen(out);
         WorklistDb db = new WorklistDb();
-        db.init();
 	User user = (User)request.getSession().getAttribute("userLoggedIn");
         String worklistId = db.getWorklistId(user.getUserId());
 	
@@ -59,8 +58,8 @@ public class Worklist extends SuperServlet {
         for (Delivery del : deliveries) {
             out.println("<tr>");
             out.println("<td>" + del.getDeliveryID());
-            out.println("<td>" + del.getModuleID());
-            out.println("<td>" + del.getStudentID());
+            out.println("<td>" + del.getModuleName());
+            out.println("<td>" + del.getUserName());
             out.println("<td>" + del.getDeliveryContent());
             out.println("<td>" + del.getDeliveryTimestamp());
             out.println("<a href=\"EvaluateServlet?deliveryId=" + del.getDeliveryID() +"\" class=\"btn btn-primary\">Evaluate!</a>");
@@ -78,16 +77,29 @@ public class Worklist extends SuperServlet {
     }
     
      private void printTable(PrintWriter out) {
-        out.println("<table>");
+       /* out.println("<table>");
         out.println("<thead>");
         out.println("<th> Delivery ID</th>");
-        out.println("<th> Module ID</th>");
-        out.println("<th> Student ID</th>");
+        out.println("<th> Module Name</th>");
+        out.println("<th> Student Name</th>");
         out.println("<th> Delivery Content</th>");
         out.println("<th> Timestamp</th>");
         out.println("</thead>");
-        out.println("<tbody>");
-        }
+        out.println("<tbody>");*/
+        
+     
+      out.println("<table class=\"table table-hovere\">");
+            out.println("<thead>");
+            out.println("<tr class=\"table-active\">");
+            out.println("<th scope=\"col\">Delivery ID</th>");
+            out.println("<th scope=\"col\">Module Name</th>");
+            out.println("<th scope=\"col\">Student Name</th> ");
+            out.println("<th scope=\"col\">Delivery Content</th>");
+            out.println("<th scope=\"col\">Timestamp</th>");
+            out.println("</tr>");
+            out.println("</thead>");
+            out.println("<tbody>");
+     }
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

@@ -45,9 +45,7 @@ public class Delivery extends SuperServlet {
         bst.bootstrapFooter(out);
         
         DeliveryDb deliver = new DeliveryDb();
-        deliver.init(); 
         ModuleDb mdb = new ModuleDb();
-        mdb.init();
         if(request.getMethod().equals("POST")){
             String link = request.getParameter("link");
             User user = (User)request.getSession().getAttribute("userLoggedIn");

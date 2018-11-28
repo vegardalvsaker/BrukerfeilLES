@@ -25,8 +25,12 @@ public class DeliveryDb extends Database{
     private static final String CHECK_DELIVERY = "select delivery_id, delivery_content, module_id, D.student_id, user_id, user_name from Delivery D inner join Users U on D.student_id = U.user_id where module_id = ? and user_id = ?";
     private static final String EDIT_DELIVERY = "select delivery_id, delivery content from Delivery";
     private static final String UPDATE_DELIVERY ="update Delivery set delivery_content = ? where delivery_id = ?";
-    private static final String SELECT_ALL_DELIVERIES = "select * from Delivery where worklist_id = ? and delivery_isEvaluated = 0";
+    private static final String SELECT_ALL_DELIVERIES = "select * from Delivery D inner join Users U on D.student_id = U.user_id inner join Module M on D.module_id = M.module_id where worklist_id = ? and delivery_isEvaluated = 0";
     private static final String UPDATE_ISEVALUATED = "update Delivery set delivery_isEvaluated = true where delivery_id = ?";
+    
+    public DeliveryDb() {
+        init();
+    }
     
     public void updateIsEvaluated(String deliveryId) {
         try (
@@ -50,14 +54,14 @@ public class DeliveryDb extends Database{
             try (ResultSet rset = ps.executeQuery();) {
                 while (rset.next()) {
                     String delId = rset.getString("delivery_id");
-                    String studentId = rset.getString("student_id");
-                    String moduleId = rset.getString("module_id");
+                    String userName = rset.getString("user_name");
+                    String moduleName = rset.getString("module_name");
                     String desc = rset.getString("delivery_content");
                     String workId = rset.getString("worklist_id");
                     String timestamp = rset.getString("delivery_timestamp");
                     boolean isEvaluated = rset.getBoolean("delivery_isEvaluated");
                                         
-                    Delivery del = new Delivery(delId, studentId, moduleId, desc, workId, timestamp, isEvaluated);
+                    Delivery del = new Delivery(delId, userName, moduleName, desc, workId, timestamp, isEvaluated);
                     deliveries.add(del);
 
                 }
@@ -83,8 +87,8 @@ public class DeliveryDb extends Database{
                 Delivery deliveries = new Delivery();
                 deliveries.setDeliveryID(deliverySet.getString("delivery_id"));
                 deliveries.setDeliveryContent(deliverySet.getString("delivery_content"));
-                deliveries.setModuleID(deliverySet.getString("module_id"));
-                deliveries.setStudentID(deliverySet.getString("student_id"));
+                deliveries.setModuleName(deliverySet.getString("module_name"));
+                deliveries.setUserName(deliverySet.getString("student_name"));
                 delivery.add(deliveries);
             }
             return delivery;
@@ -96,11 +100,6 @@ public class DeliveryDb extends Database{
         return null;
     }
     
-    
-    
-    public DeliveryDb() {
-        init();
-    }
     public void editDelivery(String deliveryContent, String deliveryId) {
    try( Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(UPDATE_DELIVERY);
@@ -134,7 +133,7 @@ public class DeliveryDb extends Database{
                 
                 delivery.setDeliveryID(rs.getString("delivery_id"));
                 delivery.setStudentID(rs.getString("student_id"));
-                delivery.setStudentName(rs.getString("user_name"));
+                delivery.setUserName(rs.getString("user_name"));
                 delivery.setModuleID(rs.getString("module_id"));
                 delivery.setDeliveryContent(rs.getString("delivery_content"));
                 delivery.setWorklistID(rs.getString("worklist_id"));

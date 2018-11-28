@@ -27,6 +27,7 @@ public class InboxDb extends Database {
     
     public ArrayList<Message> getUsersMessages(String userId) {
         ArrayList<Message> messages = new ArrayList<>();
+        UserDb uDb = new UserDb();
         try (
                 Connection conn = getConnection();
                 PreparedStatement ps = conn.prepareStatement(SELECT_ALL_MESSAGES);)
@@ -38,8 +39,8 @@ public class InboxDb extends Database {
                     Message message = new Message();
                     message.setMsgId(rs.getString("msg_id"));
                     message.setSubject(rs.getString("msg_subject"));
-                    message.setSender(rs.getString("msg_sender"));
-                    message.setReceiver(rs.getString("msg_receiver"));
+                    message.setSender(uDb.getOneProfile(rs.getString("msg_sender")));
+                    message.setReceiver(uDb.getOneProfile(rs.getString("msg_receiver")));
                     message.setText(rs.getString("msg_text"));
                     message.setTimestamp(rs.getTimestamp("msg_timestamp"));
                     message.setRead(rs.getBoolean("msg_read"));
@@ -55,7 +56,6 @@ public class InboxDb extends Database {
     
     public void sendMessage(String[] messageInfo) {
         UserDb uDb = new UserDb();
-        uDb.init();
         String recipientId = uDb.getUserId(messageInfo[1]);
         try (
                 Connection conn = getConnection();

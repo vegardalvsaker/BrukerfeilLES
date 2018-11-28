@@ -37,7 +37,6 @@ public class Results extends SuperServlet {
     private void results(PrintWriter out, HttpServletRequest request)    {
         
         ResultsDb rdb = new ResultsDb();
-        rdb.init();
         //out.println("<h1>Dine evaluerte moduler:</h1><br>");
         setUserLoggedIn(request);
         HttpSession session = request.getSession();

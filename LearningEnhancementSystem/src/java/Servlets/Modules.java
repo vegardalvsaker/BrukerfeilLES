@@ -37,9 +37,6 @@ public class Modules extends SuperServlet {
         
         try (PrintWriter out = response.getWriter()){  
             super.processRequest(request, response, "Modules", out);
-
-         
-         db.init();
         
         if (request.getParameterMap().containsKey("publish"))  {      
             db.makeModulePublic(request.getParameter("publish"));
@@ -83,6 +80,9 @@ public class Modules extends SuperServlet {
                 + "<tbody>");
                 
         for (Module module : modules) {
+            if (request.isUserInRole("Student") && !module.isPublished()) {
+                continue;
+            }
             String moduleId = Integer.toString(module.getModuleid());
             out.println("<tr>"
                     + "<td><a href=\"OneModule?id="+ moduleId +"\">" + module.getName() +"</td>"

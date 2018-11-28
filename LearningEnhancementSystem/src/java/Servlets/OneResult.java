@@ -52,7 +52,6 @@ BootstrapTemplate bst = new BootstrapTemplate();
     private void oneresult(PrintWriter out,String evalId)   {
         
         ResultsDb rdb = new ResultsDb();
-        rdb.init();
         
         List<Classes.Results> resultsList = rdb.getLResults(evalId);
         
@@ -90,7 +89,6 @@ BootstrapTemplate bst = new BootstrapTemplate();
         
         EvaluationDb evaluationdb = new EvaluationDb();
         ModuleDb moduledb = new ModuleDb();
-        moduledb.init();
         String deliveryId = request.getParameter("deliveryID");
         String evaluationid = evaluationdb.getEvaluationId(deliveryId);
         Evaluation eval = evaluationdb.getEvaluationWithScore(evaluationid);

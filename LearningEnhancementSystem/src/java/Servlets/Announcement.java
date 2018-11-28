@@ -26,7 +26,6 @@ public class Announcement extends SuperServlet {
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Announcement", out);
              AnnouncementDb db = new AnnouncementDb();
-             db.init();
              
              if (request.getMethod().equals("POST"))  {
                     String annId = request.getParameter("annId");
