@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import Database.UserDb;
+import Classes.User;
+import java.util.ArrayList;
 /**
  *
  * @author Ingve Fosse
@@ -26,20 +28,23 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
     try (PrintWriter out = response.getWriter()) {
         super.processRequest(request, response, "People", out);
         
-            
         bst.containerOpen(out);
+        
+        UserDb students = new UserDb();
+        
+        ArrayList<User> onlyStudents = students.getArrayOfStudents(out);
+        out.println("<h1>List of all students:</h1>");
+        
+        for (User user : onlyStudents) {
+            String id = user.getUserId();
+            out.println(" Name: " + user.getUserName() + "<br>");
+            out.println(" Email: " + user.getUserEmail() + "<br>");
+            out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
+            out.println("<br>" + "<br>");
+            } 
         bst.containerClose(out);
         bst.bootstrapFooter(out);
-              
-        UserDb students = new UserDb();
-        students.init();
-        
-
-        students.getOnlyStudent(out);
-        students.printOnlyStudent(out);
-        
-    }
-        
+    }    
 }
  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -1,5 +1,5 @@
 create schema LearningEnhancementSystem;
-
+##drop schema learningenhancementsystem;
 use LearningEnhancementSystem;
 
 create table Users(

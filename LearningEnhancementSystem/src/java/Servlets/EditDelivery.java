@@ -43,7 +43,6 @@ public class EditDelivery extends SuperServlet {
             bst.bootstrapFooter(out);
             
             DeliveryDb db = new DeliveryDb();
-            db.init();
             
             if (request.getMethod().equals("POST")) {
                // if (request.getParameter("moduleId")!=(null)) {

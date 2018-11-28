@@ -23,6 +23,10 @@ public class AnnouncementDb extends Database {
     private static final String ADD_ANNOUNCEMENT = "insert into Announcement values (default, ?, default, ?, ?)";
     private static final String DEL_ANNOUNCEMENT = "delete from Announcement where ann_id = ?";
     
+    public AnnouncementDb() {
+        init();
+    }
+    
     public List<Announcement> getAnnouncement(){
         List<Announcement> announcements = new ArrayList<>();
         

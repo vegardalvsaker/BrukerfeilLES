@@ -24,7 +24,6 @@ public class AddAnnouncement extends SuperServlet {
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Announcement", out);
              AnnouncementDb db = new AnnouncementDb();
-             db.init();
              out.println("<a href=\"Announcement\"a class=\"btn btn-primary\">Go back</button></a>");
              addAnnouncement(out);
              

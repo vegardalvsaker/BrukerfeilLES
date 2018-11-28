@@ -13,12 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Classes.User;
 import Database.InboxDb;
+import Database.NotificationDb;
+import Database.UserDb;
 import java.util.ArrayList;
 import Classes.Message;
 import java.util.HashMap;
-import java.util.Map;
 import HtmlTemplates.BootstrapTemplate;
-import java.nio.charset.StandardCharsets;
+
+
 /**
  *
  * @author Vegard
@@ -27,6 +29,8 @@ import java.nio.charset.StandardCharsets;
 public class Inbox extends SuperServlet {
     private BootstrapTemplate bst = new BootstrapTemplate();
     private InboxDb iDb = new InboxDb();
+    private NotificationDb nDb = new NotificationDb();
+    private UserDb uDb = new UserDb();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,7 +45,7 @@ public class Inbox extends SuperServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
            printJavaScript(out);
-           super.processRequest(request, response, "", out);
+           super.processRequest(request, response, "Inbox", out);
            if (request.getMethod().equals("POST")) {
                sendMessage(out, request);
            }
@@ -68,6 +72,7 @@ public class Inbox extends SuperServlet {
             messageInfo[3] = request.getParameter("newMessage");
 
             iDb.sendMessage(messageInfo);
+            nDb.sendNotification(uDb.getUserId(messageInfo[1]), "<a href=\"Inbox\"> Du har en ny melding</a>");
         }
     }
     
@@ -96,11 +101,11 @@ public class Inbox extends SuperServlet {
             
                if (request.getParameterMap().containsKey("sent")) {
                    for (Message message : messages) {
-                       if(message.getSender().equals(user.getUserId())) {
+                       if(message.getSender().getUserId().equals(user.getUserId())) {
                             mesMap.put(message.getMsgId(), message);
                             String readOrNot = message.isRead() ? "" : "table-active";
                             out.println("<tr class=\""+readOrNot+"\">\n" +
-         "                      <td>"+message.getSender()+"</td>\n" +
+         "                      <td>"+message.getSender().getUserName()+"</td>\n" +
          "                      <td>"+ message.getSubject() +"</td>\n" +
          "                      <td><a class=\"btn btn-warning\" href=\"Inbox?sent&msgId="+ message.getMsgId() +"\">Open</a></td>" +
          "                    </tr>");
@@ -109,18 +114,18 @@ public class Inbox extends SuperServlet {
                    
                } else {
                    for (Message message : messages) {
-                       if(message.getReceiver().equals(user.getUserId())) {
+                       if(user.getUserId().equals(message.getReceiver().getUserId())) {
                             mesMap.put(message.getMsgId(), message);
                             String readOrNot = message.isRead() ? "" : "table-active";
                             out.println("<tr class=\""+readOrNot+"\">\n" +
-         "                      <td>"+message.getSender()+"</td>\n" +
+         "                      <td>"+message.getSender().getUserName()+"</td>\n" +
          "                      <td>"+ message.getSubject() +"</td>\n" +
          "                      <td><a class=\"btn btn-warning\" href=\"Inbox?msgId="+ message.getMsgId() +"\">Open</a></td>" +
          "                    </tr>");
                     }
                    }
                }
-           out.println("<a href=\"Inbox?newMsg\"class=\"btn btn-danger\">New</a>");
+           out.println("<a href=\"Inbox?newMsg\"class=\"btn btn-primary\">New</a>");
            out.println("</tbody>\n" +
 "                </table>\n" +
 "              </div>");
@@ -141,7 +146,7 @@ public class Inbox extends SuperServlet {
                Message message = mesMap.get(msgId);
                
                out.println("<h2>"+ message.getSubject() +"</h2>");
-               out.println("<h5>"+ message.getSender() +"</h5><hr>");
+               out.println("<h5>"+ message.getSender().getUserName() +"</h5><hr>");
                out.println("<p>"+ message.getText() +"");
 
            }

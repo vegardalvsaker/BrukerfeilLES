@@ -34,6 +34,10 @@ public class ModuleDb extends Database {
     private static final String ADD_MODULE = "insert into Module values (default, ?, ?, ?, ?, ?)";
     private static final String EDIT_MODULE = "update Module set module_name = ?, module_desc = ?, module_content = ?, module_isPublished = ?, module_inInterview = ? where module_id = ?";
     
+    public ModuleDb() {
+        init();
+    }
+    
     /**
      * This method retrieves all of the modules in the database, create an object of each record and is then
      * added to a list of modules
@@ -226,8 +230,6 @@ public class ModuleDb extends Database {
     
     public boolean addModule(PrintWriter out, String modulnavn, String beskrivelse, String innhold, String leveringsform, boolean published)  {
         
-        init();
-        
         try( Connection connection = getConnection();
              PreparedStatement prepStatement = connection.prepareStatement(ADD_MODULE);
              
@@ -298,7 +300,7 @@ public class ModuleDb extends Database {
        
     } 
     
-// VVVVV Fosse VVVVV
+// VVVVV VVVVV
     
     public int getModuleCount(PrintWriter out) {
         String modules = ("select * from Module where module_isPublished = 1");
@@ -320,8 +322,61 @@ public class ModuleDb extends Database {
         return moduleCount;
     } 
     
-// ^^^^ Fosse ^^^^
+
+
+    public Module getOneModule(PrintWriter out, String id) {
+        String oneModule = ("select * from Module where module_id = ?");
+        
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(oneModule);
+                ){
+            
+            prepStatement.setString(1, id);
+            
+            try(ResultSet rset = prepStatement.executeQuery(); ){
+                Module mod = new Module();
+                
+                while(rset.next())   {
+                    mod.setModuleID(rset.getString("module_id"));
+                    mod.setName(rset.getString("module_name"));
+                    mod.setDesc(rset.getString("module_desc"));
+                    mod.setContent(rset.getString("module_content"));
+                    mod.setPublished(rset.getBoolean("module_isPublished"));
+                    mod.setinInterview(rset.getBoolean("module_inInterview"));
+
+                }
+                return mod;
+            }
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getOneModule" + liste);
+           } 
+        return null;
+    } 
     
+// ^^^^ ^^^^
+    public ArrayList<Module> getDeliveryForm(String moduleId){
+        ArrayList<Module> DeliveryForm = new ArrayList<>();
+        try (
+            Connection conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement(SELECT_ONE_MODULE)) {
+            ps.setString(1, moduleId);
+            try (ResultSet deliverySet = ps.executeQuery();) {
+                while(deliverySet.next()) {
+                Module deliveriesForm = new Module();
+                deliveriesForm.setDesc(deliverySet.getString("module_desc"));
+                deliveriesForm.setContent(deliverySet.getString("module_content"));
+                deliveriesForm.setinInterview(deliverySet.getBoolean("module_inInterview"));
+                DeliveryForm.add(deliveriesForm);
+            }
+            return DeliveryForm;
+          }
+        }catch (SQLException ex) {
+            System.out.println("Query error:" + ex);
+        }
+        return null;
     
+     }
 }
+    
 

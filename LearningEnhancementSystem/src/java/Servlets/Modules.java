@@ -30,46 +30,43 @@ public class Modules extends SuperServlet {
     //Objekt for å generere UI
     private final BootstrapTemplate bst = new BootstrapTemplate();
     private ModuleDb db = new ModuleDb();
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        try (PrintWriter out = response.getWriter()){  
+
+        try (PrintWriter out = response.getWriter()){
             super.processRequest(request, response, "Modules", out);
 
-         
-         db.init();
-        
-        if (request.getParameterMap().containsKey("publish"))  {      
+        if (request.getParameterMap().containsKey("publish"))  {
             db.makeModulePublic(request.getParameter("publish"));
             }
 
 
             bst.containerOpen(out);
-            
+
             printModules(request, out);
-            
+
             addModuleButton(out, request);
-            
+
             bst.containerClose(out);
- 
+
             bst.bootstrapFooter(out);
-            
+
 
         }
     }
-    
+
     private void printModules(HttpServletRequest request, PrintWriter out) {
         List<Module> modules = db.getModuler();
-        
-        
+
+
         out.println("<table class=\"table table-hovere\">"
                 + "<thead>"
                 + "<tr class=\"table-active\">"
                 + "<th scope=\"col\">Name</th>"
                 + "<th scope=\"col\">Short description</th>");
-        
+
         if (request.isUserInRole("Teacher")) {
             out.println("<th scope=\"col\">Delete</th>");
             out.println("<th scope=\"col\">Publish</th>");
@@ -77,15 +74,18 @@ public class Modules extends SuperServlet {
                 out.println("</tr>"
                 + "</thead>"
                 + "<tbody>");
-                
+
         for (Module module : modules) {
+            if (request.isUserInRole("Student") && !module.isPublished()) {
+                continue;
+            }
             String moduleId = Integer.toString(module.getModuleid());
             out.println("<tr>"
                     + "<td><a href=\"OneModule?id="+ moduleId +"\">" + module.getName() +"</td>"
                     + "<td>" + module.getDesc() +"</td></a>");
-            
 
-      
+
+
 
            if (request.isUserInRole("Teacher")) {
                out.println("<td><a class=\"btn btn-danger\" href=\"RemoveModule?moduleId="+ moduleId + "\">Delete</a></td>");
@@ -93,26 +93,23 @@ public class Modules extends SuperServlet {
                    out.println("<td><a class=\"btn btn-success\" href=\"Modules?publish=" + moduleId+ "\">Publish</a></td>");
                }
            }
-           
+
            out.println("<tr>");
         }
         out.println("</tbody>"
                 + "</table>");
-    }        
-            
+    }
+
     private void addModuleButton(PrintWriter out, HttpServletRequest request)  {
-            
+
             if (request.isUserInRole("Teacher"))    {
-            out.println("<form action=\"CreateModule\">");
-            out.println("<input type=\"submit\" value=\"Opprett ny modul\"></input><br>");
-            out.println("</form>");
-            
+              out.println("<a class=\"btn btn-primary\" href=\"CreateModule\">Opprett ny modul</a>");
             }
         }
 
-        
-    
-        
+
+
+
             // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

@@ -21,13 +21,16 @@ public class DeliveryDb extends Database{
     private static final String SELECT_DELIVERY = "select * from Delivery where (student_id, module_id) = (?,?)";
     private static final String SELECT_DELIVERY_WITH_USER_NAME = "select u.user_name, d.delivery_id, d.delivery_timestamp, d.student_id, d.module_id,  d.worklist_id, d.delivery_content from Delivery d inner join Users u on d.student_id = u.user_id where d.delivery_id = ?";
     private static final String ADD_DELIVERY = "insert into Delivery values (default, ?, ?, ?, ?, default, default)";
-    private static final String GET_DELIVERY_FORM ="select * from Module where module_id = ?";
     private static final String SLCT_ALL_DELIVERIES = "select * from Delivery where module_id = ?";
     private static final String CHECK_DELIVERY = "select delivery_id, delivery_content, module_id, D.student_id, user_id, user_name from Delivery D inner join Users U on D.student_id = U.user_id where module_id = ? and user_id = ?";
     private static final String EDIT_DELIVERY = "select delivery_id, delivery content from Delivery";
     private static final String UPDATE_DELIVERY ="update Delivery set delivery_content = ? where delivery_id = ?";
-    private static final String SELECT_ALL_DELIVERIES = "select * from Delivery where worklist_id = ? and delivery_isEvaluated = 0";
+    private static final String SELECT_ALL_DELIVERIES = "select * from Delivery D inner join Users U on D.student_id = U.user_id inner join Module M on D.module_id = M.module_id where worklist_id = ? and delivery_isEvaluated = 0";
     private static final String UPDATE_ISEVALUATED = "update Delivery set delivery_isEvaluated = true where delivery_id = ?";
+    
+    public DeliveryDb() {
+        init();
+    }
     
     public void updateIsEvaluated(String deliveryId) {
         try (
@@ -51,14 +54,14 @@ public class DeliveryDb extends Database{
             try (ResultSet rset = ps.executeQuery();) {
                 while (rset.next()) {
                     String delId = rset.getString("delivery_id");
-                    String studentId = rset.getString("student_id");
-                    String moduleId = rset.getString("module_id");
+                    String userName = rset.getString("user_name");
+                    String moduleName = rset.getString("module_name");
                     String desc = rset.getString("delivery_content");
                     String workId = rset.getString("worklist_id");
                     String timestamp = rset.getString("delivery_timestamp");
                     boolean isEvaluated = rset.getBoolean("delivery_isEvaluated");
                                         
-                    Delivery del = new Delivery(delId, studentId, moduleId, desc, workId, timestamp, isEvaluated);
+                    Delivery del = new Delivery(delId, userName, moduleName, desc, workId, timestamp, isEvaluated);
                     deliveries.add(del);
 
                 }
@@ -84,8 +87,7 @@ public class DeliveryDb extends Database{
                 Delivery deliveries = new Delivery();
                 deliveries.setDeliveryID(deliverySet.getString("delivery_id"));
                 deliveries.setDeliveryContent(deliverySet.getString("delivery_content"));
-                deliveries.setModuleID(deliverySet.getString("module_id"));
-                deliveries.setStudentID(deliverySet.getString("student_id"));
+                deliveries.setUserName(deliverySet.getString("user_name"));
                 delivery.add(deliveries);
             }
             return delivery;
@@ -97,11 +99,6 @@ public class DeliveryDb extends Database{
         return null;
     }
     
-    
-    
-    public DeliveryDb() {
-        init();
-    }
     public void editDelivery(String deliveryContent, String deliveryId) {
    try( Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(UPDATE_DELIVERY);
@@ -135,7 +132,7 @@ public class DeliveryDb extends Database{
                 
                 delivery.setDeliveryID(rs.getString("delivery_id"));
                 delivery.setStudentID(rs.getString("student_id"));
-                delivery.setStudentName(rs.getString("user_name"));
+                delivery.setUserName(rs.getString("user_name"));
                 delivery.setModuleID(rs.getString("module_id"));
                 delivery.setDeliveryContent(rs.getString("delivery_content"));
                 delivery.setWorklistID(rs.getString("worklist_id"));
@@ -168,43 +165,7 @@ public class DeliveryDb extends Database{
         }
     }
     
-    public void getDeliveryForm(String moduleid, PrintWriter out) {
-            try(
-                Connection conn = getConnection();
-                PreparedStatement ps = conn.prepareStatement(GET_DELIVERY_FORM);
-                ){  
-                ps.setString(1, moduleid);
-                try (ResultSet rs = ps.executeQuery();) {
-                    while (rs.next()) {
-                        String desc = rs.getString("module_desc");
-                        String content = rs.getString("module_content");
-                        Boolean inInterview = rs.getBoolean("module_inInterview");
-                        out.println("<h2>"+ moduleid + "</h2>");
-                        out.println("<p>" + desc + "</p>");
-                        out.println("<p>" + content + "</p>");
-                        
-                    
-                        if (inInterview.equals(0)||(inInterview.equals(false))){
-                            out.println("<form action=\"Delivery?id="+ moduleid+"\" method=\"POST\">");
-                            out.println("<h3>Her kan du skrive inn linken til youtube-videoen<h3>");
-                            out.println("<input type=\"text\" name=\"link\">");
-                            out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Upload\">");
-                            //out.println("<href=\"OneModule?id="+ moduleid +">");
-                            out.println("</form>");
-                        } else {
-                            out.println("<form action=\"Delivery?id="+ moduleid+"\" method=\"POST\">");
-                            out.println("<h3>Modulen godkjennes av lærer eller hjelpelærer</h3>");
-                            out.println("<p>Trykk på knappen for å gi beskjed om at du ønsker modulgodkjenning</p><br>");
-                            out.println("<input type=\"submit\" class=\"btn btn-outline-danger\" value=\"Send\">");
-                            out.println("</form>");
-                    }
-                }
-            }
-        }
-        catch (SQLException ex) {
-            System.out.println("Query error:" + ex);
-        }
-    }
+   
     public ArrayList<Delivery> getDelivery(PrintWriter out, String studentID) {
         
         String deliveries = "select d.delivery_id, d.delivery_content, d.delivery_timestamp, d.delivery_isEvaluated, w.worklist_id, s.user_id, m.module_id, m.module_name\n" +
@@ -299,8 +260,9 @@ public class DeliveryDb extends Database{
     
 
     
-    //VVVV FOSSE VVVVV
+    //VVVVVVVVV
 
+    //Returnerer int total antall evaluerte deliveries 
     public int getAllEvaluatedDeliveries(PrintWriter out) {
         String oneDelivery = ("select * from Delivery where delivery_isEvaluated = 1;");
         int allEvaluatedDeliveriesCount = 0;
@@ -322,7 +284,8 @@ public class DeliveryDb extends Database{
         return allEvaluatedDeliveriesCount;
     }     
 
-  
+    
+    //Tar i mot student_id og returnerer total antall evaluerte deliveries for en student
     public int getEvaluatedDeliveries(PrintWriter out, String id) {
         String oneDelivery = ("select * from Delivery where student_id = ? AND delivery_isEvaluated = 1;");
         int evaluatedDeliveriesCount = 0;
@@ -343,10 +306,32 @@ public class DeliveryDb extends Database{
             out.println("SQL exception: in getEvaluatedDeliveries" + liste);
         }  
         return evaluatedDeliveriesCount;
-    }     
-    //^^^^ FOSSE ^^^^
-    
-    
+    }   
+
+    //Recives a module id, retrives the amount of deliveries for said module and returns that number
+    public int getAmountOfDeliveriesPerModule(PrintWriter out, String id) {
+        String oneDelivery = ("select * from Delivery where module_id = ? AND delivery_isEvaluated = 1;");
+        int evaluatedDeliveriesCount = 0;
+        
+        try(    Connection connection = getConnection();
+                PreparedStatement prepStatement = connection.prepareStatement(oneDelivery);
+                ){
+            prepStatement.setString(1, id);
+            
+            try(ResultSet rset = prepStatement.executeQuery(); ){
+                while(rset.next())   {
+                    evaluatedDeliveriesCount++;
+                }  
+                return evaluatedDeliveriesCount;
+            }
+        }
+        catch(SQLException liste) {
+            out.println("SQL exception: in getAmountOfDeliveriesPerModule" + liste);
+        }  
+        return evaluatedDeliveriesCount;
+    }   
+    //^^^^ ^^^^
+
 }
  
      

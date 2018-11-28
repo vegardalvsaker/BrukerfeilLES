@@ -1,5 +1,6 @@
 package Servlets;
 
+import Classes.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -8,9 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import Database.UserDb;
+import java.util.ArrayList;
 /**
  *
- * @author Gorm-Erik
+ * @author Ingve Fosse
  */
 @WebServlet(urlPatterns = {"/People"})
 public class People extends SuperServlet {
@@ -19,88 +21,36 @@ public class People extends SuperServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        try (PrintWriter out = response.getWriter()) { 
+        try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "People", out);
-            
-            bst.containerOpen(out);
-  
-            addStudentForm(out, response);
-            removeStudentForm(out, response);
-            listStudentsForm(out);
-            
-            bst.containerClose(out);
-            bst.bootstrapFooter(out);
-              
-            UserDb students = new UserDb();
-            students.init();
-            
-            if (request.getMethod().equals("POST"))  {
-                
-      
-            String navn = request.getParameter("Navn");
-            String email = request.getParameter("email");
-            boolean isTeacher = Boolean.parseBoolean(request.getParameter("isTeacher"));
-            String studnavn = request.getParameter("Studentnavn");
-            
-            students.addStudent(out, navn, email, isTeacher);
-            students.removeStudent(out, studnavn);
-            
-            } else if (request.getMethod().equals("GET")) {
-                 students.getUserList(out);
-               }
-        }
-    }
-        
-        public void addStudentForm(PrintWriter out, HttpServletResponse response)    {
-            
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>People</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<div>");
-            out.println("<a href=\"People\"></a>");
-            out.println("<form action=\"People\" method=\"POST\">");
-            out.println("<h1>Legg til student/lærer</h1><br>");
-            out.println("<h3>Skriv inn navn</h3><br>");
-            out.println("<input type=\"text\" name=\"Navn\"><br>");
-            out.println("<h3>Skriv inn email</h3><br>");
-            out.println("<input type=\"text\" name=\"email\"><br>");
-            out.println("<h3>Er dette en lærer eller student?</h3><br>");
-            out.println("<input type=\"radio\" name=\"isTeacher\" value=\"true\"> Lærer<br>");
-            out.println("<input type=\"radio\" name=\"isTeacher\" value=\"false\"> Student<br>");
-            out.println("<input type=\"submit\" value=\"Legg til\">");
-            out.println("</form>");
-            out.println("</div>");  
-            
-        }
-        
-        public void removeStudentForm(PrintWriter out, HttpServletResponse response)    {
-            
-           out.println("<div>"); 
-            out.println("<form action=\"People\" method=\"POST\">");
-            out.println("<h1>Fjern student/lærer</h1><br>");
-            out.println("<input type=\"text\" name=\"Studentnavn\"><br>");
-            out.println("<input type=\"submit\" value=\"Fjern student\">");
-            out.println("</form>");
-            out.println("<br>");
-            out.println("</div>"); 
 
+            bst.containerOpen(out);
+
+        UserDb users = new UserDb();
+
+        ArrayList<User> onlyStudents = users.getArrayOfStudents(out);
+        ArrayList<User> onlyTeachers = users.getArrayOfTeachers(out);
+        out.println("<h1>List of all users:</h1>");
+
+        for (User user : onlyStudents) {
+            String id = user.getUserId();
+            out.println(" Name: " + user.getUserName() + "<br>");
+            out.println(" Email: " + user.getUserEmail() + "<br>");
+            out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
+            out.println("<br>" + "<br>");
         }
-        
-        public void listStudentsForm(PrintWriter out)   {
-            
-            
-            out.println("<div>");
-            out.println("<h1>List studenter</h1>");
-            out.println("<form action=\"People\" method=\"GET\">");
-            out.println("<input type=\"submit\" value=\"List studenter\">");
-            out.println("</form>");
-            out.println("</div>");
- 
+        for (User user : onlyTeachers) {
+            String id = user.getUserId();
+            out.println(" Name: " + user.getUserName() + "<br>");
+            out.println(" Email: " + user.getUserEmail() + "<br>");
+            out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
+            out.println("<br>" + "<br>");
         }
-        
+
+        bst.containerClose(out);
+        bst.bootstrapFooter(out);
+    }
+}
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

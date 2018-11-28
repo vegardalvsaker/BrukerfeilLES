@@ -1,5 +1,6 @@
 package Servlets;
 
+import Classes.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import Database.UserDb;
+import java.util.ArrayList;
 /**
  *
  * @author Ingve Fosse
@@ -25,21 +27,24 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
     
     try (PrintWriter out = response.getWriter()) {
         super.processRequest(request, response, "People", out);
-        
-            
+                    
         bst.containerOpen(out);
+
+        UserDb teachers = new UserDb();
+        
+        ArrayList<User> onlyTeachers = teachers.getArrayOfTeachers(out);
+        out.println("<h1>List of all teachers:</h1>");
+        
+        for (User user : onlyTeachers) {
+            String id = user.getUserId();
+            out.println(" Name: " + user.getUserName() + "<br>");
+            out.println(" Email: " + user.getUserEmail() + "<br>");
+            out.println("<a href=\"Profile?id="+ id +" \"a class=\"btn btn-info\">View Profile</button></a>");
+            out.println("<br>" + "<br>");
+            } 
         bst.containerClose(out);
         bst.bootstrapFooter(out);
-              
-        UserDb teachers = new UserDb();
-        teachers.init();
-        
-    
-        teachers.getOnlyTeacher(out);
-        teachers.printOnlyTeacher(out);
-        
-    }
-        
+    }     
 }
  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
