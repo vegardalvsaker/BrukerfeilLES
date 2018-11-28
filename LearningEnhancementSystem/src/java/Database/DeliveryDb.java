@@ -87,8 +87,7 @@ public class DeliveryDb extends Database{
                 Delivery deliveries = new Delivery();
                 deliveries.setDeliveryID(deliverySet.getString("delivery_id"));
                 deliveries.setDeliveryContent(deliverySet.getString("delivery_content"));
-                deliveries.setModuleName(deliverySet.getString("module_name"));
-                deliveries.setUserName(deliverySet.getString("student_name"));
+                deliveries.setUserName(deliverySet.getString("user_name"));
                 delivery.add(deliveries);
             }
             return delivery;

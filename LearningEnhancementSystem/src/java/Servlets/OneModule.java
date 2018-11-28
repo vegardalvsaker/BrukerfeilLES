@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -92,9 +93,9 @@ public class OneModule extends SuperServlet {
 
 
             db.printLearningGoals(id, out);
-            
-            List<Classes.Delivery> deliveryList = ddb.getDeliveryWithUserIdAndModuleId(id, user.getUserId());
-            if (deliveryList.size() != 0) {
+            List<Classes.Delivery> deliveryList = new ArrayList();
+            deliveryList = ddb.getDeliveryWithUserIdAndModuleId(id, user.getUserId());
+            if (!deliveryList.isEmpty()) {
                 for (Classes.Delivery delivery : deliveryList){
                      String deliveryId = delivery.getDeliveryID();
                 Editdelivery(out,deliveryId, id);
