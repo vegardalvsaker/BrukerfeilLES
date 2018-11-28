@@ -15,11 +15,10 @@ import Classes.Score;
 public class EvaluationDb extends Database{
     private static final String ADD_EVALUATION = "insert into Evaluation values (default, ?, ?, '', false)";
     private static final String SELECT_ONE = "select evaluation_id from Evaluation where delivery_id = ?";
-    private static final String UPDATE_EVALUATION_COMMENT = "update Evaluation set evaluation_comment = ? where delivery_id = ?";
     private static final String SELECT_EVALUATION_WITH_SCORE = "select * from Evaluation e inner join Score s on e.evaluation_id = s.evaluation_id where e.delivery_id = ?";
     private static final String UPDATE_ISPUBLISHED = "update Evaluation set evaluation_isPublished = ? where evaluation_id = ?";
     private static final String DELETE_EVALUATION = "delete from Evaluation where evaluation_id = ?";
-    private static final String UPDATE_COMMENT = "update Evaluation set evaluation_comment = ? where evaluation_id = ?";
+    private static final String UPDATE_COMMENT = "update Evaluation set evaluation_comment = ? where delivery_id = ?";
    
     public EvaluationDb(){
         init();
@@ -68,9 +67,9 @@ public class EvaluationDb extends Database{
      * @param comment
      * @return 
      */
-    public boolean finishEvaluation(String deliveryid, String comment) {
+    public boolean addComment(String deliveryid, String comment) {
         try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(UPDATE_EVALUATION_COMMENT);) {
+             PreparedStatement ps = conn.prepareStatement(UPDATE_COMMENT);) {
             ps.setString(1, comment);
             ps.setString(2, deliveryid);
             ps.executeUpdate();

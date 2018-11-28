@@ -54,7 +54,7 @@ public class AddedEvaluation extends SuperServlet {
                 return;
             }
             
-            printOptions(request, out);
+            printResult(request, out);
             out.println("<br><a href=\"EvaluateServlet\">Go back</a>");
         }
     }
@@ -69,7 +69,7 @@ public class AddedEvaluation extends SuperServlet {
             return false;
         }
         String comment = request.getParameterMap().containsKey("comment") ? request.getParameter("comment") : "";
-        eDb.finishEvaluation(deliveryid, comment);
+        eDb.addComment(deliveryid, comment);
         ArrayList<String> givenPoints = new ArrayList<>();
         givenPoints = getListOfGivenPoints(request);
         if (givenPoints.isEmpty()) {
@@ -106,27 +106,30 @@ public class AddedEvaluation extends SuperServlet {
      
     private void editEvaluation(PrintWriter out, HttpServletRequest request) {
         Evaluation eval = (Evaluation)request.getSession().getAttribute("Evaluation");
-        eDb.finishEvaluation(eval.getComment(), eval.getDeliveryid());
+        eDb.addComment(eval.getComment(), eval.getDeliveryid());
         int i = 1;
         for (Score score : eval.getScorelist()) {
             String pointsGiven = request.getParameter("learngoal" + i);
             sDb.updateScore(pointsGiven, score.getId());
             i++;
         }
-        printOptions(request, out);
+        printResult(request, out);
     }
     
-    private void printOptions(HttpServletRequest request, PrintWriter out) {
+    private void printResult(HttpServletRequest request, PrintWriter out) {
         Delivery delivery = (Delivery) request.getSession().getAttribute("delivery");
-        String comment = request.getParameter("comment");
         Evaluation evaluation = eDb.getEvaluationWithScore(delivery.getDeliveryID());
+        
         ArrayList<Score> scores = new ArrayList<>();
         scores = evaluation.getScorelist();
+        
         Module module = (Module) request.getSession().getAttribute("module");
-
         ArrayList<LearningGoal> lgoals = new ArrayList<>();
         lgoals = module.getLearningGoals();
+        
         String student = (String)request.getSession().getAttribute("student");
+        String comment = request.getParameter("comment");
+        
         bst.containerOpen(out);
         out.println("<h1>Evaluation for " + student +", " + module.getName() +"</h1>");
         bst.tableOpen(out);
@@ -136,17 +139,13 @@ public class AddedEvaluation extends SuperServlet {
             bst.tableRow(out, i, lg.getText(), Integer.toString(scores.get(i-1).getPoints()), lg.getPoints());
             i++;
         }
-        
+
         bst.tableClose(out);
         out.println("<h3>" + comment + "</h3>");
-        HttpSession session = request.getSession();
         
-        //session.removeAttribute("student");
-        //session.removeAttribute("delivery");
+        HttpSession session = request.getSession();
         session.setAttribute("Evaluation", evaluation);    
-        out.println("<a style=\"float: left;\" href=\"PublishedEvaluation\"><button class=\"btn btn-success\"> Publish evaluation!</button></a>");
-        out.println("<a style=\"float: inherit;\" href=\"EvaluateServlet?editEvaluation\"><button class=\"btn btn-warning\">Edit Evaluation</button></a>");
-        out.println("<a style=\"float: right;\" href=\"DeletedEvaluation\"><button class=\"btn btn-danger\"> Delete evaluation!</button></a>");
+        printButtons(out);
         bst.containerClose(out);
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -188,4 +187,9 @@ public class AddedEvaluation extends SuperServlet {
         return "Short description";
     }// </editor-fold>
 
+    private void printButtons(PrintWriter out) {
+        out.println("<a style=\"float: left;\" href=\"PublishedEvaluation\"><button class=\"btn btn-success\"> Publish evaluation!</button></a>");
+        out.println("<a style=\"float: inherit;\" href=\"EvaluateServlet?editEvaluation\"><button class=\"btn btn-warning\">Edit Evaluation</button></a>");
+        out.println("<a style=\"float: right;\" href=\"DeletedEvaluation\"><button class=\"btn btn-danger\"> Delete evaluation!</button></a>");
+    }
 }
