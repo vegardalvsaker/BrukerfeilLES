@@ -8,12 +8,15 @@ package Servlets;
 import Classes.Comment;
 import Classes.CommentReply;
 import Classes.User;
-
+import Classes.Module;
+import Classes.LearningGoal;
 import Database.LearningGoalDb;
 import Database.CommentDb;
 import Database.CommentReplyDb;
 import Database.DeliveryDb;
-
+import Database.ModuleDb;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -21,7 +24,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HtmlTemplates.BootstrapTemplate;
-import java.util.List;
+
+
 
 /**
  *
@@ -93,9 +97,8 @@ public class OneModule extends SuperServlet {
 
             editModuleButtonForm(out,request);
 
-
-
-            db.printLearningGoals(id, out);
+           
+            printLearnGoals(out, id);
             
             List<Classes.Delivery> deliveryList = ddb.getDeliveryWithUserIdAndModuleId(id, user.getUserId());
             if (deliveryList.size() != 0) {
@@ -206,13 +209,64 @@ public class OneModule extends SuperServlet {
             out.println("<br>");
             out.println("</form>");
     }
-private void deleteReply(PrintWriter out, String moduleId, String replyid )  {
+    private void deleteReply(PrintWriter out, String moduleId, String replyid )  {
             out.println("<form action=\"OneModule?id="+ moduleId+"\" method=\"POST\">");
             out.println("<input style=\"margin-left:2.5em;\" type=\"hidden\" name=\"deleteR\" value=\"TRUE\">");
             out.println("<input style=\"margin-left:2.5em;\" type=\"hidden\" name=\"reply_id\" value=\""+ replyid +"\"/>");
             out.println("<input style=\"margin-left:2.5em;\" type=\"submit\" class=\"btn btn-outline-danger\" value=\"Delete reply\">");
             out.println("</form>");
     }  
+    private void printLearnGoals(PrintWriter out, String id)   {
+    
+            
+            ModuleDb moduleDb = new ModuleDb();
+            moduleDb.init();
+            
+            Module module = moduleDb.getModuleWithLearningGoals(id);
+            
+            String moduleName = module.getName();
+            String moduleDesc = module.getDesc();
+            String moduleContent = module.getContent();
+            boolean leveringsform = module.getInInterview();
+            
+            ArrayList<LearningGoal> learnGoalList = module.getLearningGoals();
+                
+                out.println("<h3>" + moduleName + "</h3><br>");
+                out.println("<h5>Beskrivelse</h5");
+                out.println("<p>" + moduleDesc + "</p><br>");
+                out.println("<h5>Innhold</h5");
+                out.println("<p>" + moduleContent + "</p>");
+                
+                out.println("<h5>Leveringsform: </h5>");
+                
+                if (leveringsform == true) {
+                    
+                    out.println("<p>Muntlig</p>");
+                }
+                else if (leveringsform == false)    {
+                    
+                    out.println("<p>Video</p>");
+                }
+                  
+            out.println("<ul>");
+            out.println("<h5>Læringsmål:</h5>");
+           
+            for (LearningGoal learnGoal : learnGoalList)    {
+                
+                String lgText = learnGoal.getText();
+                int lgPoints = learnGoal.getPoints();
+                
+                 out.println("<li>");
+                 out.println(lgText + "  - ");
+                 out.println("Poeng: " + lgPoints);
+                 out.println("</li>");
+            }
+            out.println("</ul>");
+            
+            
+        }
+    
+
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

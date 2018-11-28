@@ -18,7 +18,7 @@ import Database.ModuleDb;
  * @author Vegard
  */
 @WebServlet(name = "RedirectAfterAdd", urlPatterns = {"/RedirectAfterAdd"})
-public class RedirectAfterAdd extends HttpServlet {
+public class RedirectAfterAdd extends SuperServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,12 +45,7 @@ public class RedirectAfterAdd extends HttpServlet {
                 }
             }
     }
-    
-    protected void redirectHeader(PrintWriter out) {
-        out.println("<head>\n" +
-"        <meta http-equiv=\"refresh\" content=\"3;url=Modules\" />\n" +
-"    </head");
-    }
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

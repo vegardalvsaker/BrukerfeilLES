@@ -161,7 +161,7 @@ public class EditModule extends SuperServlet {
             out.println("var i = 0;");
             out.println("function add() {");
             
-       
+        
 	    out.println("var div = document.createElement(\"div\");");
             
             out.println("div.innerHTML = '<input type=\"text\" name=\"nyttLaringsmal' + i + '\"></input> <input type=\"text\" name=\"nyttPoeng' + i + '\"></input><br>';");
@@ -185,12 +185,7 @@ public class EditModule extends SuperServlet {
 
     }
     
-    protected void redirectHeader(PrintWriter out) {
-        out.println("<head>\n" +
-"                    <meta http-equiv=\"refresh\" content=\"0;url=Modules\" />\n" +
-"                    </head");
-    }
-  
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -73,11 +73,7 @@ public class CreateModule extends SuperServlet {
          }
     }
     
-    private void redirectHeader(PrintWriter out) {
-        out.println("<head>\n" +
-        "        <meta http-equiv=\"refresh\" content=\"0;url=Modules\" />\n" +
-        "    </head");
-    }
+   
     
     private void addModuleForm(PrintWriter out)  {
             
