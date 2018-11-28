@@ -25,11 +25,10 @@ import Classes.Delivery;
 @WebServlet(name = "AddedEvaluation", urlPatterns = {"/AddedEvaluation"})
 public class AddedEvaluation extends SuperServlet {
 
-    private Delivery delivery;
-    private String comment;
     private final BootstrapTemplate bst = new BootstrapTemplate();
     private final EvaluationDb eDb = new EvaluationDb();;
     private final ScoreDb sDb = new ScoreDb();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,24 +45,14 @@ public class AddedEvaluation extends SuperServlet {
         try (PrintWriter out = response.getWriter()) {
             super.processRequest(request, response, "Worklist", out);
             if (request.getParameterMap().containsKey("edited")) {
-                Evaluation eval = (Evaluation)request.getSession().getAttribute("Evaluation");
-                eDb.finishEvaluation(eval.getComment(), eval.getDeliveryid());
-                int i = 1;
-                for (Score score : eval.getScorelist()) {
-                    String pointsGiven = request.getParameter("learngoal" + i);
-                    sDb.updateScore(pointsGiven, score.getId());
-                    i++;
-                }
-                printOptions(request, out);
+                editEvaluation(out, request);
                 return;
             }
-            assignVariableValues(request);
+            
             if (!insertEvaluationAndScore(request)) {
                 out.println("<h1>Her har det skjedd en feil! Kontakt databaseadmin</h1>");
                 return;
             }
-            Module module = (Module) request.getSession().getAttribute("module");
-            bst.bootstrapHeader(out, "Evaluation for " + module.getName());
             
             printOptions(request, out);
             out.println("<br><a href=\"EvaluateServlet\">Go back</a>");
@@ -73,15 +62,17 @@ public class AddedEvaluation extends SuperServlet {
      * Metode som legger inn kommentaren og poengene til evalueringen i databasen.
      */
     private boolean insertEvaluationAndScore(HttpServletRequest request) {
+        Delivery delivery = (Delivery) request.getSession().getAttribute("delivery");
         String deliveryid = delivery.getDeliveryID();
         User teacher = (User)request.getSession().getAttribute("userLoggedIn");
         if(!eDb.addEvaluation(teacher.getUserId(), deliveryid)) {
             return false;
         }
+        String comment = request.getParameterMap().containsKey("comment") ? request.getParameter("comment") : "";
         eDb.finishEvaluation(deliveryid, comment);
         ArrayList<String> givenPoints = new ArrayList<>();
         givenPoints = getListOfGivenPoints(request);
-        if (givenPoints.size() == 0) {
+        if (givenPoints.isEmpty()) {
             return false;
         }
         Module module = (Module) request.getSession().getAttribute("module");
@@ -112,21 +103,24 @@ public class AddedEvaluation extends SuperServlet {
         }
         return points;
     }
-    
-    private void assignVariableValues(HttpServletRequest request){
-        
-        delivery = (Delivery) request.getSession().getAttribute("delivery");
-        comment = request.getParameter("comment");
-        
-        
-        
+     
+    private void editEvaluation(PrintWriter out, HttpServletRequest request) {
+        Evaluation eval = (Evaluation)request.getSession().getAttribute("Evaluation");
+        eDb.finishEvaluation(eval.getComment(), eval.getDeliveryid());
+        int i = 1;
+        for (Score score : eval.getScorelist()) {
+            String pointsGiven = request.getParameter("learngoal" + i);
+            sDb.updateScore(pointsGiven, score.getId());
+            i++;
+        }
+        printOptions(request, out);
     }
     
     private void printOptions(HttpServletRequest request, PrintWriter out) {
         Delivery delivery = (Delivery) request.getSession().getAttribute("delivery");
         String comment = request.getParameter("comment");
-        ArrayList<Score> scores = new ArrayList<>();
         Evaluation evaluation = eDb.getEvaluationWithScore(delivery.getDeliveryID());
+        ArrayList<Score> scores = new ArrayList<>();
         scores = evaluation.getScorelist();
         Module module = (Module) request.getSession().getAttribute("module");
 
