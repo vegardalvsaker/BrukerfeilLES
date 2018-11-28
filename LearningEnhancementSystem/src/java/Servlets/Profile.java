@@ -43,7 +43,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         
               
         UserDb profile = new UserDb();
-        DeliveryDb delivery = new DeliveryDb();
+        //DeliveryDb delivery = new DeliveryDb();
         
 
         
@@ -74,7 +74,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
     }    
 }
 
-public void printProgressbarForm(PrintWriter out, String id) {
+private void printProgressbarForm(PrintWriter out, String id) {
     String userID = id; 
     
     ModuleDb module = new ModuleDb();
@@ -144,7 +144,7 @@ public void printProgressbarForm(PrintWriter out, String id) {
     out.println("</html>");
 }
 
-public void printUserInfo(PrintWriter out, String id){
+private void printUserInfo(PrintWriter out, String id){
     UserDb user = new UserDb();
     User oneProfile = user.getOneProfile(id);
     
