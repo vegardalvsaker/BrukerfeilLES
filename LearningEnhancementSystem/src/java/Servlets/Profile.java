@@ -57,7 +57,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
         if (request.isUserInRole("Teacher")) {
             out.println("Du er logget inn som en lærer: ");
             printUserInfo(out, userID);
-            if(!profile.getOneProfile(out, userID).getUserIsTeacher()){
+            if(!profile.getOneProfile(userID).getUserIsTeacher()){
                 printProgressbarForm(out, userID);
             }
             
@@ -145,7 +145,7 @@ public void printProgressbarForm(PrintWriter out, String id) {
 
 public void printUserInfo(PrintWriter out, String id){
     UserDb user = new UserDb();
-    User oneProfile = user.getOneProfile(out, id);
+    User oneProfile = user.getOneProfile(id);
     
     out.println("<h2>"+"Information about "+ oneProfile.getUserName() + "</h2>");
     out.println("User ID: " + oneProfile.getUserId() + "<br>");

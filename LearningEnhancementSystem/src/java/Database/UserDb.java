@@ -17,6 +17,7 @@ public class UserDb extends Database {
     private static final String SLCT_USER = "select * from Users where user_email = ?";
     private static final String SELECT_USERID = "select user_id from Users where user_email = ?";
     private static final String SELECT_ALL_USER_ID = "select user_id from Users";
+    private static final String SELECT_USER_NAME = "select user_name from Users where user_id = ?";
      
     
     public UserDb() {
@@ -50,6 +51,21 @@ public class UserDb extends Database {
         } 
          
         return false;
+    }
+    
+    public String getUserName(String userId) {
+        try (   Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(SELECT_USER_NAME)) {
+            ps.setString(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return rs.getString("user_name");
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("method getUserName(), error : " + ex);
+            return null;
+        }
     }
     
     public ArrayList<String> getAllUserIds() {
@@ -255,7 +271,7 @@ public class UserDb extends Database {
   //STOP 
     
 
-    public User getOneProfile(PrintWriter out, String id) {
+    public User getOneProfile(String id) {
         String oneProfile = ("select * from Users where user_id = ?");
         
         try(    Connection connection = getConnection();
@@ -277,7 +293,7 @@ public class UserDb extends Database {
             }
         }
         catch(SQLException liste) {
-            out.println("SQL exception: in getOneProfile" + liste);
+            System.out.println("SQL exception: in getOneProfile" + liste);
            } 
         return null;
     }

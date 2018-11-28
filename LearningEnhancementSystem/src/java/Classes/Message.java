@@ -12,8 +12,8 @@ import java.sql.Timestamp;
  */
 public class Message {
     private String msgId;
-    private String sender;
-    private String receiver;
+    private User sender;
+    private User receiver;
     private String subject;
     private String text;
     private Timestamp timestamp;
@@ -27,19 +27,19 @@ public class Message {
         this.msgId = msgId;
     }
 
-    public String getSender() {
+    public User getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
+    public void setSender(User sender) {
         this.sender = sender;
     }
 
-    public String getReceiver() {
+    public User getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(String receiver) {
+    public void setReceiver(User receiver) {
         this.receiver = receiver;
     }
 
