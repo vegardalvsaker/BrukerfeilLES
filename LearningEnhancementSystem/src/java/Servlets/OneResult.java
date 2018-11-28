@@ -44,7 +44,7 @@ public class OneResult extends SuperServlet {
 
         ResultsDb rdb = new ResultsDb();
 
-        ArrayList<Results> resultsList = resultsDb.getResults(evalId);
+        ArrayList<Results> resultsList = rdb.getResults(evalId);
 
             out.println("<table class=\"table table-hovere\">");
             out.println("<thead>");

@@ -96,7 +96,7 @@ public class OneModule extends SuperServlet {
 
 
 
-            db.printLearningGoals(id, out);
+            printLearnGoals(out, id);
             List<Classes.Delivery> deliveryList = new ArrayList();
             deliveryList = ddb.getDeliveryWithUserIdAndModuleId(id, user.getUserId());
             if (!deliveryList.isEmpty()) {
