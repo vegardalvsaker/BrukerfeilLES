@@ -77,18 +77,7 @@ public class Worklist extends SuperServlet {
     }
     
      private void printTable(PrintWriter out) {
-       /* out.println("<table>");
-        out.println("<thead>");
-        out.println("<th> Delivery ID</th>");
-        out.println("<th> Module Name</th>");
-        out.println("<th> Student Name</th>");
-        out.println("<th> Delivery Content</th>");
-        out.println("<th> Timestamp</th>");
-        out.println("</thead>");
-        out.println("<tbody>");*/
-        
-     
-      out.println("<table class=\"table table-hovere\">");
+            out.println("<table class=\"table table-hovere\">");
             out.println("<thead>");
             out.println("<tr class=\"table-active\">");
             out.println("<th scope=\"col\">Delivery ID</th>");
