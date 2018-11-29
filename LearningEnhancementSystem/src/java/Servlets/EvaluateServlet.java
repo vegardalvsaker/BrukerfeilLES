@@ -30,7 +30,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "EvaluateServlet", urlPatterns = {"/EvaluateServlet"})
 public class EvaluateServlet extends SuperServlet {
-    private Module module;
+    
     private BootstrapTemplate bst = new BootstrapTemplate();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -182,6 +182,7 @@ public class EvaluateServlet extends SuperServlet {
     
     private void cancelEvaluation(PrintWriter out, HttpServletRequest request) {
         HttpSession session = request.getSession();
+        Module module = (Module)session.getAttribute("module");
         session.removeAttribute("module");
         session.removeAttribute("student");
         session.removeAttribute("delivery");
