@@ -52,7 +52,7 @@ public class OneResult extends SuperServlet {
             out.println("<th scope=\"col\">Læringsmål</th>");
 
             out.println("<th scope=\"col\">Dine poeng</th> ");
-            out.println("<th scope=\"col\">Totale poeng</th> ");
+            out.println("<th scope=\"col\">Mulige poeng</th> ");
             out.println("</tr>");
             out.println("</thead>");
             out.println("<tbody>");

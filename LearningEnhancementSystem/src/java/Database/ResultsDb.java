@@ -24,8 +24,7 @@ public class ResultsDb extends Database {
     "inner join Module M on M.module_id = D.module_id \n" +
     "inner join Score S on S.evaluation_id = E.evaluation_id\n" +
     "inner join LearningGoal L on L.learn_goal_id = S.learn_goal_id\n" +
-    "where E.evaluation_id = ?\n" +
-    "group by L.learn_goal_text;";
+    "where E.evaluation_id = ?";
 
     public ResultsDb() {
         init();
