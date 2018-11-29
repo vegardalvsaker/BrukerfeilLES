@@ -6,9 +6,15 @@
 
 # BlueJ files
 *.ctxt
-# hardware and project specific xml-files
-context.xml
-web.xml
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# netbeans
+nbproject/private/private.properties
+nbproject/private/private.xml
+build/*
+nbbuild/*
 
 # hardware and project specific xml-files
 context.xml
@@ -26,5 +32,13 @@ web.xml
 *.tar.gz
 *.rar
 
+# Mac
+.DS_Store
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/LearningEnhancementSystem/nbproject/private/
+
+LearningEnhancementSystem/nbproject/private/private\.xml
+
+LearningEnhancementSystem/nbproject/private/private\.properties
